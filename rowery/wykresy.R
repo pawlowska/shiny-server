@@ -28,7 +28,8 @@ wykres_kilka<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Date(
   if (iledni<21) {breaks="1 day"}
   else if (iledni<100) {breaks = "1 week"}
   else if (iledni<210) {breaks = "2 weeks"}
-  else {breaks = "1 month"}
+  else if (iledni<450) {breaks = "1 month"}
+  else {breaks = "2 months"}
   dane_zakres<-dane[Data %in% zakres_dat & Miejsce %in% kolumny]
 
   theme_set(theme_gray(base_size = 14))
@@ -37,7 +38,7 @@ wykres_kilka<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Date(
             aes(Data, Liczba_rowerow, by=Miejsce, colour=Miejsce)
             )+geom_line(size=0.7
             )#+ggtitle("Liczba rowerów zarejestrowanych przez liczniki")
-  g<-g+scale_x_date(date_breaks = breaks, limits=c(min(start),max(stop))) #numer X ticks
+  g<-g+scale_x_date(date_breaks = breaks, limits=c(min(start),max(stop)),expand=c(0,0)) #numer X ticks
   g<-g+theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position="bottom", legend.margin  =margin(0, -2, 0, 1, "cm"))+(
