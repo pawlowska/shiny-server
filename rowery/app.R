@@ -27,8 +27,13 @@ ui <- fluidPage(
     mainPanel(
       tags$p(paste('Dane z automatycznych liczników rowerów ZDM z okresu od ', zakresOd, ' do ', zakresDo)),
       tags$p(""),
-      plotOutput('plot1', height=500, hover = "plot_hover"),
-      # verbatimTextOutput("info"),
+      div(
+        id = "plotDiv",
+        style = "position:relative",
+
+        plotOutput('plot1', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
+        uiOutput("my_tooltip")
+      ),
       
       hr(),
       tags$p(
@@ -45,27 +50,40 @@ server <- function(input, output) {
   indeksy<-reactive({ #ktore kolory beda uzyte
     match(input$liczniki, nazwy)
     })
+  
+  data <- reactive({ #potrzebne do tooltip
+    dane_long
+  })
+  
   output$plot1 <- renderPlot({
     uzyte_kolory<-kolory[indeksy()]
     wykres_kilka(dane_long, input$liczniki, 
                  start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory)
   })
   
-  # output$info <- renderText({
-  #   xy_str <- function(e) {
-  #     if(is.null(e)) return("NULL\n")
-  #     paste0("x=", round(e$x, 1), " y=", round(e$y, 1), "\n")
-  #   }
-  #   xy_range_str <- function(e) {
-  #     if(is.null(e)) return("NULL\n")
-  #     paste0("xmin=", round(e$xmin, 1), " xmax=", round(e$xmax, 1), 
-  #            " ymin=", round(e$ymin, 1), " ymax=", round(e$ymax, 1))
-  #   }
-  #   
-  #   paste0(
-  #     "hover: ", xy_str(input$plot_hover)
-  #   )
-  # })
+  output$my_tooltip <- renderUI({
+    #based on: http://stackoverflow.com/questions/38992270/r-shiny-tooltip-in-ggplot
+    
+    hover <- input$plot_hover 
+    point <- nearPoints(data(), hover, threshold = 8, maxpoints = 1)[ ,c("Data", "Liczba_rowerow")]
+    if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
+
+    #calculate the position of the tooltip
+        left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
+    top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
+    
+    left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
+    top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)   
+    
+    style <- paste0("position:absolute; z-index:100; padding: 0 6px 0 6px; height: 22px; overflow: hidden;
+                    background-color: rgba(245, 245, 245, 0.85); ",
+                    "left:", left_px + 2, "px; top:", top_px + 2, "px;")
+    
+    wellPanel(
+      style = style,
+      p(HTML(paste0( point$Data,": ", point$Liczba_rowerow)))
+    )
+  })
 }
 
 shinyApp(ui = ui, server = server)

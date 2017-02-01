@@ -1,6 +1,7 @@
 library(RColorBrewer)
 library(ggplot2)
 library(data.table)
+library(scales) #for nicer y axis
 
 source('palety_kolorow.R')
 
@@ -39,9 +40,9 @@ wykres_kilka<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Date(
             )+geom_line(size=0.7
             )#+ggtitle("Liczba rowerów zarejestrowanych przez liczniki")
   g<-g+scale_x_date(date_breaks = breaks, limits=c(min(start),max(stop)),expand=c(0,0)) #numer X ticks
-  g<-g+theme(
+  g<-g+scale_y_continuous(breaks = pretty_breaks(5))+theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position="bottom", legend.margin  =margin(0, -2, 0, 1, "cm"))+(
+    legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))+(
       scale_colour_manual(values=paleta)
     )
   g<-g+xlab("Data")+ylab("")
