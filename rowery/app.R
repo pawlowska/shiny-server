@@ -7,12 +7,16 @@ source('ladowanie_danych.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 
 dane_polaczone<-wczytaj_dane()
-nazwy<-names(dane_polaczone)[2:20]
-dane_long<-raw_to_long(dane_polaczone)
+nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
+dane_long<-wide_to_long(dane_polaczone)
+dane_tyg<-podsumuj.tygodnie(dane_long)
+dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
 zakresOdPokaz='2016-01-01'
 zakresDo = '2017-01-26'
+
+okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
 
 ui <- fluidPage(
   headerPanel('Liczba rowerów'),
@@ -21,6 +25,8 @@ ui <- fluidPage(
       dateRangeInput('zakres', 'Wybierz zakres dat', 
                      start=zakresOdPokaz, end=zakresDo, min=zakresOd, max=zakresDo,
                      separator = 'do', weekstart = 0, language = "pl"),
+      selectInput('okres', 'Podsumuj', okresy, selected = okresy[1], multiple = FALSE,
+                  selectize = TRUE, width = NULL, size = NULL),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
                          selected = nazwy[sample(1:length(nazwy),5)], inline = FALSE, width = NULL)
   ),
@@ -51,13 +57,22 @@ server <- function(input, output) {
     match(input$liczniki, nazwy)
     })
   
-  data <- reactive({ #potrzebne do tooltip
-    dane_long
+  data <- reactive({
+    zakres_dat=interval(input$zakres[1], input$zakres[2])
+    if (input$okres==okresy[2]) {
+      dane_tyg[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+      }
+    else if (input$okres==okresy[3]) {
+      dane_m[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+      }
+    else {
+      dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+      }
   })
   
   output$plot1 <- renderPlot({
     uzyte_kolory<-kolory[indeksy()]
-    wykres_kilka(dane_long, input$liczniki, 
+    wykres_kilka(data(), 
                  start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory)
   })
   

@@ -19,6 +19,8 @@ setnames(dane_dostycznia2017, names(dane_dostycznia2017), names(dane_wiekszosc20
 
 dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], dane_dostycznia2017)
 
+dane<-numery.dat(dane)
+
 write.csv(dane, file = "dane_polaczone.csv", fileEncoding = 'UTF-8')
 #dane_long<-raw_to_long(dane)
 nazwy<-names(dane)[2:20]
