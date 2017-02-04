@@ -3,6 +3,8 @@ library(shiny)
 library(Cairo) #for nice looks of the graph
 options(shiny.usecairo=T)
 
+library(lubridate)
+
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 
