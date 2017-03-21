@@ -14,14 +14,10 @@ zaladuj_dane<-function(plik, sep=';') {
   tabela
 }
 
+#currently unused
 raw_to_long<-function(dane) {
   #print(str(dane))
   tabela<-melt(dane, id.vars = "Data", variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
-}
-
-wide_to_long<-function(dane) {
-  #print(str(dane))
-  tabela<-melt(dane, id.vars = c("Data","startTyg","startM"), variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
 }
 
 wczytaj_dane<-function(plik = "dane_polaczone.csv") {
@@ -33,7 +29,23 @@ wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela
 }
 
-numery.dat<-function(tabela) {
+suma_licznikow<-function(tabela) {
+  nazwy_x<-names(tabela)[1:3]
+  nazwy<-names(tabela)[4:ncol(tabela)]
+  podw1 <- c("Al. USA - południe", "Al. USA - północ")
+  podw2 <- c("Świętokrzyska - Emilii Plater, płd", "Świętokrzyska - Emilii Plater, płn")
+  podw3 <- c("Żwirki i Wigury/Trojdena1", "Żwirki i Wigury/Trojdena2")
+  sumy <-c("Al. USA - suma","Świętokrzyska - Emilii Plater - suma", "Żwirki i Wigury/Trojdena - suma")
+  tabela[,sumy[1]:=get(podw1[1])+get(podw1[2])]
+  tabela[,sumy[2]:=get(podw2[1])+get(podw2[2])]
+  tabela[,sumy[3]:=get(podw3[1])+get(podw3[2])]
+  kolejnosc <-c(nazwy_x, sumy[1], nazwy[3:15], sumy[2], sumy[3], podw1, podw2, podw3)
+  setcolorder(tabela, kolejnosc)
+  tabela
+}
+
+#numery tygodni i miesiecy
+numery_dat<-function(tabela) { 
 #  tabela[,Tydzien:=format(Data, format="%Y-%U")]
   nazwy<-names(tabela)[2:ncol(tabela)]
   library(lubridate)
@@ -45,14 +57,21 @@ numery.dat<-function(tabela) {
   tabela
 }
 
-podsumuj.tygodnie <- function(tabela) {
-  podsumowanie <- tabela[,sum(Liczba_rowerow), by=.(Miejsce,startTyg)]
+wide_to_long<-function(dane) {
+  #print(str(dane))
+  tabela<-melt(dane, id.vars = c("Data","startTyg","startM"), variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
+}
+
+#podsumowanie po stratTyg danych w formacie long
+podsumuj.tygodnie <- function(tabela_long) { 
+  podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce,startTyg)]
   setnames(podsumowanie, c("startTyg","V1"), c("Data", "Liczba_rowerow"))
   podsumowanie
 }
 
-podsumuj.miesiace <- function(tabela) {
-  podsumowanie <- tabela[,sum(Liczba_rowerow), by=.(Miejsce,startM)]
+#podsumowanie po stratM danych w formacie long
+podsumuj.miesiace <- function(tabela_long) { 
+  podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce,startM)]
   setnames(podsumowanie, c("startM","V1"), c("Data", "Liczba_rowerow"))
   podsumowanie
 }

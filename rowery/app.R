@@ -8,17 +8,30 @@ library(lubridate)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 
-dane_polaczone<-wczytaj_dane()
+dane_polaczone<-wczytaj_dane() #wczytuje wstepnie obrobione dane z csv
+
+dane_polaczone<-suma_licznikow(dane_polaczone)
+
 nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
+
 dane_long<-wide_to_long(dane_polaczone)
 dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
-zakresOdPokaz='2016-01-01'
-zakresDo = '2017-01-26'
+zakresOdPokaz='2017-01-01'
+#zakresDo = '2017-01-26'
+zakresDo = '2017-03-19'
+
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
+
+ile_licznikow<-19
+ile_sum<-3
+ile<-ile_licznikow-ile_sum
+
+nazwy_licznikow<-nazwy[1:ile_licznikow]
+nazwy_sum<-nazwy[(ile_licznikow+1):(ile_licznikow+ile_sum)]
 
 ui <- fluidPage(
   headerPanel('Liczba rowerów'),
@@ -27,10 +40,10 @@ ui <- fluidPage(
       dateRangeInput('zakres', 'Wybierz zakres dat', 
                      start=zakresOdPokaz, end=zakresDo, min=zakresOd, max=zakresDo,
                      separator = 'do', weekstart = 0, language = "pl"),
-      selectInput('okres', 'Podsumuj', okresy, selected = okresy[1], multiple = FALSE,
+      selectInput('okres', 'Podsumuj', okresy, selected = okresy[2], multiple = FALSE,
                   selectize = TRUE, width = NULL, size = NULL),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[sample(1:length(nazwy),5)], inline = FALSE, width = NULL)
+                         selected = nazwy[sample(1:ile, 3)], inline = FALSE, width = NULL)
   ),
     mainPanel(
       tags$p(paste('Dane z automatycznych liczników rowerów ZDM z okresu od ', zakresOd, ' do ', zakresDo)),
@@ -74,8 +87,9 @@ server <- function(input, output) {
   
   output$plot1 <- renderPlot({
     uzyte_kolory<-kolory[indeksy()]
+    uzyte_linie <-lista_linii[indeksy()]
     wykres_kilka(data(), 
-                 start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory)
+                 start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory, linie = uzyte_linie)
   })
   
   output$my_tooltip <- renderUI({
