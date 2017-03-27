@@ -7,7 +7,7 @@ zaladuj_dane<-function(plik, sep=';') {
   tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 
   tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
   setorder(tabela, Data)
-  setnames(tabela, 19:20, c("Żwirki i Wigury/Trojdena1 Rower", "Żwirki i Wigury/Trojdena2 Rower"))
+  setnames(tabela, 19:20, c("Żwirki i Wigury/Trojdena, zach Rower", "Żwirki i Wigury/Trojdena, wsch Rower"))
   nazwy<-names(tabela)
   nowe_nazwy<-gsub(" Rower", "", nazwy)
   setnames(tabela, nazwy, nowe_nazwy)
@@ -29,20 +29,7 @@ wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela
 }
 
-suma_licznikow<-function(tabela) {
-  nazwy_x<-names(tabela)[1:3]
-  nazwy<-names(tabela)[4:ncol(tabela)]
-  podw1 <- c("Al. USA - południe", "Al. USA - północ")
-  podw2 <- c("Świętokrzyska - Emilii Plater, płd", "Świętokrzyska - Emilii Plater, płn")
-  podw3 <- c("Żwirki i Wigury/Trojdena1", "Żwirki i Wigury/Trojdena2")
-  sumy <-c("Al. USA - suma","Świętokrzyska - Emilii Plater - suma", "Żwirki i Wigury/Trojdena - suma")
-  tabela[,sumy[1]:=get(podw1[1])+get(podw1[2])]
-  tabela[,sumy[2]:=get(podw2[1])+get(podw2[2])]
-  tabela[,sumy[3]:=get(podw3[1])+get(podw3[2])]
-  kolejnosc <-c(nazwy_x, sumy[1], nazwy[3:15], sumy[2], sumy[3], podw1, podw2, podw3)
-  setcolorder(tabela, kolejnosc)
-  tabela
-}
+
 
 #numery tygodni i miesiecy
 numery_dat<-function(tabela) { 

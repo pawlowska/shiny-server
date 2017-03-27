@@ -6,11 +6,17 @@ options(shiny.usecairo=T)
 library(lubridate)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
+source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 
 dane_polaczone<-wczytaj_dane() #wczytuje wstepnie obrobione dane z csv
 
 dane_polaczone<-suma_licznikow(dane_polaczone)
+
+listy_stylow<-zrob_listy_stylow(dane_polaczone)
+kolory<-listy_stylow[1,]
+lista_linii<-listy_stylow[2,]
+lista_fontow<-listy_stylow[3,]
 
 nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
 
@@ -37,32 +43,54 @@ ui <- fluidPage(
   headerPanel('Liczba rowerów'),
   sidebarLayout(
     sidebarPanel(
-      dateRangeInput('zakres', 'Wybierz zakres dat', 
-                     start=zakresOdPokaz, end=zakresDo, min=zakresOd, max=zakresDo,
-                     separator = 'do', weekstart = 0, language = "pl"),
-      selectInput('okres', 'Podsumuj', okresy, selected = okresy[2], multiple = FALSE,
-                  selectize = TRUE, width = NULL, size = NULL),
+      lapply(1:length(nazwy), function(x) {
+        n <- length(nazwy)
+        css_col <- paste0("#liczniki div.checkbox:nth-child(",x,
+                          ") span{color: ", kolory[x],"; font-weight : ",lista_fontow[x],"}")
+        tags$style(type="text/css", css_col)
+      }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[sample(1:ile, 3)], inline = FALSE, width = NULL)
-  ),
+                         selected = nazwy[c(4,17:19)], inline = FALSE, width = NULL),
+      style= "padding: 10px 0px 0px 20px;"
+    ),
     mainPanel(
-      tags$p(paste('Dane z automatycznych liczników rowerów ZDM z okresu od ', zakresOd, ' do ', zakresDo)),
-      tags$p(""),
-      div(
-        id = "plotDiv",
-        style = "position:relative",
-
-        plotOutput('plot1', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
-        uiOutput("my_tooltip")
-      ),
-      
-      hr(),
-      tags$p(
-        'Dane: ',
-        tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
-        '(otrzymane mailem). Aplikacja: Monika Pawłowska',
-        tags$a(href='rowery@greenelephant.pl', "rowery@greenelephant.pl")
-        )
+      tabsetPanel(
+        tabPanel("Wykres",
+                 #wybor zakresu i grupowania daty
+                 wellPanel(fluidRow(
+                   column(5,
+                          dateRangeInput('zakres', 'Wybierz zakres dat', 
+                                         start=zakresOdPokaz, end=zakresDo, min=zakresOd, max=zakresDo,
+                                         separator = 'do', weekstart = 0, language = "pl")
+                   ),
+                   column(7,
+                          #selectInput('okres', 'Podsumuj', okresy, selected = okresy[2], multiple = FALSE,
+                          #        selectize = TRUE, width = NULL, size = NULL)
+                          radioButtons('okres', 'Podsumuj', okresy, selected = okresy[1], 
+                                       inline = TRUE, width = NULL)        
+                   )
+                 ), style= "padding: 10px 0px 0px 20px;"
+                 ), #end wellPanel
+                 div(id = "plotDiv", style = "position:relative",
+                   plotOutput('plot1', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
+                   uiOutput("my_tooltip")
+                 )
+        ),
+        tabPanel("O aplikacji",
+                 tags$p(),
+                 tags$p(
+                   'Dane z automatycznych liczników rowerów ZDM z okresu od ', zakresOd, 
+                   ' do ', zakresDo, '. Źródło danych: ',
+                   tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
+                   '(otrzymane mailem).'),
+                 tags$p(
+                   'Aplikacja: Monika Pawłowska',
+                   tags$a(href='rowery@greenelephant.pl', "rowery@greenelephant.pl"),
+                   'Kod i dane źródłowe dostępne są',
+                   tags$a(href='https://github.com/pawlowska/shiny-server/tree/master/rowery', 'tu.'))
+        ) #end of "O..."
+        
+      ) #end tabsetPanel
     ) #end mainPanel
   )
 ) #end ui

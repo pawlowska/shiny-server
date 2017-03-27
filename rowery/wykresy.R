@@ -3,16 +3,6 @@ library(ggplot2)
 library(data.table)
 library(scales) #for nicer y axis
 
-source('palety_kolorow.R')
-
-kolory<-paleta16_sorted
-kolory<-c(paleta16_sorted, 
-          paleta16_sorted[1], paleta16_sorted[1],
-          paleta16_sorted[15], paleta16_sorted[15],
-          paleta16_sorted[16], paleta16_sorted[16])
-
-lista_linii<-c(rep("solid",16), rep(c("dashed", "dotdash"),3))
-
 #wykres pojedynczej kolumny w zakresie danych
 # wykres_jeden<-function(dane, kolumna, start=as.Date("2016-01-01"), stop=as.Date("2016-12-19")) {
 #   zakres=seq(from=start, to=stop, by=1)
