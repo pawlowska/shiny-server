@@ -8,6 +8,7 @@ dane_od2014<-zaladuj_dane('dane/zapytanie PZiniewicz_utf8.csv')
 dane_2014_2015<-dane_od2014[as.numeric(format(Data,'%Y'))<2016]
 #wykasuj praska sciezke, bo nie wiadomo, czy oddziela rowery od pieszych
 dane_2014_2015_bez_praskiej<-dane_2014_2015[,"Praska sciezka rekreacyjna":=NA]
+rm(dane_od2014)
 
 #dane z maila 20.12.2016
 dane_wiekszosc2016<-zaladuj_dane('dane/Zapytanie2016utf8.csv')
@@ -25,7 +26,12 @@ dane_domarca2017<-zaladuj_dane('dane/2017styczen_marzecutf8.csv')
 setnames(dane_domarca2017, names(dane_domarca2017), names(dane_wiekszosc2016))
 
 
-dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], dane_dostycznia2017, dane_domarca2017)
+dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], dane_dostycznia2017[1:37], dane_domarca2017)
+
+rm(dane_2014_2015_bez_praskiej)
+rm(dane_wiekszosc2016)
+rm(dane_dostycznia2017)
+rm(dane_domarca2017)
 
 dane<-numery_dat(dane)
 

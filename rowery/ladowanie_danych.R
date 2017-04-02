@@ -1,7 +1,7 @@
 library(data.table)
 
 zaladuj_dane<-function(plik, sep=';') {
-  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8")
+  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
   #kolumny od 2 do końca to liczby
   cols<-2:ncol(tabela) 
   tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 

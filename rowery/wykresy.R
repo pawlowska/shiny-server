@@ -42,14 +42,14 @@ wykres_kilka<-function(dane, start, stop, paleta, linie) {
   
   #x data range and ticks  
   zakres_dat=interval(start, stop)
-  iledni = zakres_dat %/% days(1)
+  iledni = time_length(zakres_dat, unit="day")
   if (iledni<21) {breaks="1 day"}
   else if (iledni<100) {breaks = "1 week"}
   else if (iledni<210) {breaks = "2 weeks"}
   else if (iledni<450) {breaks = "1 month"}
   else {breaks = "2 months"}
 
-  krok = interval(dane[1,Data],dane[2,Data]) %/% days(1)
+  krok = time_length(interval(dane[1,Data],dane[2,Data]), unit = "day")
 
   #set theme    
   theme_set(theme_light(base_size = 14))
