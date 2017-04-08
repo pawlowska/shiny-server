@@ -3,7 +3,7 @@ library(data.table)
 
 weekend<-function(data) {
   dzien<-weekdays(data)
-  ifelse (dzien %in% c("niedziela","sobota"), "weekend", "roboczy")
+  ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
 }
 
 dodaj_pogode<-function(tabela) {
