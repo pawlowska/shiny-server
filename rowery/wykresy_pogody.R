@@ -7,8 +7,8 @@ weekend<-function(data) {
 }
 
 dodaj_pogode<-function(tabela) {
-  temperatura<-fread("pogoda/IMGW_temp_20170228.csv", header = TRUE, encoding = "UTF-8", drop=1)
-  opady<-fread("pogoda/IMGW_opady_20170305.csv", header = TRUE, encoding = "UTF-8", drop=1)
+  temperatura<-fread("./pogoda/IMGW_temp_20170228.csv", header = TRUE, encoding = "UTF-8", drop=1)
+  opady<-fread("./pogoda/IMGW_opady_20170305.csv", header = TRUE, encoding = "UTF-8", drop=1)
   opady[,"status.deszcz":=NULL]
   opady[,"status.snieg":=NULL]
   pogoda<-merge(temperatura, opady, by="data")
