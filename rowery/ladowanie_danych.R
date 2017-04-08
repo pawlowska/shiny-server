@@ -21,8 +21,7 @@ raw_to_long<-function(dane) {
 }
 
 wczytaj_dane<-function(plik = "dane_polaczone.csv") {
-  tabela<-fread(plik, header = TRUE, encoding = "UTF-8")
-  tabela[,V1:=NULL]
+  tabela<-fread(plik, header = TRUE, encoding = "UTF-8", drop=1) #1st column is just row numers, drop it
   tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
   tabela[,startTyg := as.Date(startTyg, tz="Europe/Berlin", format="%Y-%m-%d")]
   tabela[,startM := as.Date(startM, tz="Europe/Berlin", format="%Y-%m-%d")]
@@ -46,7 +45,9 @@ numery_dat<-function(tabela) {
 
 wide_to_long<-function(dane) {
   #print(str(dane))
-  tabela<-melt(dane, id.vars = c("Data","startTyg","startM"), variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
+  tabela<-melt(dane, 
+               id.vars = c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "wartosc.deszcz", "wartosc.snieg", "Jaki_dzien"), 
+               variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
 }
 
 #podsumowanie po stratTyg danych w formacie long

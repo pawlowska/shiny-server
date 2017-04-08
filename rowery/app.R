@@ -8,6 +8,7 @@ library(lubridate)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
+source('pogoda/wykresy_pogody.R', encoding = 'UTF-8')
 
 dane_polaczone<-wczytaj_dane() #wczytuje wstepnie obrobione dane z csv
 
@@ -20,6 +21,8 @@ lista_fontow<-listy_stylow[3,]
 
 nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
 
+dane_polaczone<-dodaj_pogode(dane_polaczone)
+
 dane_long<-wide_to_long(dane_polaczone)
 dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
@@ -28,6 +31,7 @@ zakresOd=  '2014-08-01'
 zakresOdPokaz='2017-01-01'
 #zakresDo = '2017-01-26'
 zakresDo = '2017-03-19'
+zakresDoPogoda= '2017-02-28'
 
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
@@ -40,7 +44,22 @@ nazwy_licznikow<-nazwy[1:ile_licznikow]
 nazwy_sum<-nazwy[(ile_licznikow+1):(ile_licznikow+ile_sum)]
 
 ui <- fluidPage(
+  tags$head(
+    tags$style(HTML("
+                    h1 {
+                      margin-top:0px;
+                      margin-bottom: 5px;
+                    }
+                    ")),
+    tags$style(HTML("
+                    h5 {
+                      padding-left: 16px;
+                      margin-top: 3px;
+                    };
+                    "))),
+  h5('Autorka: Monika Pawłowska', align = 'right'),
   headerPanel('Liczba rowerów'),
+  h5('Dane z liczników rowerowych w Warszawie'),
   sidebarLayout(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
@@ -50,7 +69,7 @@ ui <- fluidPage(
         tags$style(type="text/css", css_col)
       }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[c(4,17:19)], inline = FALSE, width = NULL),
+                         selected = nazwy[c(4,20)], inline = FALSE, width = NULL),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -71,22 +90,38 @@ ui <- fluidPage(
                    )
                  ), style= "padding: 10px 0px 0px 20px;"
                  ), #end wellPanel
-                 div(id = "plotDiv", style = "position:relative",
+                 div(id = "plotDiv", 
+                     style = "position:relative",
+                     title = "Ile rowerów jeździ w Warszawie",
                    plotOutput('plot1', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
                    uiOutput("my_tooltip")
                  )
         ),
+        tabPanel("Pogoda",
+                 tags$p(), 
+                 div(id = "weatherPlotDiv", 
+                     style = "position:relative",
+                     title = "Ile rowerów w zależności od pogody",
+                     plotOutput('plot2', height=500, hover = hoverOpts(id = "plot_hover", delay = 100))
+                 )
+        ),
         tabPanel("O aplikacji",
                  tags$p(),
-                 tags$p(
-                   'Dane z automatycznych liczników rowerów ZDM z okresu od ', zakresOd, 
-                   ' do ', zakresDo, '. Źródło danych: ',
+                 tags$p('Aplikacja', tags$b('Rowery'),' przedstawia dane z automatycznych liczników rowerów w Warszawie
+                        od początku ich funkcjonowania, czyli od ', 
+                        zakresOd, ', do ', zakresDo, 
+                        '. Źródłem danych jest: ',
                    tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
                    '(otrzymane mailem).'),
                  tags$p(
-                   'Aplikacja: Monika Pawłowska',
+                   'Średnią dobową temperaturę w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
+                   tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'),
+                   'Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy.'
+                 ),
+                 tags$p(
+                   'Autorka aplikacji: Monika Pawłowska (kontakt:',
                    tags$a(href='rowery@greenelephant.pl', "rowery@greenelephant.pl"),
-                   'Kod i dane źródłowe dostępne są',
+                   '). Kod i dane źródłowe dostępne są',
                    tags$a(href='https://github.com/pawlowska/shiny-server/tree/master/rowery', 'tu.'))
         ) #end of "O..."
         
@@ -113,11 +148,24 @@ server <- function(input, output) {
       }
   })
   
+  data_with_weather <- reactive({
+    zakres_dat=interval(zakresOd, zakresDoPogoda)
+    dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+  })
+  
+  uzyte_kolory<-reactive({
+    kolory[indeksy()]
+  })
+  
   output$plot1 <- renderPlot({
-    uzyte_kolory<-kolory[indeksy()]
     uzyte_linie <-lista_linii[indeksy()]
     wykres_kilka(data(), 
-                 start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory, linie = uzyte_linie)
+                 start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory(), linie = uzyte_linie)
+  })
+  
+  output$plot2 <- renderPlot({
+    pogoda_basic(data_with_weather(),
+                 paleta=uzyte_kolory())
   })
   
   output$my_tooltip <- renderUI({
