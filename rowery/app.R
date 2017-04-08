@@ -8,7 +8,7 @@ library(lubridate)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
-source('pogoda/wykresy_pogody.R', encoding = 'UTF-8')
+source('wykresy_pogody.R', encoding = 'UTF-8')
 
 dane_polaczone<-wczytaj_dane() #wczytuje wstepnie obrobione dane z csv
 
