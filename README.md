@@ -1,4 +1,4 @@
-# Navigation
+## Navigation
 1. [What is this?](#whatisthis)
 2. [Data sources](#data)
 3. [License](#license)
@@ -7,7 +7,7 @@
 
 This repository containds code and data for the R Shiny app presenting bicycle counters data from the city of Warsaw, Poland. The working app is at http://greenelephant.pl/rowery/
 
-
+![Number of bikes over time](screen.PNG)
 
 ## Data sources <a name="data"></a>
 
