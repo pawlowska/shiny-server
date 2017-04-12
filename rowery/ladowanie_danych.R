@@ -15,10 +15,10 @@ zaladuj_dane<-function(plik, sep=';') {
 }
 
 #currently unused
-raw_to_long<-function(dane) {
+#raw_to_long<-function(dane) {
   #print(str(dane))
-  tabela<-melt(dane, id.vars = "Data", variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
-}
+#  tabela<-melt(dane, id.vars = "Data", variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
+#}
 
 wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela<-fread(plik, header = TRUE, encoding = "UTF-8", drop=1) #1st column is just row numers, drop it
@@ -46,7 +46,7 @@ numery_dat<-function(tabela) {
 wide_to_long<-function(dane) {
   #print(str(dane))
   tabela<-melt(dane, 
-               id.vars = c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "wartosc.deszcz", "wartosc.snieg", "Jaki_dzien"), 
+               id.vars = c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien"), 
                variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
 }
 

@@ -1,0 +1,59 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Load functions
+
+```{r}
+source('pogoda/imgw.R', encoding = 'UTF-8')
+```
+
+Create a list of Mondays
+
+```{r}
+poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-04-10"))
+```
+
+Load newest temperature data
+
+```{r}
+zakres<-136:142
+temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres])
+temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres])
+temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres])
+print(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new))
+
+```
+
+Merge temeprature data
+
+```{r}
+temp_minavg<-merge(temp_min_new[,1:2], temp_avg_new[,1:2], by="data")
+temp_all<-merge(temp_minavg, temp_max_new[,1:2], by="data")
+rm(temp_minavg)
+colnames(temp_all)<-c("Data", "temp_min", "temp_avg", "temp_max")
+temp_all[,Data:=as.character(as.Date(Data))]
+
+```
+
+Load newest rain&snow data
+
+```{r}
+zakres<-137:142
+deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres])
+snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres])
+print(nrow(deszcz_new))
+print(nrow(snieg_new))
+
+```
+
+Merge rain&snow data
+
+```{r}
+opady<-merge(deszcz_new[,1:2], snieg_new[,1:2], by="data")
+opady[is.na(opady)]<-0
+colnames(opady)<-c("Data", "deszcz", "snieg")
+opady[,Data:=as.character(as.Date(Data))]
+
+```

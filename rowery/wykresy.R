@@ -64,7 +64,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie) {
             )#+ggtitle("Liczba rowerów zarejestrowanych przez liczniki")
   g<-g+scale_x_date(date_breaks = breaks, labels=labelsy(krok),limits=c(min(start),max(stop)),
                     expand=c(0,0)) #numer X ticks
-  g<-g+scale_y_continuous(breaks = pretty_breaks(5), labels=comma_format())+theme(
+  g<-g+scale_y_continuous(breaks = pretty_breaks(7), labels=comma_format())+theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
   #colours and line types

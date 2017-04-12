@@ -29,9 +29,8 @@ dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
 zakresOdPokaz='2017-01-01'
-#zakresDo = '2017-01-26'
 zakresDo = '2017-03-19'
-zakresDoPogoda= '2017-02-28'
+zakresDoPogoda= '2017-03-31'
 
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
@@ -77,32 +76,30 @@ ui <- fluidPage(
         tabPanel("Wykres",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
-                   column(5,
+                   column(5, #daty
                           dateRangeInput('zakres', 'Wybierz zakres dat', 
                                          start=zakresOdPokaz, end=zakresDo, min=zakresOd, max=zakresDo,
                                          separator = 'do', weekstart = 0, language = "pl")
                    ),
-                   column(7,
-                          #selectInput('okres', 'Podsumuj', okresy, selected = okresy[2], multiple = FALSE,
-                          #        selectize = TRUE, width = NULL, size = NULL)
+                   column(7, #dobowo/tygodniowo/miesiecznie
                           radioButtons('okres', 'Podsumuj', okresy, selected = okresy[1], 
                                        inline = TRUE, width = NULL)        
                    )
-                 ), style= "padding: 10px 0px 0px 20px;"
-                 ), #end wellPanel
-                 div(id = "plotDiv", 
+                 ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
+                 div(id = "plotDiv", #wykres
                      style = "position:relative",
-                     title = "Ile rowerów jeździ w Warszawie",
-                   plotOutput('plot1', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
-                   uiOutput("my_tooltip")
+                     alt = "Ile rowerów jeździ w Warszawie",
+                   plotOutput('plot1', height=480, hover = hoverOpts(id = "plot_hover", delay = 100)),
+                   uiOutput("bike_date_tooltip")
                  )
         ),
         tabPanel("Pogoda",
                  tags$p(), 
                  div(id = "weatherPlotDiv", 
                      style = "position:relative",
-                     title = "Ile rowerów w zależności od pogody",
-                     plotOutput('plot2', height=500, hover = hoverOpts(id = "plot_hover", delay = 100))
+                     alt = "Ile rowerów w zależności od pogody",
+                     plotOutput('plot2', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
+                     uiOutput("bike_weather_tooltip")
                  )
         ),
         tabPanel("O aplikacji",
@@ -164,33 +161,60 @@ server <- function(input, output) {
   })
   
   output$plot2 <- renderPlot({
+    #print(tail(data_with_weather()))
     pogoda_basic(data_with_weather(),
                  paleta=uzyte_kolory())
   })
   
-  output$my_tooltip <- renderUI({
+  output$bike_date_tooltip <- renderUI({
     #based on: http://stackoverflow.com/questions/38992270/r-shiny-tooltip-in-ggplot
     
-    hover <- input$plot_hover 
+    hover <- input$plot_hover
+    #is mouse close to a point?
     point <- nearPoints(data(), hover, threshold = 8, maxpoints = 1)[ ,c("Data", "Liczba_rowerow")]
     if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
 
-    #calculate the position of the tooltip
-        left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
-    top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
-    
-    left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
-    top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)   
-    
-    style <- paste0("position:absolute; z-index:100; padding: 0 6px 0 6px; height: 22px; overflow: hidden;
-                    background-color: rgba(245, 245, 245, 0.85); ",
-                    "left:", left_px + 2, "px; top:", top_px + 2, "px;")
-    
+    #else add to UI
     wellPanel(
-      style = style,
+      style = tooltip_html(tooltip_position(hover)),
       p(HTML(paste0( point$Data,": ", point$Liczba_rowerow)))
     )
   })
+  
+  output$bike_weather_tooltip <- renderUI({
+    
+    hover <- input$plot_hover
+    #is mouse close to a point?
+    point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg", "Liczba_rowerow")]
+    if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
+    
+    #else add to UI
+    wellPanel(
+      style = tooltip_html(tooltip_position(hover, w=140)),
+      p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ', point$Liczba_rowerow)))
+    )
+  })
+}
+
+tooltip_position<-function(hover, w=120) {   #calculate the position of the tooltip
+  #in relative units
+  left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
+  top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
+  #in pixel units
+  left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
+  if(hover$range$right-left_px<w) left_px<-left_px-(w+5) #tooltips too far right were hidden
+  
+  top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
+  
+  c(left_px, top_px)
+}
+
+tooltip_html<-function(pos_px) {
+  left_px<-pos_px[1]
+  top_px<-pos_px[2]
+  paste0("position:absolute; z-index:100; padding: 0 6px 0 6px; height: 22px; overflow: hidden;
+                    background-color: rgba(245, 245, 245, 0.85); ",
+  "left:", left_px + 2, "px; top:", top_px + 2, "px;")
 }
 
 shinyApp(ui = ui, server = server)

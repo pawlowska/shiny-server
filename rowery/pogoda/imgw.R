@@ -33,22 +33,21 @@ zrob_link<-function(parametr, data, stacja=warszawaOkecie, baza=bazaHist) {
 
 
 sciagaj_liste<-function(parametr, lista_dat) {
+  library(data.table)
   dane<-NULL
   for (data in lista_dat) {
     link <- zrob_link(parametr, data)
     txt<- getURL(link, userpwd = credentials)
     tabelka<-read.csv(text=txt, sep=';')
-    print(head(tabelka))
     dane<-rbind(dane, tabelka)
     Sys.sleep(1)
   }
-  dane
+  print(nrow(dane))
+  data.table(dane)
 
 }
 
 # temp_min<-sciagaj_liste(p_temp_min, poniedzialki[1:100])
-# temp_min_2<-sciagaj_liste(p_temp_min, poniedzialki[101:137])
-# temp_min<-rbind(temp_min, temp_min_2)
 
 #write.csv(temp_avg, file = "IMGW_temp_avg_B100B008CD_20170220.csv", fileEncoding = 'UTF-8')
 #write.csv(temp_max, file = "IMGW_temp_max_B100B008BD_20170228.csv", fileEncoding = 'UTF-8')
