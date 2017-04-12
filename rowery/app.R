@@ -190,7 +190,7 @@ server <- function(input, output) {
     
     #else add to UI
     wellPanel(
-      style = tooltip_html(tooltip_position(hover, w=140)),
+      style = tooltip_html(tooltip_position(hover, w=180)),
       p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ', point$Liczba_rowerow)))
     )
   })
