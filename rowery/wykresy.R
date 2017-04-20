@@ -35,11 +35,11 @@ wykres_lokalny<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Dat
   wykres_kilka(dane_zakres, start, stop)
 }
   
-better_ticks<-function(zakres_dat, rodzaj="dobowe") {
+better_ticks<-function(zakres_dat, krok=1) {
   iledni = time_length(zakres_dat, unit="day")
-  if (iledni<21) {breaks="1 day"}
-  else if (iledni<100) {breaks = "1 week"}
-  else if (iledni<210) {breaks = "2 weeks"}
+  if ((iledni<21)&&(krok==1)) {breaks="1 day"}
+  else if ((iledni<100)&&(krok<=7)) {breaks = "1 week"}
+  else if ((iledni<210)&&(krok<=7)) {breaks = "2 weeks"}
   else if (iledni<450) {breaks = "1 month"}
   else {breaks = "2 months"}
   breaks
@@ -49,11 +49,11 @@ better_ticks<-function(zakres_dat, rodzaj="dobowe") {
 wykres_kilka<-function(dane, start, stop, paleta, linie) {
 #dane w formacie long do łatwiejszego wyboru grup
   
+  krok = time_length(interval(dane[1,Data],dane[2,Data]), unit = "day")
+  
   #x data range and ticks  
   zakres_dat=interval(start, stop)
-  breaks<-better_ticks(zakres_dat)
-
-  krok = time_length(interval(dane[1,Data],dane[2,Data]), unit = "day")
+  breaks<-better_ticks(zakres_dat, krok)
 
   #set theme    
   theme_set(theme_light(base_size = 14))
