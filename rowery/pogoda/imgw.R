@@ -1,8 +1,9 @@
 library(RCurl)
 
-source('pogoda/haslo.R', encoding = 'UTF-8')
+source('haslo.R', encoding = 'UTF-8')
 
 bazaHist="cbdh/"
+bazaO="cbdo/"
 warszawaOkecie="352200375"
 
 p_temp_avg="B100B008CD" #"Średnia temperatura powietrza-doba-synop"
@@ -25,7 +26,7 @@ lista_poniedzialkow<-function(od=as.POSIXct("2014-07-28"), do=as.POSIXct("2017-0
   daty_txt
 }
 
-zrob_link<-function(parametr, data, stacja=warszawaOkecie, baza=bazaHist) {
+zrob_link<-function(parametr, data, stacja=warszawaOkecie, baza=bazaO) {
   paste("https://dane.imgw.pl/1.0/pomiary/", baza, stacja, '-', parametr, '/tydzien/', data, '?format=csv', sep="")
 }
 

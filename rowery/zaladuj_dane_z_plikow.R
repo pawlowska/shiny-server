@@ -25,13 +25,17 @@ dane_domarca2017<-zaladuj_dane('dane/2017styczen_marzecutf8.csv')
 #dane_domarca2017[,"Praska sciezka rekreacyjna":=NULL]
 setnames(dane_domarca2017, names(dane_domarca2017), names(dane_wiekszosc2016))
 
+dane_dokwietnia2017<-zaladuj_dane('dane/2017marzec_kwiecien_utf8.csv') 
+dane_dokwietnia2017[,"Praska sciezka rekreacyjna":=NULL]
+setnames(dane_dokwietnia2017, names(dane_dokwietnia2017), names(dane_wiekszosc2016))
 
-dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], dane_dostycznia2017[1:37], dane_domarca2017)
+dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], dane_dostycznia2017[1:37], dane_domarca2017[1:53], dane_dokwietnia2017[1:31])
 
 rm(dane_2014_2015_bez_praskiej)
 rm(dane_wiekszosc2016)
 rm(dane_dostycznia2017)
 rm(dane_domarca2017)
+rm(dane_dokwietnia2017)
 
 dane<-numery_dat(dane)
 

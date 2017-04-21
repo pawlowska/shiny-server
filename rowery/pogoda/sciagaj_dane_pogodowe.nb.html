@@ -175,8 +175,8 @@ $(document).ready(function () {
 <p>Load functions</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKCdwb2dvZGEvaW1ndy5SJywgZW5jb2RpbmcgPSAnVVRGLTgnKVxuYGBgIn0= -->
-<pre class="r"><code>source('pogoda/imgw.R', encoding = 'UTF-8')</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKCdpbWd3LlInLCBlbmNvZGluZyA9ICdVVEYtOCcpXG5gYGAifQ== -->
+<pre class="r"><code>source('imgw.R', encoding = 'UTF-8')</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -191,14 +191,31 @@ $(document).ready(function () {
 <p>Load newest temperature data</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xMzY6MTQyXG50ZW1wX21pbl9uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX21pbiwgcG9uaWVkemlhbGtpW3pha3Jlc10pXG50ZW1wX2F2Z19uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX2F2ZywgcG9uaWVkemlhbGtpW3pha3Jlc10pXG50ZW1wX21heF9uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX21heCwgcG9uaWVkemlhbGtpW3pha3Jlc10pXG5wcmludChucm93KHRlbXBfbWluX25ldyksIG5yb3codGVtcF9hdmdfbmV3KSwgbnJvdyh0ZW1wX21heF9uZXcpKVxuXG5gYGAifQ== -->
-<pre class="r"><code>zakres&lt;-136:142
-temp_min_new&lt;-sciagaj_liste(p_temp_min, poniedzialki[zakres])
-temp_avg_new&lt;-sciagaj_liste(p_temp_avg, poniedzialki[zakres])
-temp_max_new&lt;-sciagaj_liste(p_temp_max, poniedzialki[zakres])
-print(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new))
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xNDE6MTQyXG50ZW1wX21pbl9uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX21pbiwgcG9uaWVkemlhbGtpW3pha3Jlc10pXG5gYGAifQ== -->
+<pre class="r"><code>zakres&lt;-141:142
+temp_min_new&lt;-sciagaj_liste(p_temp_min, poniedzialki[zakres])</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE0XG4ifQ== -->
+<pre><code>[1] 14</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVtcF9hdmdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9hdmcsIHBvbmllZHppYWxraVt6YWtyZXNdKVxuYGBgIn0= -->
+<pre class="r"><code>temp_avg_new&lt;-sciagaj_liste(p_temp_avg, poniedzialki[zakres])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE0XG4ifQ== -->
+<pre><code>[1] 14</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVtcF9tYXhfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9tYXgsIHBvbmllZHppYWxraVt6YWtyZXNdKVxuYGBgIn0= -->
+<pre class="r"><code>temp_max_new&lt;-sciagaj_liste(p_temp_max, poniedzialki[zakres])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE0XG4ifQ== -->
+<pre><code>[1] 14</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQocGFzdGUobnJvdyh0ZW1wX21pbl9uZXcpLCBucm93KHRlbXBfYXZnX25ldyksIG5yb3codGVtcF9tYXhfbmV3KSkpXG5gYGAifQ== -->
+<pre class="r"><code>print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiMTQgMTQgMTRcIlxuIn0= -->
+<pre><code>[1] &quot;14 14 14&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Merge temeprature data</p>
@@ -216,28 +233,40 @@ temp_all[,Data:=as.character(as.Date(Data))]</code></pre>
 <p>Load newest rain&amp;snow data</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xMzc6MTQyXG5kZXN6Y3pfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfZGVzemN6X2RvYmEsIHBvbmllZHppYWxraVt6YWtyZXNdKVxuc25pZWdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfc25pZWdfZG9iYSwgcG9uaWVkemlhbGtpW3pha3Jlc10pXG5wcmludChucm93KGRlc3pjel9uZXcpKVxucHJpbnQobnJvdyhzbmllZ19uZXcpKVxuXG5gYGAifQ== -->
-<pre class="r"><code>zakres&lt;-137:142
-deszcz_new&lt;-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres])
-snieg_new&lt;-sciagaj_liste(p_snieg_doba, poniedzialki[zakres])
-print(nrow(deszcz_new))
-print(nrow(snieg_new))
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xNDE6MTQyXG5kZXN6Y3pfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfZGVzemN6X2RvYmEsIHBvbmllZHppYWxraVt6YWtyZXNdKVxuYGBgIn0= -->
+<pre class="r"><code>zakres&lt;-141:142
+deszcz_new&lt;-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres])</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEwXG4ifQ== -->
+<pre><code>[1] 10</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc25pZWdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfc25pZWdfZG9iYSwgcG9uaWVkemlhbGtpW3pha3Jlc10pXG5gYGAifQ== -->
+<pre class="r"><code>snieg_new&lt;-sciagaj_liste(p_snieg_doba, poniedzialki[zakres])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDBcbiJ9 -->
+<pre><code>[1] 0</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQocGFzdGUobnJvdyhkZXN6Y3pfbmV3KSwgbnJvdyhzbmllZ19uZXcpKSlcbmBgYCJ9 -->
+<pre class="r"><code>print(paste(nrow(deszcz_new), nrow(snieg_new)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiMTAgMFwiXG4ifQ== -->
+<pre><code>[1] &quot;10 0&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Merge rain&amp;snow data</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3BhZHk8LW1lcmdlKGRlc3pjel9uZXdbLDE6Ml0sIHNuaWVnX25ld1ssMToyXSwgYnk9XCJkYXRhXCIpXG5vcGFkeVtpcy5uYShvcGFkeSldPC0wXG5jb2xuYW1lcyhvcGFkeSk8LWMoXCJEYXRhXCIsIFwiZGVzemN6XCIsIFwic25pZWdcIilcbm9wYWR5WyxEYXRhOj1hcy5jaGFyYWN0ZXIoYXMuRGF0ZShEYXRhKSldXG5gYGAifQ== -->
-<pre class="r"><code>opady&lt;-merge(deszcz_new[,1:2], snieg_new[,1:2], by=&quot;data&quot;)
-opady[is.na(opady)]&lt;-0
-colnames(opady)&lt;-c(&quot;Data&quot;, &quot;deszcz&quot;, &quot;snieg&quot;)
-opady[,Data:=as.character(as.Date(Data))]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3BhZHk8LW1lcmdlKGRlc3pjel9uZXdbLDE6Ml0sIHNuaWVnX25ld1ssMToyXSwgYnk9XCJkYXRhXCIpXG5gYGAifQ== -->
+<pre class="r"><code>opady&lt;-merge(deszcz_new[,1:2], snieg_new[,1:2], by=&quot;data&quot;)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gYm1lcmdlKGksIHgsIGxlZnRjb2xzLCByaWdodGNvbHMsIGlvLCB4bywgcm9sbCwgcm9sbGVuZHMsIG5vbWF0Y2gsICA6IFxuICB0eXBlb2YgeC5kYXRhIChsb2dpY2FsKSAhPSB0eXBlb2YgaS5kYXRhIChpbnRlZ2VyKVxuIn0= -->
+<pre><code>Error in bmerge(i, x, leftcols, rightcols, io, xo, roll, rollends, nomatch,  : 
+  typeof x.data (logical) != typeof i.data (integer)</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpMb2FkIGZ1bmN0aW9ucw0KDQpgYGB7cn0NCnNvdXJjZSgncG9nb2RhL2ltZ3cuUicsIGVuY29kaW5nID0gJ1VURi04JykNCmBgYA0KDQpDcmVhdGUgYSBsaXN0IG9mIE1vbmRheXMNCg0KYGBge3J9DQpwb25pZWR6aWFsa2k8LWxpc3RhX3BvbmllZHppYWxrb3coZG89YXMuUE9TSVhjdCgiMjAxNy0wNC0xMCIpKQ0KYGBgDQoNCkxvYWQgbmV3ZXN0IHRlbXBlcmF0dXJlIGRhdGENCg0KYGBge3J9DQp6YWtyZXM8LTEzNjoxNDINCnRlbXBfbWluX25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfbWluLCBwb25pZWR6aWFsa2lbemFrcmVzXSkNCnRlbXBfYXZnX25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfYXZnLCBwb25pZWR6aWFsa2lbemFrcmVzXSkNCnRlbXBfbWF4X25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfbWF4LCBwb25pZWR6aWFsa2lbemFrcmVzXSkNCnByaW50KG5yb3codGVtcF9taW5fbmV3KSwgbnJvdyh0ZW1wX2F2Z19uZXcpLCBucm93KHRlbXBfbWF4X25ldykpDQoNCmBgYA0KDQpNZXJnZSB0ZW1lcHJhdHVyZSBkYXRhDQoNCmBgYHtyfQ0KdGVtcF9taW5hdmc8LW1lcmdlKHRlbXBfbWluX25ld1ssMToyXSwgdGVtcF9hdmdfbmV3WywxOjJdLCBieT0iZGF0YSIpDQp0ZW1wX2FsbDwtbWVyZ2UodGVtcF9taW5hdmcsIHRlbXBfbWF4X25ld1ssMToyXSwgYnk9ImRhdGEiKQ0Kcm0odGVtcF9taW5hdmcpDQpjb2xuYW1lcyh0ZW1wX2FsbCk8LWMoIkRhdGEiLCAidGVtcF9taW4iLCAidGVtcF9hdmciLCAidGVtcF9tYXgiKQ0KdGVtcF9hbGxbLERhdGE6PWFzLmNoYXJhY3Rlcihhcy5EYXRlKERhdGEpKV0NCg0KYGBgDQoNCkxvYWQgbmV3ZXN0IHJhaW4mc25vdyBkYXRhDQoNCmBgYHtyfQ0KemFrcmVzPC0xMzc6MTQyDQpkZXN6Y3pfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfZGVzemN6X2RvYmEsIHBvbmllZHppYWxraVt6YWtyZXNdKQ0Kc25pZWdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfc25pZWdfZG9iYSwgcG9uaWVkemlhbGtpW3pha3Jlc10pDQpwcmludChucm93KGRlc3pjel9uZXcpKQ0KcHJpbnQobnJvdyhzbmllZ19uZXcpKQ0KDQpgYGANCg0KTWVyZ2UgcmFpbiZzbm93IGRhdGENCg0KYGBge3J9DQpvcGFkeTwtbWVyZ2UoZGVzemN6X25ld1ssMToyXSwgc25pZWdfbmV3WywxOjJdLCBieT0iZGF0YSIpDQpvcGFkeVtpcy5uYShvcGFkeSldPC0wDQpjb2xuYW1lcyhvcGFkeSk8LWMoIkRhdGEiLCAiZGVzemN6IiwgInNuaWVnIikNCm9wYWR5WyxEYXRhOj1hcy5jaGFyYWN0ZXIoYXMuRGF0ZShEYXRhKSldDQoNCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpMb2FkIGZ1bmN0aW9ucw0KDQpgYGB7cn0NCnNvdXJjZSgnaW1ndy5SJywgZW5jb2RpbmcgPSAnVVRGLTgnKQ0KYGBgDQoNCkNyZWF0ZSBhIGxpc3Qgb2YgTW9uZGF5cw0KDQpgYGB7cn0NCnBvbmllZHppYWxraTwtbGlzdGFfcG9uaWVkemlhbGtvdyhkbz1hcy5QT1NJWGN0KCIyMDE3LTA0LTEwIikpDQpgYGANCg0KTG9hZCBuZXdlc3QgdGVtcGVyYXR1cmUgZGF0YQ0KDQpgYGB7cn0NCnpha3JlczwtMTQxOjE0Mg0KdGVtcF9taW5fbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9taW4sIHBvbmllZHppYWxraVt6YWtyZXNdKQ0KdGVtcF9hdmdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9hdmcsIHBvbmllZHppYWxraVt6YWtyZXNdKQ0KdGVtcF9tYXhfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9tYXgsIHBvbmllZHppYWxraVt6YWtyZXNdKQ0KcHJpbnQocGFzdGUobnJvdyh0ZW1wX21pbl9uZXcpLCBucm93KHRlbXBfYXZnX25ldyksIG5yb3codGVtcF9tYXhfbmV3KSkpDQoNCmBgYA0KDQpNZXJnZSB0ZW1lcHJhdHVyZSBkYXRhDQoNCmBgYHtyfQ0KdGVtcF9taW5hdmc8LW1lcmdlKHRlbXBfbWluX25ld1ssMToyXSwgdGVtcF9hdmdfbmV3WywxOjJdLCBieT0iZGF0YSIpDQp0ZW1wX2FsbDwtbWVyZ2UodGVtcF9taW5hdmcsIHRlbXBfbWF4X25ld1ssMToyXSwgYnk9ImRhdGEiKQ0Kcm0odGVtcF9taW5hdmcpDQpjb2xuYW1lcyh0ZW1wX2FsbCk8LWMoIkRhdGEiLCAidGVtcF9taW4iLCAidGVtcF9hdmciLCAidGVtcF9tYXgiKQ0KdGVtcF9hbGxbLERhdGE6PWFzLmNoYXJhY3Rlcihhcy5EYXRlKERhdGEpKV0NCg0KYGBgDQoNCkxvYWQgbmV3ZXN0IHJhaW4mc25vdyBkYXRhDQoNCmBgYHtyfQ0KemFrcmVzPC0xNDE6MTQyDQpkZXN6Y3pfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfZGVzemN6X2RvYmEsIHBvbmllZHppYWxraVt6YWtyZXNdKQ0Kc25pZWdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfc25pZWdfZG9iYSwgcG9uaWVkemlhbGtpW3pha3Jlc10pDQpwcmludChwYXN0ZShucm93KGRlc3pjel9uZXcpLCBucm93KHNuaWVnX25ldykpKQ0KDQpgYGANCg0KTWVyZ2UgcmFpbiZzbm93IGRhdGENCg0KYGBge3J9DQpvcGFkeTwtbWVyZ2UoZGVzemN6X25ld1ssMToyXSwgc25pZWdfbmV3WywxOjJdLCBieT0iZGF0YSIpDQpvcGFkeVtpcy5uYShvcGFkeSldPC0wDQpjb2xuYW1lcyhvcGFkeSk8LWMoIkRhdGEiLCAiZGVzemN6IiwgInNuaWVnIikNCm9wYWR5WyxEYXRhOj1hcy5jaGFyYWN0ZXIoYXMuRGF0ZShEYXRhKSldDQoNCmBgYA0K</div>
 
 
 

@@ -6,7 +6,7 @@ output: html_notebook
 Load functions
 
 ```{r}
-source('pogoda/imgw.R', encoding = 'UTF-8')
+source('imgw.R', encoding = 'UTF-8')
 ```
 
 Create a list of Mondays
@@ -18,11 +18,11 @@ poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-04-10"))
 Load newest temperature data
 
 ```{r}
-zakres<-136:142
+zakres<-141:142
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres])
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres])
 temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres])
-print(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new))
+print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```
 
@@ -40,11 +40,10 @@ temp_all[,Data:=as.character(as.Date(Data))]
 Load newest rain&snow data
 
 ```{r}
-zakres<-137:142
+zakres<-141:142
 deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres])
 snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres])
-print(nrow(deszcz_new))
-print(nrow(snieg_new))
+print(paste(nrow(deszcz_new), nrow(snieg_new)))
 
 ```
 
