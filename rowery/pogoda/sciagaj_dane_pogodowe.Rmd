@@ -12,13 +12,13 @@ source('imgw.R', encoding = 'UTF-8')
 Create a list of Mondays
 
 ```{r}
-poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-04-10"))
+poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-04-24"))
 ```
 
 Load newest temperature data
 
 ```{r}
-zakres<-141:142
+zakres<-140:144
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres])
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres])
 temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres])
@@ -34,13 +34,21 @@ temp_all<-merge(temp_minavg, temp_max_new[,1:2], by="data")
 rm(temp_minavg)
 colnames(temp_all)<-c("Data", "temp_min", "temp_avg", "temp_max")
 temp_all[,Data:=as.character(as.Date(Data))]
+temperatura<-rbind(temperatura, temp_all)
+
+```
+
+Save temperature file
+
+```{r}
+write.csv(temperatura, file = "IMGW_temp_20170420.csv", fileEncoding = 'UTF-8')
 
 ```
 
 Load newest rain&snow data
 
 ```{r}
-zakres<-141:142
+zakres<-140:144
 deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres])
 snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres])
 print(paste(nrow(deszcz_new), nrow(snieg_new)))

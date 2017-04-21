@@ -28,7 +28,7 @@ dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
-zakresOdPokaz='2017-01-01'
+zakresOdPokaz='2017-02-01'
 zakresDo = '2017-04-19'
 zakresDoPogoda= '2017-03-31'
 
@@ -185,13 +185,14 @@ server <- function(input, output) {
     
     hover <- input$plot_hover
     #is mouse close to a point?
-    point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg", "Liczba_rowerow")]
+    point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg","deszcz","snieg", "Liczba_rowerow")]
     if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
+    opad=point$deszcz+point$snieg
     
     #else add to UI
     wellPanel(
       style = tooltip_html(tooltip_position(hover, w=180)),
-      p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ', point$Liczba_rowerow)))
+      p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ',opad,' mm, ', point$Liczba_rowerow)))
     )
   })
 }
