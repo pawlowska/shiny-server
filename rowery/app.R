@@ -39,9 +39,6 @@ ile_licznikow<-19
 ile_sum<-3
 ile<-ile_licznikow-ile_sum
 
-nazwy_licznikow<-nazwy[1:ile_licznikow]
-nazwy_sum<-nazwy[(ile_licznikow+1):(ile_licznikow+ile_sum)]
-
 ui <- fluidPage(
   tags$head(
     tags$style(HTML("
