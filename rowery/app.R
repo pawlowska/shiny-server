@@ -207,9 +207,9 @@ server <- function(input, output) {
   })
 
   output$mymap <- renderLeaflet({
-    leaflet(lokacje[indeksy(),]) %>% 
+    leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
-    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~nazwa, radius = 10, color = uzyte_kolory(), opacity=1)
+    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~nazwa, radius = 10, color = uzyte_kolory(), opacity=1, weight = 8)
   })
   
 }
