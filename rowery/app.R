@@ -4,6 +4,7 @@ library(Cairo) #for nice looks of the graph
 options(shiny.usecairo=T)
 
 library(lubridate)
+library(leaflet) #for maps
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
@@ -13,6 +14,10 @@ source('wykresy_pogody.R', encoding = 'UTF-8')
 dane_polaczone<-wczytaj_dane() #wczytuje wstepnie obrobione dane z csv
 
 dane_polaczone<-suma_licznikow(dane_polaczone)
+
+#reading locations
+lokacje <- read.csv("czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
+sapply(lokacje,"class")
 
 listy_stylow<-zrob_listy_stylow(dane_polaczone)
 kolory<-listy_stylow[1,]
@@ -97,6 +102,14 @@ ui <- fluidPage(
                      alt = "Ile rowerów w zależności od pogody",
                      plotOutput('plot2', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
                      uiOutput("bike_weather_tooltip")
+                 )
+        ),
+        tabPanel("Położenie liczników",
+                 tags$p(), 
+                 div(id = "mapPlotDiv", 
+                     style = "position:relative",
+                     alt = "mapa liczników",
+                     leafletOutput("mymap", height=500)
                  )
         ),
         tabPanel("O aplikacji",
@@ -192,6 +205,13 @@ server <- function(input, output) {
       p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ',opad,' mm, ', point$Liczba_rowerow)))
     )
   })
+
+  output$mymap <- renderLeaflet({
+    leaflet(lokacje[indeksy(),]) %>% 
+    addTiles() %>% 
+    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~nazwa, radius = 10, color = uzyte_kolory(), opacity=1)
+  })
+  
 }
 
 tooltip_position<-function(hover, w=120) {   #calculate the position of the tooltip
