@@ -12,21 +12,21 @@ source('imgw.R', encoding = 'UTF-8')
 Create a list of Mondays
 
 ```{r}
-poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-04-24"))
+poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-05-20"))
 ```
 
 Load newest temperature data
 
 ```{r}
-zakres<-140:144
-temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres])
-temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres])
-temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres])
+zakres<-144:147
+temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres], bazaO)
+temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres], bazaO)
+temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres], bazaO)
 print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```
 
-Merge temeprature data
+Merge temperature data
 
 ```{r}
 temp_minavg<-merge(temp_min_new[,1:2], temp_avg_new[,1:2], by="data")
@@ -41,26 +41,34 @@ temperatura<-rbind(temperatura, temp_all)
 Save temperature file
 
 ```{r}
-write.csv(temperatura, file = "IMGW_temp_20170420.csv", fileEncoding = 'UTF-8')
+write.csv(temperatura, file = "IMGW_temp_20170519.csv", fileEncoding = 'UTF-8')
 
 ```
 
 Load newest rain&snow data
 
 ```{r}
-zakres<-140:144
-deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres])
-snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres])
+zakres<-143:147
+deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaO)
+snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaO)
 print(paste(nrow(deszcz_new), nrow(snieg_new)))
 
 ```
 
-Merge rain&snow data
+Merge new rain&snow data
 
 ```{r}
-opady<-merge(deszcz_new[,1:2], snieg_new[,1:2], by="data")
-opady[is.na(opady)]<-0
-colnames(opady)<-c("Data", "deszcz", "snieg")
-opady[,Data:=as.character(as.Date(Data))]
+opady_nowe<-merge(deszcz_new[,1:2], snieg_new[,1:2], by="data")
+opady_nowe[is.na(opady_nowe)]<-0
+colnames(opady_nowe)<-c("Data", "deszcz", "snieg")
+opady_nowe[,Data:=as.character(as.Date(Data))]
+
+```
+
+
+Save rain&snow file
+
+```{r}
+write.csv(opady, file = "IMGW_opady_20170430.csv", fileEncoding = 'UTF-8')
 
 ```

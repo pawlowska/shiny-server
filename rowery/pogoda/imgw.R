@@ -33,11 +33,11 @@ zrob_link<-function(parametr, data, stacja=warszawaOkecie, baza=bazaO) {
 #link = "https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100E00200/tydzien/2017-01-25?format=csv"
 
 
-sciagaj_liste<-function(parametr, lista_dat) {
+sciagaj_liste<-function(parametr, lista_dat, baza=bazaHist) {
   library(data.table)
   dane<-NULL
   for (data in lista_dat) {
-    link <- zrob_link(parametr, data)
+    link <- zrob_link(parametr, data, warszawaOkecie, baza)
     txt<- getURL(link, userpwd = credentials)
     tabelka<-read.csv(text=txt, sep=';')
     dane<-rbind(dane, tabelka)
