@@ -128,7 +128,7 @@ ui <- fluidPage(
                  tags$p(
                    'Autorka aplikacji: Monika Pawłowska (kontakt:',
                    tags$a(href='rowery@greenelephant.pl', "rowery@greenelephant.pl"),
-                   '). Kod i dane źródłowe dostępne są',
+                   '), mapa: Adam Kolipiński. Kod i dane źródłowe dostępne są',
                    tags$a(href='https://github.com/pawlowska/shiny-server/tree/master/rowery', 'tu.'))
         ) #end of "O..."
         
