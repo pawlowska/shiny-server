@@ -12,13 +12,13 @@ source('imgw.R', encoding = 'UTF-8')
 Create a list of Mondays
 
 ```{r}
-poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-05-20"))
+poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-06-12"))
 ```
 
 Load newest temperature data
 
 ```{r}
-zakres<-144:147
+zakres<-148:151
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres], bazaO)
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres], bazaO)
 temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres], bazaO)
@@ -41,14 +41,14 @@ temperatura<-rbind(temperatura, temp_all)
 Save temperature file
 
 ```{r}
-write.csv(temperatura, file = "IMGW_temp_20170519.csv", fileEncoding = 'UTF-8')
+write.csv(temperatura, file = "IMGW_temp_20170531.csv", fileEncoding = 'UTF-8')
 
 ```
 
 Load newest rain&snow data
 
 ```{r}
-zakres<-143:147
+zakres<-148:151
 deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaO)
 snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaO)
 print(paste(nrow(deszcz_new), nrow(snieg_new)))
@@ -66,9 +66,14 @@ opady_nowe[,Data:=as.character(as.Date(Data))]
 ```
 
 
+```{r}
+opady<-rbind(opady, opady_nowe)
+
+```
+
 Save rain&snow file
 
 ```{r}
-write.csv(opady, file = "IMGW_opady_20170430.csv", fileEncoding = 'UTF-8')
+write.csv(opady, file = "IMGW_opady_20170531.csv", fileEncoding = 'UTF-8')
 
 ```
