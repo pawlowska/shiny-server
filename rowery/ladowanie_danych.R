@@ -1,13 +1,15 @@
 library(data.table)
 
-zaladuj_dane<-function(plik, sep=';') {
+zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
   tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
   #kolumny od 2 do końca to liczby
   cols<-2:ncol(tabela) 
   tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 
   tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
   setorder(tabela, Data)
-  setnames(tabela, 19:20, c("Żwirki i Wigury/Trojdena, zach Rower", "Żwirki i Wigury/Trojdena, wsch Rower"))
+  if (zwirki_i_wigury) {
+    setnames(tabela, 19:20, c("Żwirki i Wigury/Trojdena, zach Rower", "Żwirki i Wigury/Trojdena, wsch Rower"))
+  }
   nazwy<-names(tabela)
   nowe_nazwy<-gsub(" Rower", "", nazwy)
   setnames(tabela, nazwy, nowe_nazwy)
@@ -62,4 +64,10 @@ podsumuj.miesiace <- function(tabela_long) {
   podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce,startM)]
   setnames(podsumowanie, c("startM","V1"), c("Data", "Liczba_rowerow"))
   podsumowanie
+}
+
+
+weekend<-function(data) {
+  dzien<-weekdays(data)
+  ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
 }

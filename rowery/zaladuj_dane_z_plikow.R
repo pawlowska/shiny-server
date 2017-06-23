@@ -12,6 +12,8 @@ rm(dane_od2014)
 
 #dane z maila 20.12.2016
 dane_wiekszosc2016<-zaladuj_dane('dane/Zapytanie2016utf8.csv')
+setnames(dane_wiekszosc2016, "Dworzec Wileński Nowy( Targowa)", "Dworzec Wileński Nowy (Targowa)")
+setnames(dane_wiekszosc2016, "Rowery (Praska ścieżka rekreacyjna)", "Praska ścieżka rekreacyjna")
 
 #ujednolic nazwy
 setnames(dane_2014_2015_bez_praskiej, names(dane_2014_2015_bez_praskiej), names(dane_wiekszosc2016))
@@ -25,17 +27,31 @@ dane_domarca2017<-zaladuj_dane('dane/2017styczen_marzecutf8.csv')
 #dane_domarca2017[,"Praska sciezka rekreacyjna":=NULL]
 setnames(dane_domarca2017, names(dane_domarca2017), names(dane_wiekszosc2016))
 
-dane_dokwietnia2017<-zaladuj_dane('dane/2017marzec_kwiecien_utf8.csv') 
+dane_dokwietnia2017<-zaladuj_dane('dane/2017marzec_kwiecien_utf8.csv', zwirki_i_wigury = FALSE) 
 dane_dokwietnia2017[,"Praska sciezka rekreacyjna":=NULL]
 setnames(dane_dokwietnia2017, names(dane_dokwietnia2017), names(dane_wiekszosc2016))
 
-dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], dane_dostycznia2017[1:37], dane_domarca2017[1:53], dane_dokwietnia2017[1:31])
+dane_doczerwca2017<-zaladuj_dane('dane/2017kwiecien-czerwiec_utf8.csv', zwirki_i_wigury = FALSE) 
+dane_doczerwca2017[,"Praska sciezka rekreacyjna":=NULL]
+setnames(dane_doczerwca2017, "Rowery", "Praska ścieżka rekreacyjna" )
+setnames(dane_doczerwca2017, "Dworzec Wileński Nowy( Targowa)", "Dworzec Wileński Nowy (Targowa)")
+setnames(dane_doczerwca2017, "Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena, zach")
+setnames(dane_doczerwca2017, "Żwirki i Wigury/Trojdena wsch.", "Żwirki i Wigury/Trojdena, wsch")
+setcolorder(dane_doczerwca2017, names(dane_wiekszosc2016))
+setnames(dane_doczerwca2017, names(dane_doczerwca2017), names(dane_wiekszosc2016))
+
+#setnames(dane_dokwietnia2017, names(dane_dokwietnia2017), names(dane_wiekszosc2016))
+
+dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], 
+            dane_dostycznia2017[1:37], dane_domarca2017[1:53], 
+            dane_dokwietnia2017[1:31], dane_doczerwca2017)
 
 rm(dane_2014_2015_bez_praskiej)
 rm(dane_wiekszosc2016)
 rm(dane_dostycznia2017)
 rm(dane_domarca2017)
 rm(dane_dokwietnia2017)
+rm(dane_doczerwca2017)
 
 dane<-numery_dat(dane)
 

@@ -1,10 +1,7 @@
 library(ggplot2)
 library(data.table)
 
-weekend<-function(data) {
-  dzien<-weekdays(data)
-  ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
-}
+
 
 dodaj_pogode<-function(tabela, 
                        plik_temperatura="IMGW_temp_20170531.csv", 

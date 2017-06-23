@@ -19,7 +19,7 @@ dane_polaczone<-suma_licznikow(dane_polaczone)
 lokacje <- read.csv("czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 
-listy_stylow<-zrob_listy_stylow(dane_polaczone)
+listy_stylow<-zrob_listy_stylow(dane_polaczone) #w obsluga_sumowania
 kolory<-listy_stylow[1,]
 lista_linii<-listy_stylow[2,]
 lista_fontow<-listy_stylow[3,]
@@ -34,7 +34,7 @@ dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
 zakresOdPokaz='2017-02-01'
-zakresDo = '2017-04-19'
+zakresDo = '2017-06-22'
 zakresDoPogoda= '2017-05-31'
 
 

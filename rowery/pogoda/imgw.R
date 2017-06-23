@@ -9,14 +9,19 @@ warszawaOkecie="352200375"
 p_temp_avg="B100B008CD" #"Średnia temperatura powietrza-doba-synop"
 p_temp_max="B100B008BD" #"Maksymalna temperatura powietrza-doba-synop"
 p_temp_min="B100B008AD" #"Minimalna temperatura powietrza-doba-synop"
-p_deszcz_doba="B600B008FD"
+p_deszcz_doba="B600B008FD" #Suma opadu - deszcz-doba-synop
 p_snieg_doba="B650B008FD"
+p_zachmurzenie_godz = "B314B00400" #Zachmurzenie całkowite-pomiar godzinowy-synop
+p_wiatr_godz = "B200B00400" #"Prędkość wiatru-pomiar godzinowy-synop-obserwator"
 
 #B600B018FD - Suma dobowa opadu - woda - NIE MA
 #B601E002FD - Czas trwania opadu za ostatnie 24 h-synop - NIE MA
 #B600B008FD - Suma opadu - deszcz-doba-synop - JEST
 #B650B008FD - Suma opadu - śnieg-doba-synop - JEST
 #B609B00400 - Opad za 6 godzin-synop - JEST
+#B600K00200 JEST
+#B600K002FG JEST
+#B200B00400
 
 lista_poniedzialkow<-function(od=as.POSIXct("2014-07-28"), do=as.POSIXct("2017-03-30")) {
   library(lubridate)
