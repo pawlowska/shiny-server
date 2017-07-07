@@ -12,17 +12,30 @@ source('imgw.R', encoding = 'UTF-8')
 Create a list of Mondays
 
 ```{r}
-poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-06-19"))
+poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-06-26"))
+```
+
+Alternatively, create a list of days
+```{r}
+dni<-lista_dni(od=as.POSIXct("2017-06-01"), do=as.POSIXct("2017-06-30"))
 ```
 
 Load newest temperature data
 
 ```{r}
-zakres<-149:152
+zakres<-149:153
 baza=bazaO
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres], baza)
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres], baza)
 temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres], baza)
+print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
+
+```
+```{r}
+baza=bazaO
+temp_min_new<-sciagaj_liste(p_temp_min, dni[1], baza, zakres='/doba/')
+temp_avg_new<-sciagaj_liste(p_temp_avg, dni[1], baza, zakres='/doba/')
+temp_max_new<-sciagaj_liste(p_temp_max, dni[1], baza, zakres='/doba/')
 print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```
@@ -49,9 +62,9 @@ write.csv(temperatura, file = "IMGW_temp_20170531.csv", fileEncoding = 'UTF-8')
 Load newest rain&snow data
 
 ```{r}
-zakres<-148:151
-deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaO)
-snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaO)
+zakres<-149:153
+deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaHist)
+snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaHist)
 print(paste(nrow(deszcz_new), nrow(snieg_new)))
 
 ```
@@ -75,13 +88,13 @@ opady<-rbind(opady, opady_nowe)
 Save rain&snow file
 
 ```{r}
-write.csv(opady, file = "IMGW_opady_20170531.csv", fileEncoding = 'UTF-8')
+write.csv(opady, file = "IMGW_opady_20170630.csv", fileEncoding = 'UTF-8')
 
 ```
 
 Load clouds data
 ```{r}
-zakres<-148:149
+zakres<-149:153
 chmury_new<-sciagaj_liste(p_zachmurzenie_godz, poniedzialki[zakres], bazaHist)
 print(nrow(chmury_new))
 
@@ -92,13 +105,13 @@ chmury<-rbind(chmury, chmury_new)
 ```
 
 ```{r}
-write.csv(chmury, file = "IMGW_chmury_20170531.csv", fileEncoding = 'UTF-8')
+write.csv(chmury, file = "IMGW_chmury_20170630.csv", fileEncoding = 'UTF-8')
 
 ```
 
 Load wind data
 ```{r}
-zakres<-141:149
+zakres<-149:153
 wiatr_new<-sciagaj_liste(p_wiatr_godz, poniedzialki[zakres], bazaHist)
 print(nrow(wiatr_new))
 
@@ -109,7 +122,7 @@ wiatr<-rbind(wiatr, wiatr_new)
 ```
 
 ```{r}
-write.csv(wiatr, file = "IMGW_wiatr_20170531.csv", fileEncoding = 'UTF-8')
+write.csv(wiatr, file = "IMGW_wiatr_20170630.csv", fileEncoding = 'UTF-8')
 
 ```
 

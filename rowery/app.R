@@ -35,7 +35,7 @@ dane_m<-podsumuj.miesiace(dane_long)
 zakresOd=  '2014-08-01'
 zakresOdPokaz='2017-02-01'
 zakresDo = '2017-06-22'
-zakresDoPogoda= '2017-05-31'
+zakresDoPogoda= '2017-06-30'
 
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
