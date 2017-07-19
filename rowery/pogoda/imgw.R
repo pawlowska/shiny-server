@@ -52,6 +52,7 @@ sciagaj_liste<-function(parametr, lista_dat, baza=bazaHist, zakres='/tydzien/') 
   dane<-NULL
   for (data in lista_dat) {
     link <- zrob_link(parametr, data, warszawaOkecie, baza, zakres)
+    print(link)
     txt<- getURL(link, userpwd = credentials)
     tabelka<-read.csv(text=txt, sep=';')
     dane<-rbind(dane, tabelka)

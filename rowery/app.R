@@ -91,7 +91,7 @@ ui <- fluidPage(
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
                      alt = "Ile rowerów jeździ w Warszawie",
-                   plotOutput('plot1', height=480, hover = hoverOpts(id = "plot_hover", delay = 100)),
+                   plotOutput('plotLiczba', height=480, hover = hoverOpts(id = "plot_hover", delay = 100)),
                    uiOutput("bike_date_tooltip")
                  )
         ),
@@ -100,7 +100,7 @@ ui <- fluidPage(
                  div(id = "weatherPlotDiv", 
                      style = "position:relative",
                      alt = "Ile rowerów w zależności od pogody",
-                     plotOutput('plot2', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
+                     plotOutput('plotPogoda', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
                      uiOutput("bike_weather_tooltip")
                  )
         ),
@@ -139,8 +139,10 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   indeksy<-reactive({ #ktore kolory beda uzyte
+    validate(
+      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     match(input$liczniki, nazwy)
-    })
+  })
   
   data <- reactive({
     zakres_dat=interval(input$zakres[1], input$zakres[2])
@@ -164,14 +166,22 @@ server <- function(input, output) {
     kolory[indeksy()]
   })
   
-  output$plot1 <- renderPlot({
+  output$plotLiczba <- renderPlot({
+    validate(
+      need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
+           paste("Data spoza zakresu - dostępne dane od", zakresOd)),
+      need((input$zakres[1]<=zakresDo)&(input$zakres[2]>=zakresDo), 
+           paste("Data spoza zakresu - dostępne dane do", zakresDo))
+    )
     uzyte_linie <-lista_linii[indeksy()]
     wykres_kilka(data(), 
                  start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory(), linie = uzyte_linie)
   })
   
-  output$plot2 <- renderPlot({
-    #print(tail(data_with_weather()))
+  output$plotPogoda <- renderPlot({
+    validate(
+      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
+    )
     pogoda_basic(data_with_weather(),
                  paleta=uzyte_kolory())
   })
