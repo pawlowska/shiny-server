@@ -183,7 +183,8 @@ server <- function(input, output) {
       need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
            paste("Data spoza zakresu - dostępne dane od", zakresOd)),
       need((input$zakres[1]<=zakresDo)&(input$zakres[2]>=zakresDo), 
-           paste("Data spoza zakresu - dostępne dane do", zakresDo))
+           paste("Data spoza zakresu - dostępne dane do", zakresDo)),
+      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     wykres_kilka(data(), 
                  start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory(), linie = uzyte_linie())
@@ -197,6 +198,8 @@ server <- function(input, output) {
   })
 
   output$plotHours <- renderPlot({
+    validate(
+      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   })
   
