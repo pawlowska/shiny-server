@@ -1,6 +1,6 @@
 ### ladowanie danych:
-
 library(data.table)
+source('ladowanie_danych.R', encoding = 'UTF-8')
 
 #dane od Pawla Ziniewicza
 dane_od2014<-zaladuj_dane('dane/zapytanie PZiniewicz_utf8.csv')
@@ -56,5 +56,26 @@ rm(dane_doczerwca2017)
 dane<-numery_dat(dane)
 
 write.csv(dane, file = "dane_polaczone.csv", fileEncoding = 'UTF-8')
-#dane_long<-raw_to_long(dane)
 nazwy<-names(dane)[4:ncol(dane)]
+
+dane_zsumowane<-suma_licznikow(dane)
+write.csv(dane_zsumowane, file = "dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')
+
+
+#dane godzinowe
+#pilotaz
+godz_wybrane_2017<-zaladuj_dane_godzinowe('dane/2017_08_05-14_06-bez-kierunkow.csv', format="%y-%m-%d %H:%M")
+godz_wybrane_2017<-filtruj_in_out(godz_wybrane_2017)
+setnames(godz_wybrane_2017, "Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena, zach")
+setnames(godz_wybrane_2017, "Żwirki i Wigury/Trojdena wsch.", "Żwirki i Wigury/Trojdena, wsch")
+godz_wybrane_2017<-suma_licznikow(godz_wybrane_2017)
+nazwy_licznikow<-names(godz_wybrane_2017)[4:27]
+print(nazwy_licznikow)
+godz_wybrane_2017[,Jaki_dzien:=weekend(Data)]
+write.csv(godz_wybrane_2017, file = "dane_godzinowe_zsumowane.csv", fileEncoding = 'UTF-8', row.names = FALSE)
+#wide to long
+godz_2017_long<-wide_to_long(godz_wybrane_2017, c("Czas", "Data", "Godzina", "Jaki_dzien"))
+godz_2017_long_srednia<-godz_2017_long[,mean(Liczba_rowerow), by=c("Godzina","Jaki_dzien", "Miejsce")]
+setnames(godz_2017_long_srednia, 'V1',"Srednia")
+godz_2017_long<-merge(godz_2017_long, godz_2017_long_srednia, by=c("Godzina","Jaki_dzien", "Miejsce"))
+write.csv(godz_2017_long, file = "dane_godzinowe_long.csv", fileEncoding = 'UTF-8', row.names = FALSE)

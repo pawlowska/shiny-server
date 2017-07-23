@@ -18,13 +18,13 @@ poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-07-17"))
 
 Alternatively, create a list of days
 ```{r}
-dni<-lista_dni(od=as.POSIXct("2017-06-01"), do=as.POSIXct("2017-07-17"))
+dni<-lista_dni(od=as.POSIXct("2017-07-01"), do=as.POSIXct("2017-07-22"))
 ```
 
 Load newest temperature data
 
 ```{r}
-zakres<-153:156
+zakres<-152:156
 baza=bazaO
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres], baza)
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres], baza)
@@ -34,9 +34,9 @@ print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 ```
 ```{r}
 baza=bazaO
-temp_min_new<-sciagaj_liste(p_temp_min, dni[2:30], baza, zakres='/doba/')
-temp_avg_new<-sciagaj_liste(p_temp_avg, dni[2:30], baza, zakres='/doba/')
-temp_max_new<-sciagaj_liste(p_temp_max, dni[2:30], baza, zakres='/doba/')
+temp_min_new<-sciagaj_liste(p_temp_min, dni, baza, zakres='/doba/')
+temp_avg_new<-sciagaj_liste(p_temp_avg, dni, baza, zakres='/doba/')
+temp_max_new<-sciagaj_liste(p_temp_max, dni, baza, zakres='/doba/')
 print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```

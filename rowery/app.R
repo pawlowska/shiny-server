@@ -11,9 +11,7 @@ source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 source('wykresy_pogody.R', encoding = 'UTF-8')
 
-dane_polaczone<-wczytaj_dane() #wczytuje wstepnie obrobione dane z csv
-
-dane_polaczone<-suma_licznikow(dane_polaczone)
+dane_polaczone<-wczytaj_dane(plik = "dane_polaczone_zsumowane.csv") #wczytuje wstepnie obrobione dane z csv
 
 #reading locations
 lokacje <- read.csv("czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
@@ -37,12 +35,10 @@ zakresOdPokaz='2017-02-01'
 zakresDo = '2017-06-22'
 zakresDoPogoda= '2017-06-30'
 
-
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
 
-ile_licznikow<-19
-ile_sum<-3
-ile<-ile_licznikow-ile_sum
+#dane godzinowe
+godzinowe<-wczytaj_dane_godzinowe("dane_godzinowe_long.csv")
 
 ui <- fluidPage(
   tags$head(
@@ -70,7 +66,7 @@ ui <- fluidPage(
         tags$style(type="text/css", css_col)
       }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[c(4,20)], inline = FALSE, width = NULL),
+                         selected = nazwy[c(17,20)], inline = FALSE, width = NULL),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -102,6 +98,14 @@ ui <- fluidPage(
                      alt = "Ile rowerów w zależności od pogody",
                      plotOutput('plotPogoda', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
                      uiOutput("bike_weather_tooltip")
+                 )
+        ),
+        tabPanel("Dane godzinowe",
+                 tags$p(), 
+                 div(id = "hoursPlotDiv", 
+                     style = "position:relative",
+                     #alt = "Ile rowerów w zależności od pogody",
+                     plotOutput('plotHours', height=500)
                  )
         ),
         tabPanel("Położenie liczników",
@@ -162,8 +166,16 @@ server <- function(input, output) {
     dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
   })
   
+  data_hourly <- reactive({
+    godzinowe[Miejsce %in% input$liczniki]
+  })
+  
   uzyte_kolory<-reactive({
     kolory[indeksy()]
+  })
+  
+  uzyte_linie<-reactive({
+    lista_linii[indeksy()]
   })
   
   output$plotLiczba <- renderPlot({
@@ -173,17 +185,19 @@ server <- function(input, output) {
       need((input$zakres[1]<=zakresDo)&(input$zakres[2]>=zakresDo), 
            paste("Data spoza zakresu - dostępne dane do", zakresDo))
     )
-    uzyte_linie <-lista_linii[indeksy()]
     wykres_kilka(data(), 
-                 start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory(), linie = uzyte_linie)
+                 start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory(), linie = uzyte_linie())
   })
   
   output$plotPogoda <- renderPlot({
     validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
-    pogoda_basic(data_with_weather(),
-                 paleta=uzyte_kolory())
+    pogoda_basic(data_with_weather(), paleta=uzyte_kolory())
+  })
+
+  output$plotHours <- renderPlot({
+    wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   })
   
   output$bike_date_tooltip <- renderUI({

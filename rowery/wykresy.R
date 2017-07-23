@@ -3,19 +3,6 @@ library(ggplot2)
 library(data.table)
 library(scales) #for nicer y axis
 
-#wykres pojedynczej kolumny w zakresie danych
-# wykres_jeden<-function(dane, kolumna, start=as.Date("2016-01-01"), stop=as.Date("2016-12-19")) {
-#   zakres=seq(from=start, to=stop, by=1)
-#   do_wykresu<-dane[Data %in% zakres, c("Data",kolumna), with = F]
-# 
-#   
-#   g<-ggplot(do_wykresu, 
-#             aes(Data, get(kolumna)))+geom_line(colour=kolory[2], size=1
-#             )+ylab("Liczba rowerów")+ggtitle(kolumna)
-#   g<-g+theme(axis.text.x = element_text(angle = 90, hjust = 1))
-#   g<-g+scale_x_date(date_breaks = "2 weeks")
-#   g
-# }
 
 labelsy<-function(krok) {
   function(x) {
@@ -100,5 +87,21 @@ wykres_kilka<-function(dane, start, stop, paleta, linie) {
 
   g<-g+guides(col = guide_legend(ncol = 3, byrow = TRUE))
   
+  g
+}
+
+wykres_godzinowy<-function(dane, paleta, linie) {
+  theme_set(theme_light(base_size = 14))
+  
+  g<-ggplot(dane, aes(x = Godzina, y = Liczba_rowerow)) +
+    geom_line(aes(group=interaction(Data,Miejsce), colour=Miejsce), size=0.3, alpha=0.5) +
+    geom_line(aes(x=Godzina, y=Srednia, group=Miejsce, colour=Miejsce, linetype=Miejsce), size=0.95) +
+    scale_colour_manual(values=paleta)+scale_linetype_manual(values=linie) +
+    scale_x_continuous(breaks=pretty_breaks(11), expand=c(0, 1)) +
+    ylab("") +
+    ggtitle("Dane z okresu 8.05.-11.06.2017") +
+    facet_grid(. ~ Jaki_dzien) +
+    guides(col = guide_legend(ncol = 3, byrow = TRUE))+
+    theme(legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
   g
 }

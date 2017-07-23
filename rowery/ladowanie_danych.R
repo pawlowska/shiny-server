@@ -16,11 +16,39 @@ zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
   tabela
 }
 
-#currently unused
-#raw_to_long<-function(dane) {
-  #print(str(dane))
-#  tabela<-melt(dane, id.vars = "Data", variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
-#}
+zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M") {
+  library(data.table)
+  
+  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
+  #kolumny od 2 do końca to liczby
+  cols<-2:ncol(tabela) 
+  tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols]
+  nazwy_licznikow<-names(tabela)[2:ncol(tabela)]
+  tabela[,Czas := as.POSIXct(Data, tz="Europe/Berlin", format=format)]
+  setorder(tabela, Czas)
+  tabela[,Data := as.Date(Czas, tz="Europe/Berlin")]
+  tabela[,Godzina:=hour(Czas)]
+  setcolorder(tabela, c("Czas", "Data", "Godzina", nazwy_licznikow))
+  tabela[,'Praska sciezka rekreacyjna':=NULL]
+  setnames(tabela, 'Rowery', "Praska ścieżka rekreacyjna")
+  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", "Dworzec Wileński Nowy (Targowa)")
+  
+  tabela
+}
+
+filtruj_in_out<-function(tabela) {
+  nazwy<-names(tabela)
+  nazwy_in_out<-c(grep("IN", nazwy, value = TRUE), grep("OUT", nazwy, value = TRUE))
+  tabela[,(nazwy_in_out):=NULL]
+  tabela
+}
+
+wczytaj_dane_godzinowe<-function(plik) {
+  library(data.table)
+  tabela <- fread(plik, encoding = "UTF-8", header = TRUE)
+  tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
+  tabela
+}
 
 wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela<-fread(plik, header = TRUE, encoding = "UTF-8", drop=1) #1st column is just row numers, drop it
@@ -45,10 +73,10 @@ numery_dat<-function(tabela) {
   tabela
 }
 
-wide_to_long<-function(dane) {
+wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien")) {
   #print(str(dane))
   tabela<-melt(dane, 
-               id.vars = c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien"), 
+               id.vars = nazwy_zmiennych, 
                variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
 }
 
