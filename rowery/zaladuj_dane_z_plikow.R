@@ -40,11 +40,23 @@ setnames(dane_doczerwca2017, "Żwirki i Wigury/Trojdena wsch.", "Żwirki i Wigur
 setcolorder(dane_doczerwca2017, names(dane_wiekszosc2016))
 setnames(dane_doczerwca2017, names(dane_doczerwca2017), names(dane_wiekszosc2016))
 
+dane_dolipca2017<-zaladuj_dane('dane/2017_czerwiec-lipiec.csv', zwirki_i_wigury = FALSE) 
+dane_dolipca2017[,"Praska sciezka rekreacyjna":=NULL]
+dane_dolipca2017[,"Piesi":=NULL]
+dane_dolipca2017[,"Marsa":=NULL]
+setnames(dane_dolipca2017, "Rowery", "Praska ścieżka rekreacyjna" )
+setnames(dane_dolipca2017, "Dworzec Wileński Nowy( Targowa)", "Dworzec Wileński Nowy (Targowa)")
+setnames(dane_dolipca2017, "Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena, zach")
+setnames(dane_dolipca2017, "Żwirki i Wigury/Trojdena wsch.", "Żwirki i Wigury/Trojdena, wsch")
+print(str(dane_dolipca2017))
+setcolorder(dane_dolipca2017, names(dane_wiekszosc2016))
+setnames(dane_dolipca2017, names(dane_dolipca2017), names(dane_wiekszosc2016))
+
 #setnames(dane_dokwietnia2017, names(dane_dokwietnia2017), names(dane_wiekszosc2016))
 
 dane<-rbind(dane_2014_2015_bez_praskiej, dane_wiekszosc2016[1:354], 
             dane_dostycznia2017[1:37], dane_domarca2017[1:53], 
-            dane_dokwietnia2017[1:31], dane_doczerwca2017)
+            dane_dokwietnia2017[1:31], dane_doczerwca2017[1:63], dane_dolipca2017)
 
 rm(dane_2014_2015_bez_praskiej)
 rm(dane_wiekszosc2016)
@@ -52,6 +64,7 @@ rm(dane_dostycznia2017)
 rm(dane_domarca2017)
 rm(dane_dokwietnia2017)
 rm(dane_doczerwca2017)
+rm(dane_dolipca2017)
 
 dane<-numery_dat(dane)
 
