@@ -2,7 +2,7 @@ podw<-rbind(c("Al. USA - południe", "Al. USA - północ"),
             c("Most Gdański - ciąg pieszo-rowerowy", "Most Gdanski - ścieżka rowerowa"),
             c("NSR - Solec - ciąg pieszo-rowerowy", "NSR-Solec - ścieżka rowerowa"),
             c("Świętokrzyska - Emilii Plater, płd", "Świętokrzyska - Emilii Plater, płn"),
-            c("Żwirki i Wigury/Trojdena, zach", "Żwirki i Wigury/Trojdena, wsch")
+            c("Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena wsch.")
 )
 sumy <-c("Al. USA - suma",
          "Most Gdański - suma",
@@ -35,12 +35,11 @@ source('palety_kolorow.R')
 
 ile_unikatow<-14
 
-zrob_listy_stylow<-function(tabela) {
-  nazwy<-names(tabela)[4:ncol(tabela)]
+zrob_listy_stylow<-function(nazwy) {
   nazwy_bez_podw<-nazwy[!(nazwy %in% podw)]
 
   
-  kolory_bez_podw<-paleta14_sorted
+  kolory_bez_podw<-paleta16_sorted
   kolory<-kolory_bez_podw
   linie<-c(rep("solid", ile_unikatow))
   fonty<-c(rep("bold", ile_unikatow))

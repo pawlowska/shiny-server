@@ -7,8 +7,10 @@ zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
   tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 
   tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
   setorder(tabela, Data)
+  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", enc2utf8("Dworzec Wileński (Targowa)"))
+  
   if (zwirki_i_wigury) {
-    setnames(tabela, 19:20, c("Żwirki i Wigury/Trojdena, zach Rower", "Żwirki i Wigury/Trojdena, wsch Rower"))
+    setnames(tabela, 19:20, c("Żwirki i Wigury/Trojdena, wsch. Rower", "Żwirki i Wigury/Trojdena, zach. Rower"))
   }
   nazwy<-names(tabela)
   nowe_nazwy<-gsub(" Rower", "", nazwy)
@@ -16,22 +18,38 @@ zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
   tabela
 }
 
-zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M") {
+zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M", bez_kierunkow=TRUE, ziw=TRUE) {
   library(data.table)
   
   tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
   #kolumny od 2 do końca to liczby
   cols<-2:ncol(tabela) 
   tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols]
+  
+  #bledne nazwy Zwirki i Wigury
+  if (ziw) {
+    indeksy<-grep("Wigury", names(tabela))
+    nazwy_ziw<-names(tabela)[indeksy]
+    nazwy_ziw<-c(sub("Trojdena", "Trojdena wsch.", nazwy_ziw[1:3]),
+                 sub("Trojdena", "Trojdena zach.", nazwy_ziw[4:6]))
+    setnames(tabela, indeksy, nazwy_ziw)
+  }
+  
+  #odrzuć kierunki
+  if (bez_kierunkow) {tabela<-filtruj_in_out(tabela)}
+  
+  #podziel na daty i godziny
   nazwy_licznikow<-names(tabela)[2:ncol(tabela)]
   tabela[,Czas := as.POSIXct(Data, tz="Europe/Berlin", format=format)]
-  setorder(tabela, Czas)
   tabela[,Data := as.Date(Czas, tz="Europe/Berlin")]
   tabela[,Godzina:=hour(Czas)]
+  
   setcolorder(tabela, c("Czas", "Data", "Godzina", nazwy_licznikow))
   tabela[,'Praska sciezka rekreacyjna':=NULL]
+  tabela[,'Piesi':=NULL]
   setnames(tabela, 'Rowery', "Praska ścieżka rekreacyjna")
-  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", "Dworzec Wileński Nowy (Targowa)")
+  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", "Dworzec Wileński (Targowa)")
+  #setorder(tabela, Czas)
   
   tabela
 }
@@ -68,7 +86,7 @@ numery_dat<-function(tabela) {
   #uses lubridate; correction to make the week start Monday
   tabela[,startTyg:=floor_date(Data-days(1), "week")+days(1)]
   tabela[,startM:=floor_date(Data, "month")]
-  setcolorder(tabela, c("Data", "startTyg", "startM", nazwy))
+  setcolorder(tabela, c("Data", "startTyg", "startM", nazwy[order(nazwy)]))
   
   tabela
 }

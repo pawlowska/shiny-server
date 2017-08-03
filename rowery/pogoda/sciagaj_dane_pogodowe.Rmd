@@ -13,18 +13,18 @@ library(data.table)
 Create a list of Mondays
 
 ```{r}
-poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-07-17"))
+poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-07-31"))
 ```
 
 Alternatively, create a list of days
 ```{r}
-dni<-lista_dni(od=as.POSIXct("2017-07-01"), do=as.POSIXct("2017-07-22"))
+dni<-lista_dni(od=as.POSIXct("2017-07-01"), do=as.POSIXct("2017-07-31"))
 ```
 
 Load newest temperature data
 
 ```{r}
-zakres<-152:156
+zakres<-153:158
 baza=bazaO
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres], baza)
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres], baza)
@@ -33,10 +33,10 @@ print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```
 ```{r}
-baza=bazaO
-temp_min_new<-sciagaj_liste(p_temp_min, dni, baza, zakres='/doba/')
-temp_avg_new<-sciagaj_liste(p_temp_avg, dni, baza, zakres='/doba/')
-temp_max_new<-sciagaj_liste(p_temp_max, dni, baza, zakres='/doba/')
+baza=bazaHist
+temp_min_new<-sciagaj_liste(p_temp_min, dni[1:31], baza, zakres='/doba/')
+temp_avg_new<-sciagaj_liste(p_temp_avg, dni[1:31], baza, zakres='/doba/')
+temp_max_new<-sciagaj_liste(p_temp_max, dni[1:31], baza, zakres='/doba/')
 print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```
@@ -63,9 +63,9 @@ write.csv(temperatura, file = "IMGW_temp_20170630.csv", fileEncoding = 'UTF-8')
 Load newest rain&snow data
 
 ```{r}
-zakres<-149:153
-deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaHist)
-snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaHist)
+zakres<-153:158
+deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaO)
+snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaO)
 print(paste(nrow(deszcz_new), nrow(snieg_new)))
 
 ```

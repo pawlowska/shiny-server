@@ -17,12 +17,13 @@ dane_polaczone<-wczytaj_dane(plik = "dane_polaczone_zsumowane.csv") #wczytuje ws
 lokacje <- read.csv("czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 
-listy_stylow<-zrob_listy_stylow(dane_polaczone) #w obsluga_sumowania
+#do listy stylów potrzebne tylko aktualne nazwy liczników, nie aktualne dane
+nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
+print(nazwy)
+listy_stylow<-zrob_listy_stylow(nazwy) #w obsluga_sumowania
 kolory<-listy_stylow[1,]
 lista_linii<-listy_stylow[2,]
 lista_fontow<-listy_stylow[3,]
-
-nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
 
 dane_polaczone<-dodaj_pogode(dane_polaczone)
 
@@ -66,7 +67,7 @@ ui <- fluidPage(
         tags$style(type="text/css", css_col)
       }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[c(17,20)], inline = FALSE, width = NULL),
+                         selected = nazwy[c(4,9,21)], inline = FALSE, width = NULL),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -236,7 +237,7 @@ server <- function(input, output) {
   output$mymap <- renderLeaflet({
     leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
-    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~nazwa, radius = 10, color = uzyte_kolory(), opacity=1, weight = 8)
+    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, radius = 10, color = uzyte_kolory(), opacity=1, weight = 8)
   })
   
 }
