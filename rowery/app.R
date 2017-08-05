@@ -19,7 +19,6 @@ sapply(lokacje,"class")
 
 #do listy stylów potrzebne tylko aktualne nazwy liczników, nie aktualne dane
 nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
-print(nazwy)
 listy_stylow<-zrob_listy_stylow(nazwy) #w obsluga_sumowania
 kolory<-listy_stylow[1,]
 lista_linii<-listy_stylow[2,]

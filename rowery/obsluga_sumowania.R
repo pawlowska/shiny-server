@@ -33,14 +33,14 @@ suma_licznikow<-function(tabela) {
 
 source('palety_kolorow.R')
 
-ile_unikatow<-14
+ile_unikatow<-15
 
 zrob_listy_stylow<-function(nazwy) {
   nazwy_bez_podw<-nazwy[!(nazwy %in% podw)]
 
   
   kolory_bez_podw<-paleta16_sorted
-  kolory<-kolory_bez_podw
+  kolory<-kolory_bez_podw[1:ile_unikatow]
   linie<-c(rep("solid", ile_unikatow))
   fonty<-c(rep("bold", ile_unikatow))
   
