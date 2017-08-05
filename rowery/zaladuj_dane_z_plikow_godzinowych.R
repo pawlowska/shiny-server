@@ -5,7 +5,7 @@ godz2014<-zaladuj_dane_godzinowe('dane/godz-2014.csv')
 godz2015<-zaladuj_dane_godzinowe('dane/godz-2015.csv')
 godz2016<-zaladuj_dane_godzinowe('dane/godz-2016.csv', format="%y-%m-%d %H:%M")
 godz2017<-zaladuj_dane_godzinowe('dane/godz-2017-old.csv')
-#godz2017<-zaladuj_dane_godzinowe('dane/godz-2017.csv', format="%y-%m-%d %H:%M", bez_kierunkow=F, ziw=F)
+#godz2017_new<-zaladuj_dane_godzinowe('dane/godz-2017.csv', format="%y-%m-%d %H:%M", bez_kierunkow=F, ziw=F)
 
 godz<-rbind(godz2014, godz2015, godz2016, godz2017)
 #godz[,Jaki_dzien:=weekend(Data)]

@@ -33,10 +33,10 @@ print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```
 ```{r}
-baza=bazaHist
-temp_min_new<-sciagaj_liste(p_temp_min, dni[1:31], baza, zakres='/doba/')
-temp_avg_new<-sciagaj_liste(p_temp_avg, dni[1:31], baza, zakres='/doba/')
-temp_max_new<-sciagaj_liste(p_temp_max, dni[1:31], baza, zakres='/doba/')
+baza=bazaO
+temp_min_new<-sciagaj_liste(p_temp_min, dni[1:11], baza, zakres='/doba/')
+temp_avg_new<-sciagaj_liste(p_temp_avg, dni[1:11], baza, zakres='/doba/')
+temp_max_new<-sciagaj_liste(p_temp_max, dni[1:11], baza, zakres='/doba/')
 print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))
 
 ```

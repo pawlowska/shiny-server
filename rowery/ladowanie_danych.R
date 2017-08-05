@@ -48,8 +48,7 @@ zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M", bez_kie
   tabela[,'Praska sciezka rekreacyjna':=NULL]
   tabela[,'Piesi':=NULL]
   setnames(tabela, 'Rowery', "Praska ścieżka rekreacyjna")
-  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", "Dworzec Wileński (Targowa)")
-  #setorder(tabela, Czas)
+  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", enc2utf8("Dworzec Wileński (Targowa)"))
   
   tabela
 }

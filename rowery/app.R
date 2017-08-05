@@ -31,7 +31,7 @@ dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
-zakresOdPokaz='2017-02-01'
+zakresOdPokaz='2017-03-01'
 zakresDo = '2017-07-30'
 zakresDoPogoda= '2017-06-30'
 
@@ -182,7 +182,7 @@ server <- function(input, output) {
     validate(
       need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
            paste("Data spoza zakresu - dostępne dane od", zakresOd)),
-      need((input$zakres[1]<=zakresDo)&(input$zakres[2]>=zakresDo), 
+      need((input$zakres[1]<=zakresDo)&(input$zakres[2]<=zakresDo), 
            paste("Data spoza zakresu - dostępne dane do", zakresDo)),
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )

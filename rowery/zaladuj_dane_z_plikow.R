@@ -3,7 +3,7 @@ library(data.table)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 
 #dane polaczone z danych godzinowych
-dane_dolutego2017<-fread("dane-20140813-20170202.csv", encoding = 'UTF-8')
+dane_dolutego2017<-fread("dane/dane-20140813-20170202.csv", encoding = 'UTF-8')
 dane_dolutego2017[,Data := as.Date(Data, tz="Europe/Berlin")]
 
 dane_domarca2017<-zaladuj_dane('dane/2017styczen_marzecutf8.csv') 
@@ -13,16 +13,14 @@ setnames(dane_domarca2017, names(dane_domarca2017), names(dane_dolutego2017))
 dane_od2014_domarca2017<-rbind(dane_dolutego2017[Data<min(dane_domarca2017[,Data]),], dane_domarca2017)
 
 #polacz kwiecien i czerwiec
-dane_dokwietnia2017<-zaladuj_dane('dane/2017marzec_kwiecien_utf8.csv', zwirki_i_wigury = FALSE) 
+dane_dokwietnia2017<-zaladuj_dane('dane/2017marzec_kwiecien_utf8_poprPZ.csv', zwirki_i_wigury = FALSE) 
 dane_doczerwca2017<-zaladuj_dane('dane/2017kwiecien-czerwiec_utf8.csv', zwirki_i_wigury = FALSE) 
 
 dane_odmarca_doczerwca2017<-rbind(dane_dokwietnia2017[Data<min(dane_doczerwca2017[,Data]),], dane_doczerwca2017)
 dane_odmarca_doczerwca2017[,"Praska sciezka rekreacyjna":=NULL]
 setnames(dane_odmarca_doczerwca2017, "Rowery", grep("Praska", names(dane_dolutego2017), value = TRUE))
 
-#OK
-
-dane_dolipca2017<-zaladuj_dane('dane/2017_czerwiec-lipiec.csv', zwirki_i_wigury = FALSE) 
+dane_dolipca2017<-zaladuj_dane('dane/2017_czerwiec-lipiec_poprPZ.csv', zwirki_i_wigury = FALSE) 
 dane_dolipca2017[,"Praska sciezka rekreacyjna":=NULL]
 dane_dolipca2017[,"Piesi":=NULL]
 setnames(dane_dolipca2017, "Rowery", grep("Praska", names(dane_dolutego2017), value = TRUE))
@@ -40,12 +38,12 @@ rm(dane_dolipca2017)
 
 dane<-numery_dat(dane_od2014_lipca2017)
 
-write.csv(dane, file = "dane_polaczone.csv", fileEncoding = 'UTF-8')
+write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
 nazwy<-names(dane)[4:ncol(dane)]
 
 dane_zsumowane<-suma_licznikow(dane)
 write.csv(dane_zsumowane, file = "dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')
-
+rm(dane)
 
 #dane godzinowe
 #pilotaz
