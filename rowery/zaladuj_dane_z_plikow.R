@@ -1,6 +1,7 @@
 ### ladowanie danych:
 library(data.table)
 source('ladowanie_danych.R', encoding = 'UTF-8')
+source('read_from_api.R', encoding = 'UTF-8')
 
 #dane polaczone z danych godzinowych
 dane_dolutego2017<-fread("dane/dane-20140813-20170202.csv", encoding = 'UTF-8')
@@ -36,7 +37,11 @@ rm(dane_odmarca_doczerwca2017)
 rm(dane_doczerwca2017)
 rm(dane_dolipca2017)
 
-dane<-numery_dat(dane_od2014_lipca2017)
+nowe_dane<-zaladuj_dane_api()[Data>as.Date("2017-07-31")]
+
+dane<-rbind(dane_od2014_lipca2017[Data<as.Date("2017-07-31")], nowe_dane, fill=TRUE)
+
+dane<-numery_dat(dane)
 
 write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
 nazwy<-names(dane)[4:ncol(dane)]

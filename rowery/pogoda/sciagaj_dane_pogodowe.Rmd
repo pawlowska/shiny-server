@@ -24,7 +24,7 @@ dni<-lista_dni(od=as.POSIXct("2017-07-01"), do=as.POSIXct("2017-07-31"))
 Load newest temperature data
 
 ```{r}
-zakres<-153:158
+zakres<-153:154
 baza=bazaO
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres], baza)
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres], baza)
