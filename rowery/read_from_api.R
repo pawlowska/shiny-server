@@ -9,7 +9,7 @@ read_counterids<-function(filename="counterids.json") {
   ids
 }
 
-zaladuj_dane_api<-function(filename="bike_counts.csv") {
+zaladuj_dane_api<-function(filename="bike_counts.csv", ids=ids) {
   link <- 'http://greenelephant.pl/rowery/api/v1/'
   txt<- getURL(link, userpwd = credentials)
   #txt<- getURL(link)

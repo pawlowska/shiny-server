@@ -63,9 +63,9 @@ write.csv(temperatura, file = "IMGW_temp_20170630.csv", fileEncoding = 'UTF-8')
 Load newest rain&snow data
 
 ```{r}
-zakres<-153:158
-deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaO)
-snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaO)
+zakres<-153:154
+deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaHist)
+snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaHist)
 print(paste(nrow(deszcz_new), nrow(snieg_new)))
 
 ```
