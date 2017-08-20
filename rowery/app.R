@@ -31,8 +31,8 @@ dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
-zakresOdPokaz='2017-03-01'
-zakresDo = '2017-08-11'
+zakresOdPokaz='2017-05-01'
+zakresDo = '2017-08-19'
 zakresDoPogoda= '2017-06-30'
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
@@ -145,20 +145,16 @@ server <- function(input, output) {
   indeksy<-reactive({ #ktore kolory beda uzyte
     validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
-    match(input$liczniki, nazwy)
+    match(unique(data()$Miejsce), nazwy)
   })
   
   data <- reactive({
     zakres_dat=interval(input$zakres[1], input$zakres[2])
-    if (input$okres==okresy[2]) {
-      dane_tyg[Data %within% zakres_dat & Miejsce %in% input$liczniki]
-      }
-    else if (input$okres==okresy[3]) {
-      dane_m[Data %within% zakres_dat & Miejsce %in% input$liczniki]
-      }
-    else {
-      dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
-      }
+    #pick daily, weekly or monthly data
+    if (input$okres==okresy[2])       {wybor<-dane_tyg}
+    else if (input$okres==okresy[3])  {wybor<-dane_m}
+    else {wybor<-dane_long}
+    wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
   })
   
   data_with_weather <- reactive({
@@ -241,7 +237,7 @@ server <- function(input, output) {
   
 }
 
-tooltip_position<-function(hover, w=120) {   #calculate the position of the tooltip
+tooltip_position<-function(hover, w=130) {   #calculate the position of the tooltip
   #in relative units
   left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
   top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)

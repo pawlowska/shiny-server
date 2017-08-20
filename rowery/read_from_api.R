@@ -9,8 +9,8 @@ read_counterids<-function(filename="counterids.json") {
   ids
 }
 
-zaladuj_dane_api<-function(filename="bike_counts.csv", ids=ids) {
-  link <- 'http://greenelephant.pl/rowery/api/v1/'
+zaladuj_dane_api<-function(filename="bike_counts.csv", ids=ids, od="2017-07-14") {
+  link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od)
   txt<- getURL(link, userpwd = credentials)
   #txt<- getURL(link)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))

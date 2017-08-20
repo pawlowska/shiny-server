@@ -38,7 +38,7 @@ rm(dane_doczerwca2017)
 rm(dane_dolipca2017)
 
 ids<-read_counterids()
-nowe_dane<-zaladuj_dane_api()[Data>as.Date("2017-07-31")]
+nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-07-31")
 
 dane<-rbind(dane_od2014_lipca2017[Data<as.Date("2017-07-31")], nowe_dane, fill=TRUE)
 
@@ -53,7 +53,7 @@ rm(dane)
 
 #dane godzinowe
 #pilotaz
-godz_wybrane_2017<-zaladuj_dane_godzinowe('dane/2017_08_05-14_06-bez-kierunkow.csv', format="%y-%m-%d %H:%M", ziw=F)
+godz_wybrane_2017<-zaladuj_dane_godzinowe('dane/2017_08_05-14_06.csv', format="%y-%m-%d %H:%M", ziw=F)
 godz_wybrane_2017<-suma_licznikow(godz_wybrane_2017)
 nazwy_licznikow<-names(godz_wybrane_2017)[4:27]
 godz_wybrane_2017[,Jaki_dzien:=weekend(Data)]

@@ -13,19 +13,19 @@ library(data.table)
 Create a list of Mondays
 
 ```{r}
-poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-07-31"))
+poniedzialki<-lista_poniedzialkow(do=as.POSIXct("2017-08-14"))
 ```
 
 Alternatively, create a list of days
 ```{r}
-dni<-lista_dni(od=as.POSIXct("2017-07-01"), do=as.POSIXct("2017-07-31"))
+dni<-lista_dni(od=as.POSIXct("2017-07-01"), do=as.POSIXct("2017-08-119"))
 ```
 
 Load newest temperature data
 
 ```{r}
 zakres<-153:154
-baza=bazaO
+baza=bazaHist
 temp_min_new<-sciagaj_liste(p_temp_min, poniedzialki[zakres], baza)
 temp_avg_new<-sciagaj_liste(p_temp_avg, poniedzialki[zakres], baza)
 temp_max_new<-sciagaj_liste(p_temp_max, poniedzialki[zakres], baza)
@@ -64,8 +64,9 @@ Load newest rain&snow data
 
 ```{r}
 zakres<-153:154
-deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaHist)
-snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaHist)
+baza=bazaO
+deszcz_new<-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], baza)
+snieg_new<-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], baza)
 print(paste(nrow(deszcz_new), nrow(snieg_new)))
 
 ```
