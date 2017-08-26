@@ -2,6 +2,7 @@
 library(data.table)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
+source('obsluga_sumowania.R', encoding = 'UTF-8')
 
 #dane polaczone z danych godzinowych
 dane_dolutego2017<-fread("dane/dane-20140813-20170202-poprSw.csv", encoding = 'UTF-8')
@@ -46,6 +47,7 @@ dane<-numery_dat(dane)
 
 write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
 nazwy<-names(dane)[4:ncol(dane)]
+
 
 dane_zsumowane<-suma_licznikow(dane)
 write.csv(dane_zsumowane, file = "dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')

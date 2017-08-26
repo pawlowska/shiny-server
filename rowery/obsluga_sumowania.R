@@ -1,20 +1,35 @@
-podw<-rbind(c("Al. USA - południe", "Al. USA - północ"),
+podwojne<-rbind(c("Al. USA - południe", "Al. USA - północ"),
             c("Most Gdański - ciąg pieszo-rowerowy", "Most Gdanski - ścieżka rowerowa"),
             c("NSR - Solec - ciąg pieszo-rowerowy", "NSR-Solec - ścieżka rowerowa"),
             c("Świętokrzyska - Emilii Plater, płd", "Świętokrzyska - Emilii Plater, płn"),
             c("Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena wsch.")
 )
-sumy <-c("Al. USA - suma",
+
+podw_in_out<-rbind(podwojne,
+                   c("Al. USA - południe IN", "Al. USA - północ IN"),
+                   c("Al. USA - południe OUT", "Al. USA - północ OUT"),
+                   c("Świętokrzyska - Emilii Plater, płd IN", "Świętokrzyska - Emilii Plater, płn IN"),
+                   c("Świętokrzyska - Emilii Plater, płd OUT", "Świętokrzyska - Emilii Plater, płn OUT"),
+                   c("Żwirki i Wigury/Trojdena wsch. IN", "Żwirki i Wigury/Trojdena zach. IN"),
+                   c("Żwirki i Wigury/Trojdena wsch. OUT","Żwirki i Wigury/Trojdena zach. OUT"))
+
+sumy_zwykle <-c("Al. USA - suma",
          "Most Gdański - suma",
          "NSR - Solec - suma",
          "Świętokrzyska - Emilii Plater - suma", 
          "Żwirki i Wigury/Trojdena - suma")
 
-suma_licznikow<-function(tabela) {
-  nazwy_x<-names(tabela)[1:3]
-  nazwy<-names(tabela)[4:ncol(tabela)]
+sumy_in_out<-c(sumy_zwykle,
+         "Al. USA - suma IN", "Al. USA - suma OUT", 
+         "Świętokrzyska - Emilii Plater - suma IN", "Świętokrzyska - Emilii Plater - suma OUT",
+         "Żwirki i Wigury/Trojdena - suma IN", "Żwirki i Wigury/Trojdena - suma OUT")
 
-  nazwy_bez_podw<-nazwy[!(nazwy %in% podw)]
+
+suma_licznikow<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
+  nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
+  nazwy<-names(tabela)[4:ncol(tabela)] #reszta
+
+  nazwy_bez_podw<-nazwy[!(nazwy %in% podw)] #tych sumowanie nie dotyczy
   kolej_unikat<-sort(c(nazwy_bez_podw, sumy))
   kolej<-kolej_unikat
   i<-1
@@ -31,11 +46,24 @@ suma_licznikow<-function(tabela) {
 }
 
 
+in_out_ratio<-function(tabela) {
+  nazwy<-names(tabela)
+  nazwy_in <-grep("IN", nazwy, value = TRUE)
+  nazwy_out<-grep("OUT", nazwy, value = TRUE)
+  i=1
+  for (n_in in nazwy_in) {
+    n_ratio<-gsub(" IN", " ratio", n_in)
+    tabela[,(n_ratio):=(get(nazwy_in[i])-get(nazwy_out[i]))/(get(nazwy_in[i])+get(nazwy_out[i]))]
+    i<-i+1
+  }
+  tabela
+}
+
 source('palety_kolorow.R')
 
 ile_unikatow<-15
 
-zrob_listy_stylow<-function(nazwy) {
+zrob_listy_stylow<-function(nazwy, podw=podwojne, sumy=sumy_zwykle) {
   nazwy_bez_podw<-nazwy[!(nazwy %in% podw)]
 
   

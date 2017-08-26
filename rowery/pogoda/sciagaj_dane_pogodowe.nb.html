@@ -184,21 +184,33 @@ $(document).ready(function () {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkYXRhLnRhYmxlKVxuYGBgIn0= -->
 <pre class="r"><code>library(data.table)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiZGF0YS50YWJsZSAxLjEwLjRcbiAgVGhlIGZhc3Rlc3Qgd2F5IHRvIGxlYXJuIChieSBkYXRhLnRhYmxlIGF1dGhvcnMpOiBodHRwczovL3d3dy5kYXRhY2FtcC5jb20vY291cnNlcy9kYXRhLWFuYWx5c2lzLXRoZS1kYXRhLXRhYmxlLXdheVxuICBEb2N1bWVudGF0aW9uOiA/ZGF0YS50YWJsZSwgZXhhbXBsZShkYXRhLnRhYmxlKSBhbmQgYnJvd3NlVmlnbmV0dGVzKFwiZGF0YS50YWJsZVwiKVxuICBSZWxlYXNlIG5vdGVzLCB2aWRlb3MgYW5kIHNsaWRlczogaHR0cDovL3ItZGF0YXRhYmxlLmNvbVxuXG5Eb+aIvOO4s+aIvOO4uWN6YW5pZSBwYWtpZXR1OiDjpLzjuLFkYXRhLnRhYmxl46S847iyXG5cbk5hc3TmlLzjuaFwdWrmiLzjuLljeSBvYmlla3Qgem9zdGHmiLzjuLMgemFrcnl0eSBfcHJ6ZXpfIOOkvOO4sS5HbG9iYWxFbnbjpLzjuLI6XG5cbiAgICAuTlxuIn0= -->
+<pre><code>data.table 1.10.4
+  The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way
+  Documentation: ?data.table, example(data.table) and browseVignettes(&quot;data.table&quot;)
+  Release notes, videos and slides: http://r-datatable.com
+
+Do戼㸳戼㸹czanie pakietu: 㤼㸱data.table㤼㸲
+
+Nast攼㹡puj戼㸹cy obiekt zosta戼㸳 zakryty _przez_ 㤼㸱.GlobalEnv㤼㸲:
+
+    .N</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Create a list of Mondays</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9uaWVkemlhbGtpPC1saXN0YV9wb25pZWR6aWFsa293KGRvPWFzLlBPU0lYY3QoXCIyMDE3LTA3LTMxXCIpKVxuYGBgIn0= -->
-<pre class="r"><code>poniedzialki&lt;-lista_poniedzialkow(do=as.POSIXct(&quot;2017-07-31&quot;))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9uaWVkemlhbGtpPC1saXN0YV9wb25pZWR6aWFsa293KGRvPWFzLlBPU0lYY3QoXCIyMDE3LTA4LTE0XCIpKVxuYGBgIn0= -->
+<pre class="r"><code>poniedzialki&lt;-lista_poniedzialkow(do=as.POSIXct(&quot;2017-08-14&quot;))</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Alternatively, create a list of days</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZG5pPC1saXN0YV9kbmkob2Q9YXMuUE9TSVhjdChcIjIwMTctMDctMDFcIiksIGRvPWFzLlBPU0lYY3QoXCIyMDE3LTA3LTMxXCIpKVxuYGBgIn0= -->
-<pre class="r"><code>dni&lt;-lista_dni(od=as.POSIXct(&quot;2017-07-01&quot;), do=as.POSIXct(&quot;2017-07-31&quot;))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZG5pPC1saXN0YV9kbmkob2Q9YXMuUE9TSVhjdChcIjIwMTctMDctMDFcIiksIGRvPWFzLlBPU0lYY3QoXCIyMDE3LTA4LTExXCIpKVxuYGBgIn0= -->
+<pre class="r"><code>dni&lt;-lista_dni(od=as.POSIXct(&quot;2017-07-01&quot;), do=as.POSIXct(&quot;2017-08-11&quot;))</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog46S847ixbHVicmlkYXRl46S847iyXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g46S847ixcGFja2FnZTpkYXRhLnRhYmxl46S847iyOlxuXG4gICAgaG91ciwgaXNvd2VlaywgbWRheSwgbWludXRlLCBtb250aCwgcXVhcnRlciwgc2Vjb25kLCB3ZGF5LCB3ZWVrLCB5ZGF5LCB5ZWFyXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOOkvOO4sXBhY2thZ2U6YmFzZeOkvOO4sjpcblxuICAgIGRhdGVcbiJ9 -->
 <pre><code>
@@ -217,49 +229,37 @@ The following object is masked from 㤼㸱package:base㤼㸲:
 <p>Load newest temperature data</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xNTM6MTU4XG5iYXphPWJhemFPXG50ZW1wX21pbl9uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX21pbiwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemEpXG5gYGAifQ== -->
-<pre class="r"><code>zakres&lt;-153:158
-baza=bazaO
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xNTM6MTU0XG5iYXphPWJhemFIaXN0XG50ZW1wX21pbl9uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX21pbiwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemEpXG5gYGAifQ== -->
+<pre class="r"><code>zakres&lt;-153:154
+baza=bazaHist
 temp_min_new&lt;-sciagaj_liste(p_temp_min, poniedzialki[zakres], baza)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjEwMEIwMDhBRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CMTAwQjAwOEFEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUIxMDBCMDA4QUQvdHlkemllbi8yMDE3LTA3LTEwP2Zvcm1hdD1jc3ZcIlxuWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjEwMEIwMDhBRC90eWR6aWVuLzIwMTctMDctMTc/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CMTAwQjAwOEFEL3R5ZHppZW4vMjAxNy0wNy0yND9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUIxMDBCMDA4QUQvdHlkemllbi8yMDE3LTA3LTMxP2Zvcm1hdD1jc3ZcIlxuWzFdIDhcbiJ9 -->
-<pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008AD/tydzien/2017-06-26?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008AD/tydzien/2017-07-03?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008AD/tydzien/2017-07-10?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008AD/tydzien/2017-07-17?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008AD/tydzien/2017-07-24?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008AD/tydzien/2017-07-31?format=csv&quot;
-[1] 8</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhBRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOEFEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSA1XG4ifQ== -->
+<pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008AD/tydzien/2017-06-26?format=csv&quot;
+[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008AD/tydzien/2017-07-03?format=csv&quot;
+[1] 5</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVtcF9hdmdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9hdmcsIHBvbmllZHppYWxraVt6YWtyZXNdLCBiYXphKVxuYGBgIn0= -->
 <pre class="r"><code>temp_avg_new&lt;-sciagaj_liste(p_temp_avg, poniedzialki[zakres], baza)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjEwMEIwMDhDRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CMTAwQjAwOENEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUIxMDBCMDA4Q0QvdHlkemllbi8yMDE3LTA3LTEwP2Zvcm1hdD1jc3ZcIlxuWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjEwMEIwMDhDRC90eWR6aWVuLzIwMTctMDctMTc/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CMTAwQjAwOENEL3R5ZHppZW4vMjAxNy0wNy0yND9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUIxMDBCMDA4Q0QvdHlkemllbi8yMDE3LTA3LTMxP2Zvcm1hdD1jc3ZcIlxuWzFdIDZcbiJ9 -->
-<pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008CD/tydzien/2017-06-26?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008CD/tydzien/2017-07-03?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008CD/tydzien/2017-07-10?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008CD/tydzien/2017-07-17?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008CD/tydzien/2017-07-24?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008CD/tydzien/2017-07-31?format=csv&quot;
-[1] 6</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhDRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOENEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSA1XG4ifQ== -->
+<pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008CD/tydzien/2017-06-26?format=csv&quot;
+[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008CD/tydzien/2017-07-03?format=csv&quot;
+[1] 5</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVtcF9tYXhfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9tYXgsIHBvbmllZHppYWxraVt6YWtyZXNdLCBiYXphKVxuYGBgIn0= -->
 <pre class="r"><code>temp_max_new&lt;-sciagaj_liste(p_temp_max, poniedzialki[zakres], baza)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjEwMEIwMDhCRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CMTAwQjAwOEJEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUIxMDBCMDA4QkQvdHlkemllbi8yMDE3LTA3LTEwP2Zvcm1hdD1jc3ZcIlxuWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjEwMEIwMDhCRC90eWR6aWVuLzIwMTctMDctMTc/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CMTAwQjAwOEJEL3R5ZHppZW4vMjAxNy0wNy0yND9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUIxMDBCMDA4QkQvdHlkemllbi8yMDE3LTA3LTMxP2Zvcm1hdD1jc3ZcIlxuWzFdIDhcbiJ9 -->
-<pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008BD/tydzien/2017-06-26?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008BD/tydzien/2017-07-03?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008BD/tydzien/2017-07-10?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008BD/tydzien/2017-07-17?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008BD/tydzien/2017-07-24?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B100B008BD/tydzien/2017-07-31?format=csv&quot;
-[1] 8</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhCRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOEJEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSA2XG4ifQ== -->
+<pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008BD/tydzien/2017-06-26?format=csv&quot;
+[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008BD/tydzien/2017-07-03?format=csv&quot;
+[1] 6</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQocGFzdGUobnJvdyh0ZW1wX21pbl9uZXcpLCBucm93KHRlbXBfYXZnX25ldyksIG5yb3codGVtcF9tYXhfbmV3KSkpXG5gYGAifQ== -->
 <pre class="r"><code>print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiOCA2IDhcIlxuIn0= -->
-<pre><code>[1] &quot;8 6 8&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiNSA1IDZcIlxuIn0= -->
+<pre><code>[1] &quot;5 5 6&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-chunk-begin -->
@@ -347,36 +347,35 @@ temperatura&lt;-rbind(temperatura, temp_all)</code></pre>
 <p>Load newest rain&amp;snow data</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xNTM6MTU4XG5kZXN6Y3pfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfZGVzemN6X2RvYmEsIHBvbmllZHppYWxraVt6YWtyZXNdLCBiYXphTylcbmBgYCJ9 -->
-<pre class="r"><code>zakres&lt;-153:158
-deszcz_new&lt;-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], bazaO)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuemFrcmVzPC0xNTM6MTU0XG5gYGAifQ== -->
+<pre class="r"><code>zakres&lt;-153:154</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjYwMEIwMDhGRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CNjAwQjAwOEZEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUI2MDBCMDA4RkQvdHlkemllbi8yMDE3LTA3LTEwP2Zvcm1hdD1jc3ZcIlxuWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjYwMEIwMDhGRC90eWR6aWVuLzIwMTctMDctMTc/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CNjAwQjAwOEZEL3R5ZHppZW4vMjAxNy0wNy0yND9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUI2MDBCMDA4RkQvdHlkemllbi8yMDE3LTA3LTMxP2Zvcm1hdD1jc3ZcIlxuWzFdIDVcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlOlxucGFja2FnZSDigJhzcOKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuMy4zIFxuIn0= -->
+<pre><code>Warning message:
+package ‘sp’ was built under R version 3.3.3 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmF6YT1iYXphT1xuZGVzemN6X25ldzwtc2NpYWdhal9saXN0ZShwX2Rlc3pjel9kb2JhLCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YSlcbmBgYCJ9 -->
+<pre class="r"><code>baza=bazaO
+deszcz_new&lt;-sciagaj_liste(p_deszcz_doba, poniedzialki[zakres], baza)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjYwMEIwMDhGRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CNjAwQjAwOEZEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSAxXG4ifQ== -->
 <pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B600B008FD/tydzien/2017-06-26?format=csv&quot;
 [1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B600B008FD/tydzien/2017-07-03?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B600B008FD/tydzien/2017-07-10?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B600B008FD/tydzien/2017-07-17?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B600B008FD/tydzien/2017-07-24?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B600B008FD/tydzien/2017-07-31?format=csv&quot;
-[1] 5</code></pre>
+[1] 1</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc25pZWdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfc25pZWdfZG9iYSwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemFPKVxuYGBgIn0= -->
-<pre class="r"><code>snieg_new&lt;-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], bazaO)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc25pZWdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfc25pZWdfZG9iYSwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemEpXG5gYGAifQ== -->
+<pre class="r"><code>snieg_new&lt;-sciagaj_liste(p_snieg_doba, poniedzialki[zakres], baza)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjY1MEIwMDhGRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CNjUwQjAwOEZEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUI2NTBCMDA4RkQvdHlkemllbi8yMDE3LTA3LTEwP2Zvcm1hdD1jc3ZcIlxuWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjY1MEIwMDhGRC90eWR6aWVuLzIwMTctMDctMTc/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CNjUwQjAwOEZEL3R5ZHppZW4vMjAxNy0wNy0yND9mb3JtYXQ9Y3N2XCJcblsxXSBcImh0dHBzOi8vZGFuZS5pbWd3LnBsLzEuMC9wb21pYXJ5L2NiZG8vMzUyMjAwMzc1LUI2NTBCMDA4RkQvdHlkemllbi8yMDE3LTA3LTMxP2Zvcm1hdD1jc3ZcIlxuWzFdIDBcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2Jkby8zNTIyMDAzNzUtQjY1MEIwMDhGRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRvLzM1MjIwMDM3NS1CNjUwQjAwOEZEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSAwXG4ifQ== -->
 <pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B650B008FD/tydzien/2017-06-26?format=csv&quot;
 [1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B650B008FD/tydzien/2017-07-03?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B650B008FD/tydzien/2017-07-10?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B650B008FD/tydzien/2017-07-17?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B650B008FD/tydzien/2017-07-24?format=csv&quot;
-[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdo/352200375-B650B008FD/tydzien/2017-07-31?format=csv&quot;
 [1] 0</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQocGFzdGUobnJvdyhkZXN6Y3pfbmV3KSwgbnJvdyhzbmllZ19uZXcpKSlcbmBgYCJ9 -->
 <pre class="r"><code>print(paste(nrow(deszcz_new), nrow(snieg_new)))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiNSAwXCJcbiJ9 -->
-<pre><code>[1] &quot;5 0&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiMSAwXCJcbiJ9 -->
+<pre><code>[1] &quot;1 0&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -472,7 +471,7 @@ wiatr_new&lt;-sciagaj_liste(p_wiatr_godz, poniedzialki[zakres], bazaHist)</code>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpMb2FkIGZ1bmN0aW9ucw0KDQpgYGB7cn0NCnNvdXJjZSgnaW1ndy5SJywgZW5jb2RpbmcgPSAnVVRGLTgnKQ0KbGlicmFyeShkYXRhLnRhYmxlKQ0KYGBgDQoNCkNyZWF0ZSBhIGxpc3Qgb2YgTW9uZGF5cw0KDQpgYGB7cn0NCnBvbmllZHppYWxraTwtbGlzdGFfcG9uaWVkemlhbGtvdyhkbz1hcy5QT1NJWGN0KCIyMDE3LTA3LTMxIikpDQpgYGANCg0KQWx0ZXJuYXRpdmVseSwgY3JlYXRlIGEgbGlzdCBvZiBkYXlzDQpgYGB7cn0NCmRuaTwtbGlzdGFfZG5pKG9kPWFzLlBPU0lYY3QoIjIwMTctMDctMDEiKSwgZG89YXMuUE9TSVhjdCgiMjAxNy0wNy0zMSIpKQ0KYGBgDQoNCkxvYWQgbmV3ZXN0IHRlbXBlcmF0dXJlIGRhdGENCg0KYGBge3J9DQp6YWtyZXM8LTE1MzoxNTgNCmJhemE9YmF6YU8NCnRlbXBfbWluX25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfbWluLCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YSkNCnRlbXBfYXZnX25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfYXZnLCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YSkNCnRlbXBfbWF4X25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfbWF4LCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YSkNCnByaW50KHBhc3RlKG5yb3codGVtcF9taW5fbmV3KSwgbnJvdyh0ZW1wX2F2Z19uZXcpLCBucm93KHRlbXBfbWF4X25ldykpKQ0KDQpgYGANCmBgYHtyfQ0KYmF6YT1iYXphTw0KdGVtcF9taW5fbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9taW4sIGRuaVsxOjExXSwgYmF6YSwgemFrcmVzPScvZG9iYS8nKQ0KdGVtcF9hdmdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9hdmcsIGRuaVsxOjExXSwgYmF6YSwgemFrcmVzPScvZG9iYS8nKQ0KdGVtcF9tYXhfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9tYXgsIGRuaVsxOjExXSwgYmF6YSwgemFrcmVzPScvZG9iYS8nKQ0KcHJpbnQocGFzdGUobnJvdyh0ZW1wX21pbl9uZXcpLCBucm93KHRlbXBfYXZnX25ldyksIG5yb3codGVtcF9tYXhfbmV3KSkpDQoNCmBgYA0KDQpNZXJnZSB0ZW1wZXJhdHVyZSBkYXRhDQoNCmBgYHtyfQ0KdGVtcF9taW5hdmc8LW1lcmdlKHRlbXBfbWluX25ld1ssMToyXSwgdGVtcF9hdmdfbmV3WywxOjJdLCBieT0iZGF0YSIpDQp0ZW1wX2FsbDwtbWVyZ2UodGVtcF9taW5hdmcsIHRlbXBfbWF4X25ld1ssMToyXSwgYnk9ImRhdGEiKQ0Kcm0odGVtcF9taW5hdmcpDQpjb2xuYW1lcyh0ZW1wX2FsbCk8LWMoIkRhdGEiLCAidGVtcF9taW4iLCAidGVtcF9hdmciLCAidGVtcF9tYXgiKQ0KdGVtcF9hbGxbLERhdGE6PWFzLmNoYXJhY3Rlcihhcy5EYXRlKERhdGEpKV0NCnRlbXBlcmF0dXJhPC1yYmluZCh0ZW1wZXJhdHVyYSwgdGVtcF9hbGwpDQoNCmBgYA0KDQpTYXZlIHRlbXBlcmF0dXJlIGZpbGUNCg0KYGBge3J9DQp3cml0ZS5jc3YodGVtcGVyYXR1cmEsIGZpbGUgPSAiSU1HV190ZW1wXzIwMTcwNjMwLmNzdiIsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpDQoNCmBgYA0KDQpMb2FkIG5ld2VzdCByYWluJnNub3cgZGF0YQ0KDQpgYGB7cn0NCnpha3JlczwtMTUzOjE1OA0KZGVzemN6X25ldzwtc2NpYWdhal9saXN0ZShwX2Rlc3pjel9kb2JhLCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YU8pDQpzbmllZ19uZXc8LXNjaWFnYWpfbGlzdGUocF9zbmllZ19kb2JhLCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YU8pDQpwcmludChwYXN0ZShucm93KGRlc3pjel9uZXcpLCBucm93KHNuaWVnX25ldykpKQ0KDQpgYGANCg0KTWVyZ2UgbmV3IHJhaW4mc25vdyBkYXRhDQoNCmBgYHtyfQ0Kb3BhZHlfbm93ZTwtbWVyZ2UoZGVzemN6X25ld1ssMToyXSwgc25pZWdfbmV3WywxOjJdLCBieT0iZGF0YSIpDQpvcGFkeV9ub3dlW2lzLm5hKG9wYWR5X25vd2UpXTwtMA0KY29sbmFtZXMob3BhZHlfbm93ZSk8LWMoIkRhdGEiLCAiZGVzemN6IiwgInNuaWVnIikNCm9wYWR5X25vd2VbLERhdGE6PWFzLmNoYXJhY3Rlcihhcy5EYXRlKERhdGEpKV0NCg0KYGBgDQoNCg0KYGBge3J9DQpvcGFkeTwtcmJpbmQob3BhZHksIG9wYWR5X25vd2UpDQoNCmBgYA0KDQpTYXZlIHJhaW4mc25vdyBmaWxlDQoNCmBgYHtyfQ0Kd3JpdGUuY3N2KG9wYWR5LCBmaWxlID0gIklNR1dfb3BhZHlfMjAxNzA2MzAuY3N2IiwgZmlsZUVuY29kaW5nID0gJ1VURi04JykNCg0KYGBgDQoNCkxvYWQgY2xvdWRzIGRhdGENCmBgYHtyfQ0KemFrcmVzPC0xNDk6MTUzDQpjaG11cnlfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfemFjaG11cnplbmllX2dvZHosIHBvbmllZHppYWxraVt6YWtyZXNdLCBiYXphSGlzdCkNCnByaW50KG5yb3coY2htdXJ5X25ldykpDQoNCmBgYA0KDQpgYGB7cn0NCmNobXVyeTwtcmJpbmQoY2htdXJ5LCBjaG11cnlfbmV3KQ0KYGBgDQoNCmBgYHtyfQ0Kd3JpdGUuY3N2KGNobXVyeSwgZmlsZSA9ICJJTUdXX2NobXVyeV8yMDE3MDYzMC5jc3YiLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnKQ0KDQpgYGANCg0KTG9hZCB3aW5kIGRhdGENCmBgYHtyfQ0KemFrcmVzPC0xNDk6MTUzDQp3aWF0cl9uZXc8LXNjaWFnYWpfbGlzdGUocF93aWF0cl9nb2R6LCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YUhpc3QpDQpwcmludChucm93KHdpYXRyX25ldykpDQoNCmBgYA0KDQpgYGB7cn0NCndpYXRyPC1yYmluZCh3aWF0ciwgd2lhdHJfbmV3KQ0KYGBgDQoNCmBgYHtyfQ0Kd3JpdGUuY3N2KHdpYXRyLCBmaWxlID0gIklNR1dfd2lhdHJfMjAxNzA2MzAuY3N2IiwgZmlsZUVuY29kaW5nID0gJ1VURi04JykNCg0KYGBgDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpMb2FkIGZ1bmN0aW9ucw0KDQpgYGB7cn0NCnNvdXJjZSgnaW1ndy5SJywgZW5jb2RpbmcgPSAnVVRGLTgnKQ0KbGlicmFyeShkYXRhLnRhYmxlKQ0KYGBgDQoNCkNyZWF0ZSBhIGxpc3Qgb2YgTW9uZGF5cw0KDQpgYGB7cn0NCnBvbmllZHppYWxraTwtbGlzdGFfcG9uaWVkemlhbGtvdyhkbz1hcy5QT1NJWGN0KCIyMDE3LTA4LTE0IikpDQpgYGANCg0KQWx0ZXJuYXRpdmVseSwgY3JlYXRlIGEgbGlzdCBvZiBkYXlzDQpgYGB7cn0NCmRuaTwtbGlzdGFfZG5pKG9kPWFzLlBPU0lYY3QoIjIwMTctMDctMDEiKSwgZG89YXMuUE9TSVhjdCgiMjAxNy0wOC0xMTkiKSkNCmBgYA0KDQpMb2FkIG5ld2VzdCB0ZW1wZXJhdHVyZSBkYXRhDQoNCmBgYHtyfQ0KemFrcmVzPC0xNTM6MTU0DQpiYXphPWJhemFIaXN0DQp0ZW1wX21pbl9uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX21pbiwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemEpDQp0ZW1wX2F2Z19uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX2F2ZywgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemEpDQp0ZW1wX21heF9uZXc8LXNjaWFnYWpfbGlzdGUocF90ZW1wX21heCwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemEpDQpwcmludChwYXN0ZShucm93KHRlbXBfbWluX25ldyksIG5yb3codGVtcF9hdmdfbmV3KSwgbnJvdyh0ZW1wX21heF9uZXcpKSkNCg0KYGBgDQpgYGB7cn0NCmJhemE9YmF6YU8NCnRlbXBfbWluX25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfbWluLCBkbmlbMToxMV0sIGJhemEsIHpha3Jlcz0nL2RvYmEvJykNCnRlbXBfYXZnX25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfYXZnLCBkbmlbMToxMV0sIGJhemEsIHpha3Jlcz0nL2RvYmEvJykNCnRlbXBfbWF4X25ldzwtc2NpYWdhal9saXN0ZShwX3RlbXBfbWF4LCBkbmlbMToxMV0sIGJhemEsIHpha3Jlcz0nL2RvYmEvJykNCnByaW50KHBhc3RlKG5yb3codGVtcF9taW5fbmV3KSwgbnJvdyh0ZW1wX2F2Z19uZXcpLCBucm93KHRlbXBfbWF4X25ldykpKQ0KDQpgYGANCg0KTWVyZ2UgdGVtcGVyYXR1cmUgZGF0YQ0KDQpgYGB7cn0NCnRlbXBfbWluYXZnPC1tZXJnZSh0ZW1wX21pbl9uZXdbLDE6Ml0sIHRlbXBfYXZnX25ld1ssMToyXSwgYnk9ImRhdGEiKQ0KdGVtcF9hbGw8LW1lcmdlKHRlbXBfbWluYXZnLCB0ZW1wX21heF9uZXdbLDE6Ml0sIGJ5PSJkYXRhIikNCnJtKHRlbXBfbWluYXZnKQ0KY29sbmFtZXModGVtcF9hbGwpPC1jKCJEYXRhIiwgInRlbXBfbWluIiwgInRlbXBfYXZnIiwgInRlbXBfbWF4IikNCnRlbXBfYWxsWyxEYXRhOj1hcy5jaGFyYWN0ZXIoYXMuRGF0ZShEYXRhKSldDQp0ZW1wZXJhdHVyYTwtcmJpbmQodGVtcGVyYXR1cmEsIHRlbXBfYWxsKQ0KDQpgYGANCg0KU2F2ZSB0ZW1wZXJhdHVyZSBmaWxlDQoNCmBgYHtyfQ0Kd3JpdGUuY3N2KHRlbXBlcmF0dXJhLCBmaWxlID0gIklNR1dfdGVtcF8yMDE3MDYzMC5jc3YiLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnKQ0KDQpgYGANCg0KTG9hZCBuZXdlc3QgcmFpbiZzbm93IGRhdGENCg0KYGBge3J9DQp6YWtyZXM8LTE1MzoxNTQNCmJhemE9YmF6YU8NCmRlc3pjel9uZXc8LXNjaWFnYWpfbGlzdGUocF9kZXN6Y3pfZG9iYSwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemEpDQpzbmllZ19uZXc8LXNjaWFnYWpfbGlzdGUocF9zbmllZ19kb2JhLCBwb25pZWR6aWFsa2lbemFrcmVzXSwgYmF6YSkNCnByaW50KHBhc3RlKG5yb3coZGVzemN6X25ldyksIG5yb3coc25pZWdfbmV3KSkpDQoNCmBgYA0KDQpNZXJnZSBuZXcgcmFpbiZzbm93IGRhdGENCg0KYGBge3J9DQpvcGFkeV9ub3dlPC1tZXJnZShkZXN6Y3pfbmV3WywxOjJdLCBzbmllZ19uZXdbLDE6Ml0sIGJ5PSJkYXRhIikNCm9wYWR5X25vd2VbaXMubmEob3BhZHlfbm93ZSldPC0wDQpjb2xuYW1lcyhvcGFkeV9ub3dlKTwtYygiRGF0YSIsICJkZXN6Y3oiLCAic25pZWciKQ0Kb3BhZHlfbm93ZVssRGF0YTo9YXMuY2hhcmFjdGVyKGFzLkRhdGUoRGF0YSkpXQ0KDQpgYGANCg0KDQpgYGB7cn0NCm9wYWR5PC1yYmluZChvcGFkeSwgb3BhZHlfbm93ZSkNCg0KYGBgDQoNClNhdmUgcmFpbiZzbm93IGZpbGUNCg0KYGBge3J9DQp3cml0ZS5jc3Yob3BhZHksIGZpbGUgPSAiSU1HV19vcGFkeV8yMDE3MDYzMC5jc3YiLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnKQ0KDQpgYGANCg0KTG9hZCBjbG91ZHMgZGF0YQ0KYGBge3J9DQp6YWtyZXM8LTE0OToxNTMNCmNobXVyeV9uZXc8LXNjaWFnYWpfbGlzdGUocF96YWNobXVyemVuaWVfZ29keiwgcG9uaWVkemlhbGtpW3pha3Jlc10sIGJhemFIaXN0KQ0KcHJpbnQobnJvdyhjaG11cnlfbmV3KSkNCg0KYGBgDQoNCmBgYHtyfQ0KY2htdXJ5PC1yYmluZChjaG11cnksIGNobXVyeV9uZXcpDQpgYGANCg0KYGBge3J9DQp3cml0ZS5jc3YoY2htdXJ5LCBmaWxlID0gIklNR1dfY2htdXJ5XzIwMTcwNjMwLmNzdiIsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpDQoNCmBgYA0KDQpMb2FkIHdpbmQgZGF0YQ0KYGBge3J9DQp6YWtyZXM8LTE0OToxNTMNCndpYXRyX25ldzwtc2NpYWdhal9saXN0ZShwX3dpYXRyX2dvZHosIHBvbmllZHppYWxraVt6YWtyZXNdLCBiYXphSGlzdCkNCnByaW50KG5yb3cod2lhdHJfbmV3KSkNCg0KYGBgDQoNCmBgYHtyfQ0Kd2lhdHI8LXJiaW5kKHdpYXRyLCB3aWF0cl9uZXcpDQpgYGANCg0KYGBge3J9DQp3cml0ZS5jc3Yod2lhdHIsIGZpbGUgPSAiSU1HV193aWF0cl8yMDE3MDYzMC5jc3YiLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnKQ0KDQpgYGANCg0K</div>
 
 
 

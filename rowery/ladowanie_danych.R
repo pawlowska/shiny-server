@@ -40,6 +40,9 @@ zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M", bez_kie
   
   #podziel na daty i godziny
   nazwy_licznikow<-names(tabela)[2:ncol(tabela)]
+  nowe_nazwy<-gsub(" Rower", "", nazwy_licznikow)
+  setnames(tabela, nazwy_licznikow, nowe_nazwy)
+  nazwy_licznikow<-names(tabela)[2:ncol(tabela)]
   tabela[,Czas := as.POSIXct(Data, tz="Europe/Berlin", format=format)]
   tabela[,Data := as.Date(Czas, tz="Europe/Berlin")]
   tabela[,Godzina:=hour(Czas)]
