@@ -7,7 +7,6 @@ library(lubridate)
 library(leaflet) #for maps
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
-source('read_from_api.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 source('wykresy_pogody.R', encoding = 'UTF-8')
@@ -32,7 +31,7 @@ dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  '2014-08-01'
-zakresOdPokaz='2017-07-01'
+zakresOdPokaz='2017-05-01'
 zakresDo = '2017-08-25'
 zakresDoPogoda= '2017-06-30'
 
@@ -67,7 +66,7 @@ ui <- fluidPage(
         tags$style(type="text/css", css_col)
       }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[c(1,10)], inline = FALSE, width = NULL),
+                         selected = nazwy[c(4,9,21)], inline = FALSE, width = NULL),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -77,8 +76,7 @@ ui <- fluidPage(
                  wellPanel(fluidRow(
                    column(5, #daty
                           dateRangeInput('zakres', 'Wybierz zakres dat', 
-                                         start=zakresOdPokaz, end=as.character(Sys.Date()-1), 
-                                         min=zakresOd, max=as.character(Sys.Date()-1),
+                                         start=zakresOdPokaz, end=zakresDo, min=zakresOd, max=zakresDo,
                                          separator = 'do', weekstart = 0, language = "pl")
                    ),
                    column(7, #dobowo/tygodniowo/miesiecznie
@@ -144,21 +142,8 @@ ui <- fluidPage(
 ) #end ui
 
 server <- function(input, output) {
-  if (as.Date(zakresDo)<Sys.Date()-1) {
-    print("Są nowe dane")
-    ids<-read_counterids()
-    nowe_dane<-zaladuj_dane_api(ids=ids, od=zakresDo)
-    nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
-    nowe_z_pogoda<-dodaj_pogode(nowe_dane)
-    nowe_long<-wide_to_long(nowe_z_pogoda)
-    dane_long<-rbind(dane_long[Data<as.Date(zakresDo)], nowe_long)
-    dane_tyg<-podsumuj.tygodnie(dane_long)
-    dane_m<-podsumuj.miesiace(dane_long)
-    zakresDo<-as.character(Sys.Date()-1)
-  }
-
   indeksy<-reactive({ #ktore kolory beda uzyte
-    shiny::validate(
+    validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     match(unique(data()$Miejsce), nazwy)
   })
@@ -190,7 +175,7 @@ server <- function(input, output) {
   })
   
   output$plotLiczba <- renderPlot({
-    shiny::validate(
+    validate(
       need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
            paste("Data spoza zakresu - dostępne dane od", zakresOd)),
       need((input$zakres[1]<=zakresDo)&(input$zakres[2]<=zakresDo), 
@@ -202,14 +187,14 @@ server <- function(input, output) {
   })
   
   output$plotPogoda <- renderPlot({
-    shiny::validate(
+    validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     pogoda_basic(data_with_weather(), paleta=uzyte_kolory())
   })
 
   output$plotHours <- renderPlot({
-    shiny::validate(
+    validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   })

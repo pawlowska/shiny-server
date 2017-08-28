@@ -1,8 +1,8 @@
-podwojne<-enc2utf8(rbind(c("Al. USA - południe", "Al. USA - północ"),
+podwojne<-rbind(c("Al. USA - południe", "Al. USA - północ"),
             c("Most Gdański - ciąg pieszo-rowerowy", "Most Gdanski - ścieżka rowerowa"),
             c("NSR - Solec - ciąg pieszo-rowerowy", "NSR-Solec - ścieżka rowerowa"),
             c("Świętokrzyska - Emilii Plater, płd", "Świętokrzyska - Emilii Plater, płn"),
-            c("Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena wsch."))
+            c("Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena wsch.")
 )
 
 podw_in_out<-rbind(podwojne,
@@ -13,16 +13,16 @@ podw_in_out<-rbind(podwojne,
                    c("Żwirki i Wigury/Trojdena wsch. IN", "Żwirki i Wigury/Trojdena zach. IN"),
                    c("Żwirki i Wigury/Trojdena wsch. OUT","Żwirki i Wigury/Trojdena zach. OUT"))
 
-sumy_zwykle <-enc2utf8(c("Al. USA - suma",
+sumy_zwykle <-c("Al. USA - suma",
          "Most Gdański - suma",
          "NSR - Solec - suma",
          "Świętokrzyska - Emilii Plater - suma", 
-         "Żwirki i Wigury/Trojdena - suma"))
+         "Żwirki i Wigury/Trojdena - suma")
 
-sumy_in_out<-enc2utf8(c(sumy_zwykle,
+sumy_in_out<-c(sumy_zwykle,
          "Al. USA - suma IN", "Al. USA - suma OUT", 
          "Świętokrzyska - Emilii Plater - suma IN", "Świętokrzyska - Emilii Plater - suma OUT",
-         "Żwirki i Wigury/Trojdena - suma IN", "Żwirki i Wigury/Trojdena - suma OUT"))
+         "Żwirki i Wigury/Trojdena - suma IN", "Żwirki i Wigury/Trojdena - suma OUT")
 
 
 suma_licznikow<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
