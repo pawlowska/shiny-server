@@ -19,5 +19,6 @@ zaladuj_dane_api<-function(filename="bike_counts.csv", ids=ids, od="2017-07-14")
   tabela[,Miejsce:=as.character(Licznik)]
   tabela[,Miejsce:=unlist(ids[Miejsce])]
   tabela_wide<-dcast(tabela, Data ~Miejsce, value.var="Liczba_rowerow")
+  
   tabela_wide
 }

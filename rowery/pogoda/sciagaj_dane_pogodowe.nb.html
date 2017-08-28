@@ -175,27 +175,10 @@ $(document).ready(function () {
 <p>Load functions</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKCdpbWd3LlInLCBlbmNvZGluZyA9ICdVVEYtOCcpXG5gYGAifQ== -->
-<pre class="r"><code>source('imgw.R', encoding = 'UTF-8')</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKCdpbWd3LlInLCBlbmNvZGluZyA9ICdVVEYtOCcpXG5saWJyYXJ5KGRhdGEudGFibGUpXG5gYGAifQ== -->
+<pre class="r"><code>source('imgw.R', encoding = 'UTF-8')
+library(data.table)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoio2Fkb3dhbmllIHd5bWFnYW5lZ28gcGFraWV0dTogYml0b3BzXG4ifQ== -->
-<pre><code>愼㸳adowanie wymaganego pakietu: bitops</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkYXRhLnRhYmxlKVxuYGBgIn0= -->
-<pre class="r"><code>library(data.table)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiZGF0YS50YWJsZSAxLjEwLjRcbiAgVGhlIGZhc3Rlc3Qgd2F5IHRvIGxlYXJuIChieSBkYXRhLnRhYmxlIGF1dGhvcnMpOiBodHRwczovL3d3dy5kYXRhY2FtcC5jb20vY291cnNlcy9kYXRhLWFuYWx5c2lzLXRoZS1kYXRhLXRhYmxlLXdheVxuICBEb2N1bWVudGF0aW9uOiA/ZGF0YS50YWJsZSwgZXhhbXBsZShkYXRhLnRhYmxlKSBhbmQgYnJvd3NlVmlnbmV0dGVzKFwiZGF0YS50YWJsZVwiKVxuICBSZWxlYXNlIG5vdGVzLCB2aWRlb3MgYW5kIHNsaWRlczogaHR0cDovL3ItZGF0YXRhYmxlLmNvbVxuXG5Eb+aIvOO4s+aIvOO4uWN6YW5pZSBwYWtpZXR1OiDjpLzjuLFkYXRhLnRhYmxl46S847iyXG5cbk5hc3TmlLzjuaFwdWrmiLzjuLljeSBvYmlla3Qgem9zdGHmiLzjuLMgemFrcnl0eSBfcHJ6ZXpfIOOkvOO4sS5HbG9iYWxFbnbjpLzjuLI6XG5cbiAgICAuTlxuIn0= -->
-<pre><code>data.table 1.10.4
-  The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way
-  Documentation: ?data.table, example(data.table) and browseVignettes(&quot;data.table&quot;)
-  Release notes, videos and slides: http://r-datatable.com
-
-Do戼㸳戼㸹czanie pakietu: 㤼㸱data.table㤼㸲
-
-Nast攼㹡puj戼㸹cy obiekt zosta戼㸳 zakryty _przez_ 㤼㸱.GlobalEnv㤼㸲:
-
-    .N</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Create a list of Mondays</p>
@@ -234,32 +217,32 @@ The following object is masked from 㤼㸱package:base㤼㸲:
 baza=bazaHist
 temp_min_new&lt;-sciagaj_liste(p_temp_min, poniedzialki[zakres], baza)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhBRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOEFEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSA1XG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhBRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOEFEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSAxMTRcbiJ9 -->
 <pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008AD/tydzien/2017-06-26?format=csv&quot;
 [1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008AD/tydzien/2017-07-03?format=csv&quot;
-[1] 5</code></pre>
+[1] 114</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVtcF9hdmdfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9hdmcsIHBvbmllZHppYWxraVt6YWtyZXNdLCBiYXphKVxuYGBgIn0= -->
 <pre class="r"><code>temp_avg_new&lt;-sciagaj_liste(p_temp_avg, poniedzialki[zakres], baza)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhDRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOENEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSA1XG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhDRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOENEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSAxMTRcbiJ9 -->
 <pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008CD/tydzien/2017-06-26?format=csv&quot;
 [1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008CD/tydzien/2017-07-03?format=csv&quot;
-[1] 5</code></pre>
+[1] 114</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVtcF9tYXhfbmV3PC1zY2lhZ2FqX2xpc3RlKHBfdGVtcF9tYXgsIHBvbmllZHppYWxraVt6YWtyZXNdLCBiYXphKVxuYGBgIn0= -->
 <pre class="r"><code>temp_max_new&lt;-sciagaj_liste(p_temp_max, poniedzialki[zakres], baza)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhCRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOEJEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSA2XG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaHR0cHM6Ly9kYW5lLmltZ3cucGwvMS4wL3BvbWlhcnkvY2JkaC8zNTIyMDAzNzUtQjEwMEIwMDhCRC90eWR6aWVuLzIwMTctMDYtMjY/Zm9ybWF0PWNzdlwiXG5bMV0gXCJodHRwczovL2RhbmUuaW1ndy5wbC8xLjAvcG9taWFyeS9jYmRoLzM1MjIwMDM3NS1CMTAwQjAwOEJEL3R5ZHppZW4vMjAxNy0wNy0wMz9mb3JtYXQ9Y3N2XCJcblsxXSAxMTRcbiJ9 -->
 <pre><code>[1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008BD/tydzien/2017-06-26?format=csv&quot;
 [1] &quot;https://dane.imgw.pl/1.0/pomiary/cbdh/352200375-B100B008BD/tydzien/2017-07-03?format=csv&quot;
-[1] 6</code></pre>
+[1] 114</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQocGFzdGUobnJvdyh0ZW1wX21pbl9uZXcpLCBucm93KHRlbXBfYXZnX25ldyksIG5yb3codGVtcF9tYXhfbmV3KSkpXG5gYGAifQ== -->
 <pre class="r"><code>print(paste(nrow(temp_min_new), nrow(temp_avg_new), nrow(temp_max_new)))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiNSA1IDZcIlxuIn0= -->
-<pre><code>[1] &quot;5 5 6&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiMTE0IDExNCAxMTRcIlxuIn0= -->
+<pre><code>[1] &quot;114 114 114&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-chunk-begin -->
