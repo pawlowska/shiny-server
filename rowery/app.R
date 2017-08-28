@@ -10,6 +10,7 @@ source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 source('wykresy_pogody.R', encoding = 'UTF-8')
+source('read_from_api.R', encoding = 'UTF-8')
 
 dane_polaczone<-wczytaj_dane(plik = "dane_polaczone_zsumowane.csv") #wczytuje wstepnie obrobione dane z csv
 
@@ -143,7 +144,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   indeksy<-reactive({ #ktore kolory beda uzyte
-    validate(
+    shiny::validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     match(unique(data()$Miejsce), nazwy)
   })
@@ -175,7 +176,7 @@ server <- function(input, output) {
   })
   
   output$plotLiczba <- renderPlot({
-    validate(
+    shiny::validate(
       need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
            paste("Data spoza zakresu - dostępne dane od", zakresOd)),
       need((input$zakres[1]<=zakresDo)&(input$zakres[2]<=zakresDo), 
@@ -187,14 +188,14 @@ server <- function(input, output) {
   })
   
   output$plotPogoda <- renderPlot({
-    validate(
+    shiny::validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     pogoda_basic(data_with_weather(), paleta=uzyte_kolory())
   })
 
   output$plotHours <- renderPlot({
-    validate(
+    shiny::validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   })
