@@ -28,6 +28,9 @@ sumy_in_out<-enc2utf8(c(sumy_zwykle,
 suma_licznikow<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
   nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
   nazwy<-names(tabela)[4:ncol(tabela)] #reszta
+  
+  missing <- setdiff(podw, names(tabela))
+  tabela[,(missing):=as.integer(NA)]
 
   nazwy_bez_podw<-nazwy[!(nazwy %in% podw)] #tych sumowanie nie dotyczy
   kolej_unikat<-sort(c(nazwy_bez_podw, sumy))
