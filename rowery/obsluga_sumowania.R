@@ -82,5 +82,5 @@ zrob_listy_stylow<-function(nazwy, podw=podwojne, sumy=sumy_zwykle) {
     
   }
   
-  rbind(kolory, linie, fonty)
+  cbind(kolory, linie, fonty)
 }

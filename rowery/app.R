@@ -12,29 +12,23 @@ source('wykresy.R', encoding = 'UTF-8')
 source('wykresy_pogody.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
 
-dane_polaczone<-wczytaj_dane(plik = "dane_polaczone_zsumowane.csv") #wczytuje wstepnie obrobione dane z csv
-
 #reading locations
 lokacje <- read.csv("czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 
-#do listy stylów potrzebne tylko aktualne nazwy liczników, nie aktualne dane
-nazwy<-names(dane_polaczone)[4:ncol(dane_polaczone)]
-listy_stylow<-zrob_listy_stylow(nazwy) #w obsluga_sumowania
-kolory<-listy_stylow[1,]
-lista_linii<-listy_stylow[2,]
-lista_fontow<-listy_stylow[3,]
+#reading colors etc
+listy_stylow<-data.table(read.csv(file = "listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
 
-dane_polaczone<-dodaj_pogode(dane_polaczone)
+#reading data
+dane_long<-wczytaj_dane("dane_long.csv")
 
-dane_long<-wide_to_long(dane_polaczone)
 dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
 
-zakresOd=  '2014-08-01'
-zakresOdPokaz='2017-07-01'
-zakresDo = '2017-08-25'
+zakresOd=  min(dane_long[,Data])
+zakresDo = max(dane_long[,Data]) 
 zakresDoPogoda= '2017-06-30'
+zakresOdPokaz='2017-07-01'
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
 
@@ -63,7 +57,7 @@ ui <- fluidPage(
       lapply(1:length(nazwy), function(x) {
         n <- length(nazwy)
         css_col <- paste0("#liczniki div.checkbox:nth-child(",x,
-                          ") span{color: ", kolory[x],"; font-weight : ",lista_fontow[x],"}")
+                          ") span{color: ", listy_stylow$kolory[x],"; font-weight : ",listy_stylow[[x,3]],"}")
         tags$style(type="text/css", css_col)
       }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
@@ -143,18 +137,30 @@ ui <- fluidPage(
   )
 ) #end ui
 
-server <- function(input, output) {
-  if (as.Date(zakresDo)<Sys.Date()-1) {
+server <- function(input, output, session) {
+  #dane zaladowane od ostatniego git commit
+  ostatnie_nowe_long<-wczytaj_dane("nowe_long.csv")
+  ostatnia_data<-max(ostatnie_nowe_long[,Data])
+  
+  #czy są nowsze dane niż w "nowe_long.csv"?  
+  if (ostatnia_data<Sys.Date()-1) {
         ids<-read_counterids()
         nowe_dane<-zaladuj_dane_api(ids=ids, od=zakresDo)
         nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
         nowe_z_pogoda<-dodaj_pogode(nowe_dane)
         nowe_long<-wide_to_long(nowe_z_pogoda)
-        dane_long<-rbind(dane_long[Data<as.Date(zakresDo)], nowe_long)
-        dane_tyg<-podsumuj.tygodnie(dane_long)
-        dane_m<-podsumuj.miesiace(dane_long)
-        zakresDo<-as.character(Sys.Date()-1)
   }
+  
+  #uaktualnij "nowe" dane
+  nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
+  write.csv(nowe_long, file = "nowe_long.csv", fileEncoding = 'UTF-8')
+  
+  #polacz ze "starymi" danymi
+  dane_long<-rbind(dane_long[Data<as.Date(zakresDo)], nowe_long)
+  
+  dane_tyg<-podsumuj.tygodnie(dane_long)
+  dane_m<-podsumuj.miesiace(dane_long)
+  zakresDo<-as.character(Sys.Date()-1)
   
   indeksy<-reactive({ #ktore kolory beda uzyte
     shiny::validate(
@@ -181,11 +187,11 @@ server <- function(input, output) {
   })
   
   uzyte_kolory<-reactive({
-    kolory[indeksy()]
+    listy_stylow$kolory[indeksy()]
   })
   
   uzyte_linie<-reactive({
-    lista_linii[indeksy()]
+    listy_stylow$linie[indeksy()]
   })
   
   output$plotLiczba <- renderPlot({
