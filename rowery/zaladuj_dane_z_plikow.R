@@ -56,7 +56,7 @@ listy_stylow<-zrob_listy_stylow(nazwy) #w obsluga_sumowania
 write.csv(listy_stylow, file = "listy_stylow.csv", fileEncoding = 'UTF-8', row.names = F)
 write.csv(dane_zsumowane, file = "dane/dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')
 dane_zsumowane<-dodaj_pogode(dane_zsumowane)
-write.csv(dane_zsumowane, file = "dane_zsumowane_z_pogoda.csv", fileEncoding = 'UTF-8')
+write.csv(dane_zsumowane, file = "dane/dane_zsumowane_z_pogoda.csv", fileEncoding = 'UTF-8')
 dane_long<-wide_to_long(dane_zsumowane)
 write.csv(dane_long, file = "dane_long.csv", fileEncoding = 'UTF-8')
 
