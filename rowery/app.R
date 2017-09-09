@@ -141,22 +141,25 @@ server <- function(input, output, session) {
   #dane zaladowane od ostatniego git commit
   ostatnie_nowe_long<-wczytaj_dane("nowe_long.csv")
   ostatnia_data<-max(ostatnie_nowe_long[,Data])
+  cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
   
   #czy są nowsze dane niż w "nowe_long.csv"?  
   if (ostatnia_data<Sys.Date()-1) {
         ids<-read_counterids()
-        nowe_dane<-zaladuj_dane_api(ids=ids, od=zakresDo)
+        nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
         nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
         nowe_z_pogoda<-dodaj_pogode(nowe_dane)
         nowe_long<-wide_to_long(nowe_z_pogoda)
+        ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
+        #uaktualnij "nowe" dane
+        write.csv(ostatnie_nowe_long, file = "nowe_long.csv", fileEncoding = 'UTF-8')
   }
   
-  #uaktualnij "nowe" dane
-  nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
-  write.csv(nowe_long, file = "nowe_long.csv", fileEncoding = 'UTF-8')
+  cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(ostatnie_nowe_long[,Data])), "\n")
+  
   
   #polacz ze "starymi" danymi
-  dane_long<-rbind(dane_long[Data<as.Date(zakresDo)], nowe_long)
+  dane_long<-rbind(dane_long[Data<as.Date(zakresDo)], ostatnie_nowe_long)
   
   dane_tyg<-podsumuj.tygodnie(dane_long)
   dane_m<-podsumuj.miesiace(dane_long)
