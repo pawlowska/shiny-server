@@ -1,22 +1,23 @@
 "","Data","startTyg","startM","temp_min","temp_avg","temp_max","deszcz","snieg","Jaki_dzien","Miejsce","Liczba_rowerow"
-"1",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Al. USA - suma",527
-"2",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Al. USA - południe",346
-"3",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Al. USA - północ",181
-"4",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Banacha",662
-"5",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Belwederska",332
-"6",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Dworzec Wilenski (al. Solidarności)",460
-"7",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Dworzec Wileński (Targowa)",662
-"8",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Marszałkowska",462
-"9",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Most Gdanski - ścieżka rowerowa",424
-"10",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"NSR - Solec - suma",1008
-"11",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"NSR - Solec - ciąg pieszo-rowerowy",288
-"12",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"NSR-Solec - ścieżka rowerowa",720
-"13",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Praska ścieżka rekreacyjna",278
-"14",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Świętokrzyska - Emilii Plater - suma",860
-"15",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Świętokrzyska - Emilii Plater, płd",820
-"16",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Świętokrzyska - Emilii Plater, płn",40
-"17",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Wybrzeże Helskie",618
-"18",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Wysockiego",172
-"19",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Żwirki i Wigury/Trojdena - suma",475
-"20",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Żwirki i Wigury/Trojdena zach.",77
-"21",2017-09-02,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Żwirki i Wigury/Trojdena wsch.",398
+"1",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Al. USA - suma",1382
+"2",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Al. USA - południe",909
+"3",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Al. USA - północ",473
+"4",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Banacha",2408
+"5",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Bazyliańska",151
+"6",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Belwederska",982
+"7",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Dworzec Wilenski (al. Solidarności)",1166
+"8",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Dworzec Wileński (Targowa)",1177
+"9",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Marszałkowska",1116
+"10",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Most Gdanski - ścieżka rowerowa",721
+"11",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"NSR - Solec - suma",2067
+"12",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"NSR - Solec - ciąg pieszo-rowerowy",514
+"13",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"NSR-Solec - ścieżka rowerowa",1553
+"14",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Praska ścieżka rekreacyjna",312
+"15",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Świętokrzyska - Emilii Plater - suma",2535
+"16",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Świętokrzyska - Emilii Plater, płd",2468
+"17",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Świętokrzyska - Emilii Plater, płn",67
+"18",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Wybrzeże Helskie",1634
+"19",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Wysockiego",499
+"20",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Żwirki i Wigury/Trojdena - suma",1673
+"21",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Żwirki i Wigury/Trojdena zach.",355
+"22",2017-09-01,2017-08-28,2017-09-01,NA,NA,NA,NA,NA,NA,"Żwirki i Wigury/Trojdena wsch.",1318

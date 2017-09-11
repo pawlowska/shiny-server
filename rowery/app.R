@@ -151,6 +151,8 @@ server <- function(input, output, session) {
         nowe_z_pogoda<-dodaj_pogode(nowe_dane)
         nowe_long<-wide_to_long(nowe_z_pogoda)
         ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
+        setorder(ostatnie_nowe_long, "Data")
+        print(str(ostatnie_nowe_long))
         #uaktualnij "nowe" dane
         write.csv(ostatnie_nowe_long, file = "nowe_long.csv", fileEncoding = 'UTF-8')
   }
