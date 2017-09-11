@@ -19,6 +19,9 @@ sapply(lokacje,"class")
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
 
+cat(file=stderr(), "czytam stare dane", "\n")
+
+
 #reading data
 dane_long<-wczytaj_dane("dane_long.csv")
 
@@ -34,6 +37,8 @@ okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
 
 #dane godzinowe
 godzinowe<-wczytaj_dane_godzinowe("dane_godzinowe_long.csv")
+cat(file=stderr(), "przygotowania zakonczone", "\n")
+
 
 ui <- fluidPage(
   tags$head(
@@ -139,6 +144,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   #dane zaladowane od ostatniego git commit
+  cat(file=stderr(), "probuje wczytac nowe_long", "\n")
   ostatnie_nowe_long<-wczytaj_dane("nowe_long.csv")
   ostatnia_data<-max(ostatnie_nowe_long[,Data])
   cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
@@ -152,7 +158,6 @@ server <- function(input, output, session) {
         nowe_long<-wide_to_long(nowe_z_pogoda)
         ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
         setorder(ostatnie_nowe_long, "Data")
-        print(str(ostatnie_nowe_long))
         #uaktualnij "nowe" dane
         write.csv(ostatnie_nowe_long, file = "nowe_long.csv", fileEncoding = 'UTF-8')
   }
