@@ -119,3 +119,15 @@ weekend<-function(data) {
   dzien<-weekdays(data)
   ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
 }
+
+dodaj_pogode<-function(tabela, 
+                       plik_temperatura="IMGW_temp_20170630.csv", 
+                       plik_opady="IMGW_opady_20170630.csv") {
+  temperatura<-fread(plik_temperatura, header = TRUE, encoding = "UTF-8", drop=1)
+  opady<-fread(plik_opady, header = TRUE, encoding = "UTF-8", drop=1)
+  pogoda<-merge(temperatura, opady, by="Data")
+  pogoda[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
+  pogoda[,Jaki_dzien:=weekend(Data)]
+  dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
+  dane
+}

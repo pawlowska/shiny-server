@@ -9,7 +9,6 @@ library(leaflet) #for maps
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
-source('wykresy_pogody.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
 
 #reading locations
@@ -18,9 +17,6 @@ sapply(lokacje,"class")
 
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
-
-cat(file=stderr(), "czytam stare dane", "\n")
-
 
 #reading data
 dane_long<-wczytaj_dane("dane_long.csv")
@@ -31,9 +27,9 @@ dane_m<-podsumuj.miesiace(dane_long)
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
 zakresDoPogoda= '2017-06-30'
-zakresOdPokaz='2017-07-01'
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
+wykresyPogody=c('temperatury', 'daty')
 
 #dane godzinowe
 godzinowe<-wczytaj_dane_godzinowe("dane_godzinowe_long.csv")
@@ -66,7 +62,7 @@ ui <- fluidPage(
         tags$style(type="text/css", css_col)
       }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[c(1,10)], inline = FALSE, width = NULL),
+                         selected = nazwy[c(18,23)], inline = FALSE, width = NULL),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -76,7 +72,7 @@ ui <- fluidPage(
                  wellPanel(fluidRow(
                    column(5, #daty
                           dateRangeInput('zakres', 'Wybierz zakres dat',
-                                         start=zakresOdPokaz, end=as.character(Sys.Date()-1), 
+                                         start=as.character(Sys.Date()-100), end=as.character(Sys.Date()-1), 
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl")
                    ),
@@ -93,7 +89,20 @@ ui <- fluidPage(
                  )
         ),
         tabPanel("Pogoda",
-                 tags$p(), 
+                 #wybor zakresu i grupowania daty
+                 wellPanel(fluidRow(
+
+                   column(4, #dobowo/tygodniowo/miesiecznie
+                          radioButtons('rodzajPogody', 'Zależność od', wykresyPogody, selected = wykresyPogody[2], 
+                                       inline = TRUE, width = NULL)        
+                   ),
+                   column(6, #daty
+                          dateRangeInput('zakresPogoda', 'Wybierz zakres dat',
+                                         start=as.character(as.Date(zakresDoPogoda)-120), end=zakresDoPogoda,
+                                         min=zakresOd, max=zakresDoPogoda,
+                                         separator = 'do', weekstart = 0, language = "pl")
+                   )
+                 ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
                  div(id = "weatherPlotDiv", 
                      style = "position:relative",
                      alt = "Ile rowerów w zależności od pogody",
@@ -188,7 +197,9 @@ server <- function(input, output, session) {
   })
   
   data_with_weather <- reactive({
-    zakres_dat=interval(zakresOd, zakresDoPogoda)
+    #zakres_dat=interval(zakresOd, zakresDoPogoda)
+    zakres_dat=interval(input$zakresPogoda[1], input$zakresPogoda[2])
+    
     dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
   })
   
@@ -220,7 +231,16 @@ server <- function(input, output, session) {
     shiny::validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
-    pogoda_basic(data_with_weather(), paleta=uzyte_kolory())
+    if(input$rodzajPogody==wykresyPogody[1]) {
+      pogoda_basic(data_with_weather(), paleta=uzyte_kolory())
+    } else {
+      #zakres_dat=interval(input$zakresPogoda[1], input$zakresPogoda[2])
+      
+      #wykres_pogoda_liczba(data_with_weather()[Data %within% zakres_dat],
+      wykres_pogoda_liczba(data_with_weather(),
+                           start=input$zakresPogoda[1], stop=input$zakresPogoda[2], 
+                           paleta=uzyte_kolory(), linie = uzyte_linie())
+    }
   })
 
   output$plotHours <- renderPlot({
@@ -244,7 +264,9 @@ server <- function(input, output, session) {
     )
   })
   
-  output$bike_weather_tooltip <- renderUI({
+  output$bike_weather_tooltip <- renderUI(
+    if (input$rodzajPogody==wykresyPogody[2]) {return(NULL)}
+    else {
     
     hover <- input$plot_hover
     #is mouse close to a point?

@@ -2,7 +2,7 @@ library(RColorBrewer)
 library(ggplot2)
 library(data.table)
 library(scales) #for nicer y axis
-
+library(grid)
 
 labelsy<-function(krok) {
   function(x) {
@@ -99,9 +99,76 @@ wykres_godzinowy<-function(dane, paleta, linie) {
     scale_colour_manual(values=paleta)+scale_linetype_manual(values=linie) +
     scale_x_continuous(breaks=pretty_breaks(11), expand=c(0, 1)) +
     ylab("") +
-    ggtitle("Dane z okresu 8.05.-11.06.2017") +
     facet_grid(. ~ Jaki_dzien) +
     guides(col = guide_legend(ncol = 3, byrow = TRUE))+
     theme(legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
   g
+}
+
+pogoda_basic<-function(dane, paleta) {
+  #set theme    
+  theme_set(theme_light(base_size = 14))
+  
+  method_fit<-ifelse(length(unique(dane[,Data]))<150, "lm", "loess")
+  
+  gg<-ggplot(dane, 
+             aes(temp_avg, Liczba_rowerow, colour = Miejsce, shape = Jaki_dzien, size=(deszcz+snieg))) +
+    geom_point(alpha=0.8) +
+    scale_size(range = c(1.5, 8)) +
+    scale_shape_manual(values=c(16,1)) + #full and empty circles
+    scale_x_continuous(breaks=pretty_breaks(8), expand=c(0, 1)) +
+    scale_y_continuous(breaks=pretty_breaks(8), limits = c(-20, NA)) +
+    geom_smooth(size=0.7, alpha=0.2, span = 0.5, method=method_fit) +   # Add a loess smoothed fit curve with confidence region
+    theme(legend.position="bottom", legend.justification="left", legend.box.just = "left",
+          legend.margin=margin(0, -2, 0, 1, "cm"), legend.box="vertical")+
+    scale_colour_manual(values=paleta) +
+    xlab("Średnia temperatura dobowa (°C)")+ylab("")+ #axis labels
+    guides(shape = guide_legend(title="Jaki dzień", order = 1),
+           size = guide_legend(title="Opady (deszcz i śnieg) w mm", order = 2),
+           colour = guide_legend(ncol = 3, byrow = TRUE, order = 3))
+  
+  gg
+}
+
+wykres_pogody_w_czasie<-function(dane) {
+  #set theme    
+  theme_set(theme_light(base_size = 14))
+  
+  g_t<-ggplot(dane)+
+    geom_line( aes(Data, temp_avg), colour='red3', size=0.5 )+
+    geom_ribbon(aes(x=Data, ymin=temp_min, ymax=temp_max), fill='red', alpha=0.1)+
+    scale_x_date(expand=c(0,0), labels=NULL)+ #numer X ticks
+    ylab("Temperatura (°C)")+xlab("")
+  
+  g_d<-ggplot(dane)+
+    geom_segment(aes(x=Data, xend=Data, y=0, yend=deszcz), 
+                 color = "steelblue", lineend = "butt", size=1)+
+    #geom_point(aes(Data, deszcz), color = "steelblue")+
+    scale_x_date(expand=c(0,0), labels=NULL)+ #numer X ticks
+    ylab("Deszcz (mm)")+xlab("")
+  
+  
+  lista<-lista_weekendow(dane)
+  
+  plot_list=list(g_t, g_d)
+  for (i in 1:2) {
+      plot_list[[i]]<-plot_list[[i]]+geom_rect(data=lista, 
+                   aes(xmin=soboty, xmax=niedziele, ymin=-Inf, ymax=+Inf), 
+                   fill='gray', 
+                   alpha=0.2) +
+      theme( # remove the vertical grid lines
+        panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())+
+      theme(plot.margin = unit(c(0,0,-5,0), "pt"))
+  }
+  
+  plot_list
+}
+
+wykres_pogoda_liczba<-function(dane, start, stop, paleta, linie) {
+  lista<- wykres_pogody_w_czasie(dane)
+  g2<- wykres_kilka(dane, start, stop, paleta, linie)
+  #grid.arrange(g1, g2, ncol=1, heights = c(1, 2),  padding = unit(0, "line"))
+  grid.newpage()
+  grid.draw(rbind(ggplotGrob(lista[[1]]), ggplotGrob(lista[[2]]),
+                  ggplotGrob(g2), size = "last"))
 }
