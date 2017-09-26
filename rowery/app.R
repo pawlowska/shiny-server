@@ -20,6 +20,7 @@ listy_stylow<-data.table(read.csv(file = "listy_stylow.csv", fileEncoding = 'UTF
 
 #reading data
 dane_long<-wczytaj_dane("dane_long.csv")
+nazwy<-unique(dane_long[,Miejsce])
 
 dane_tyg<-podsumuj.tygodnie(dane_long)
 dane_m<-podsumuj.miesiace(dane_long)
@@ -34,7 +35,6 @@ wykresyPogody=c('temperatury', 'daty')
 #dane godzinowe
 godzinowe<-wczytaj_dane_godzinowe("dane_godzinowe_long.csv")
 cat(file=stderr(), "przygotowania zakonczone", "\n")
-
 
 ui <- fluidPage(
   tags$head(
@@ -56,7 +56,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
-        n <- length(nazwy)
+        #n <- length(nazwy)
         css_col <- paste0("#liczniki div.checkbox:nth-child(",x,
                           ") span{color: ", listy_stylow$kolory[x],"; font-weight : ",listy_stylow[[x,3]],"}")
         tags$style(type="text/css", css_col)
