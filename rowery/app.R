@@ -163,8 +163,8 @@ server <- function(input, output, session) {
         ids<-read_counterids()
         nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
         nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
-        nowe_z_pogoda<-dodaj_pogode(nowe_dane)
-        nowe_long<-wide_to_long(nowe_z_pogoda)
+        #nowe_z_pogoda<-dodaj_pogode(nowe_dane)
+        nowe_long<-wide_to_long(dodaj_pogode(nowe_dane))
         ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
         setorder(ostatnie_nowe_long, "Data")
         #uaktualnij "nowe" dane
@@ -176,6 +176,7 @@ server <- function(input, output, session) {
   
   #polacz ze "starymi" danymi
   dane_long<-rbind(dane_long[Data<as.Date(zakresDo)], ostatnie_nowe_long)
+  setorder(dane_long, Miejsce)
   
   dane_tyg<-podsumuj.tygodnie(dane_long)
   dane_m<-podsumuj.miesiace(dane_long)
