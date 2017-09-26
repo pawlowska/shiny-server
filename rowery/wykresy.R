@@ -33,8 +33,10 @@ better_ticks<-function(zakres_dat, krok=1) {
 }
 
 lista_weekendow<-function(dane) {
-  daty<-dane[weekend(Data)=="weekend", Data] #now it's a vector
-  daty<-unique(daty)
+  przedzial<-seq(min(dane[,Data]), max(dane[,Data]), by="days")
+  daty<-przedzial[weekend(przedzial)=="weekend"]
+  #daty<-dane[weekend(Data)=="weekend", Data] #now it's a vector
+  #daty<-unique(daty)
 
   krok = time_length(interval(daty[1], daty[2]), unit = "day")
   if (krok!=1) daty<-daty[2:length(daty)]
