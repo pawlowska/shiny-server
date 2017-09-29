@@ -62,7 +62,7 @@ ui <- fluidPage(
         tags$style(type="text/css", css_col)
       }),
       checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[c(18,23)], inline = FALSE, width = NULL),
+                         selected = nazwy[c(1,7,12)], inline = FALSE, width = NULL),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -110,14 +110,14 @@ ui <- fluidPage(
                      uiOutput("bike_weather_tooltip")
                  )
         ),
-        tabPanel("Dane godzinowe",
-                 tags$p(), 
-                 div(id = "hoursPlotDiv", 
-                     style = "position:relative",
-                     #alt = "Ile rowerów w zależności od pogody",
-                     plotOutput('plotHours', height=500)
-                 )
-        ),
+        # tabPanel("Dane godzinowe",
+        #          tags$p(), 
+        #          div(id = "hoursPlotDiv", 
+        #              style = "position:relative",
+        #              #alt = "Ile rowerów w zależności od pogody",
+        #              plotOutput('plotHours', height=500)
+        #          )
+        # ),
         tabPanel("Położenie liczników",
                  tags$p(), 
                  div(id = "mapPlotDiv", 

@@ -18,6 +18,24 @@ zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
   tabela
 }
 
+zaladuj_dane_new<-function(plik, sep=';', bez_kierunkow=TRUE) {
+  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
+  #kolumny od 2 do końca to liczby
+  cols<-2:ncol(tabela) 
+  tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 
+  tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
+  setorder(tabela, Data)
+
+  tabela[,Piesi:=NULL]
+  tabela[,'Praska ścieżka rekreacyjna':=Rowery]
+  tabela[,Rowery:=NULL]
+  
+  #odrzuć kierunki
+  if (bez_kierunkow) {tabela<-filtruj_in_out(tabela)}
+
+  tabela
+}
+
 zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M", bez_kierunkow=TRUE, ziw=TRUE) {
   library(data.table)
   

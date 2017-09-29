@@ -1,3 +1,12 @@
+podwojne_prefix<-enc2utf8(c("Al. Jerozolimskie", 
+                            "al. USA",
+                            "NSR Most Gdański",
+                            "NSR Solec",
+                            "Świętokrzyska/Emilii Plater",
+                            "Żwirki i Wigury/Trojdena"))
+
+sumy_zwykle<-paste(podwojne_prefix,"- suma")
+
 podwojne<-enc2utf8(rbind(c("Al. USA - południe", "Al. USA - północ"),
             c("Most Gdański - ciąg pieszo-rowerowy", "Most Gdanski - ścieżka rowerowa"),
             c("NSR - Solec - ciąg pieszo-rowerowy", "NSR-Solec - ścieżka rowerowa"),
@@ -13,19 +22,35 @@ podw_in_out<-enc2utf8(rbind(podwojne,
                    c("Żwirki i Wigury/Trojdena wsch. IN", "Żwirki i Wigury/Trojdena zach. IN"),
                    c("Żwirki i Wigury/Trojdena wsch. OUT","Żwirki i Wigury/Trojdena zach. OUT")))
 
-sumy_zwykle <-enc2utf8(c("Al. USA - suma",
-         "Most Gdański - suma",
-         "NSR - Solec - suma",
-         "Świętokrzyska - Emilii Plater - suma", 
-         "Żwirki i Wigury/Trojdena - suma"))
-
 sumy_in_out<-enc2utf8(c(sumy_zwykle,
          "Al. USA - suma IN", "Al. USA - suma OUT", 
          "Świętokrzyska - Emilii Plater - suma IN", "Świętokrzyska - Emilii Plater - suma OUT",
          "Żwirki i Wigury/Trojdena - suma IN", "Żwirki i Wigury/Trojdena - suma OUT"))
 
+suma_licznikow<-function(tabela, podw=podwojne_prefix) {
+  nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
+  nazwy<-names(tabela)[4:ncol(tabela)] #reszta
+  
+  i<-1
+  for (p in podw) {
+    print(i)
+    s<-paste(p, "- suma")
+    sumuj<-grep(podw[i], nazwy, value = T)
+    print(sumuj)
+    tabela[,(s):=get(sumuj[1])+get(sumuj[2])]
+    i<-i+1
+  }
 
-suma_licznikow<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
+  nazwy<-names(tabela)[4:ncol(tabela)] #reszta
+  nazwy<-sort(nazwy)
+  
+  kolejnosc <-c(nazwy_x, nazwy)
+  setcolorder(tabela, kolejnosc)
+  tabela
+}
+
+
+suma_licznikow_old<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
   nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
   nazwy<-names(tabela)[4:ncol(tabela)] #reszta
   
@@ -64,11 +89,11 @@ in_out_ratio<-function(tabela) {
 
 source('palety_kolorow.R')
 
-ile_unikatow<-15
+ile_unikatow<-16
 
-zrob_listy_stylow<-function(nazwy, podw=podwojne, sumy=sumy_zwykle) {
-  nazwy_bez_podw<-nazwy[!(nazwy %in% podw)]
-
+zrob_listy_stylow<-function(nazwy, podw=podwojne_prefix, sumy=sumy_zwykle) {
+  podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), nazwy, value = TRUE)
+  nazwy_bez_podw<-sort(c(nazwy[!(nazwy %in% podwojne_i_sumy)], sumy))
   
   kolory_bez_podw<-paleta16_sorted
   kolory<-kolory_bez_podw[1:ile_unikatow]

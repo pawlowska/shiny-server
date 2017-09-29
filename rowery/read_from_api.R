@@ -15,7 +15,7 @@ zaladuj_dane_api<-function(filename="bike_counts.csv", ids=ids, od="2017-07-14")
   #txt<- getURL(link)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
   setnames(tabela, c("Licznik", "Data", "Liczba_rowerow"))
-  tabela<-tabela[Licznik!=100038471 & Licznik!=100038438]
+  #tabela<-tabela[Licznik!=100038471 & Licznik!=100038438]
   tabela[,Data:=as.Date(Data)]
   tabela[,Miejsce:=as.character(Licznik)]
   t<-unlist(ids[tabela$Miejsce])
