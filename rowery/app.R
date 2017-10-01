@@ -12,14 +12,14 @@ source('wykresy.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
 
 #reading locations
-lokacje <- read.csv("czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
+lokacje <- read.csv("pliki/czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 
 #reading colors etc
-listy_stylow<-data.table(read.csv(file = "listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
+listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
 
 #reading data
-dane_long<-wczytaj_dane("dane_long.csv")
+dane_long<-wczytaj_dane("pliki/dane_long.csv")
 nazwy<-unique(dane_long[,Miejsce])
 
 #dane_tyg<-podsumuj.tygodnie(dane_long)
@@ -33,7 +33,7 @@ okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
 wykresyPogody=c('temperatury', 'daty')
 
 #dane godzinowe
-godzinowe<-wczytaj_dane_godzinowe("dane_godzinowe_long.csv")
+godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
 cat(file=stderr(), "przygotowania zakonczone", "\n")
 
 ui <- fluidPage(
@@ -154,7 +154,7 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   #dane zaladowane od ostatniego git commit
   cat(file=stderr(), "probuje wczytac nowe_long", "\n")
-  ostatnie_nowe_long<-wczytaj_dane("nowe_long.csv")
+  ostatnie_nowe_long<-wczytaj_dane("pliki/nowe_long.csv")
   ostatnia_data<-max(ostatnie_nowe_long[,Data])
   cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
   
@@ -169,7 +169,7 @@ server <- function(input, output, session) {
         
         setorder(ostatnie_nowe_long, "Data")
         #uaktualnij "nowe" dane
-        write.csv(ostatnie_nowe_long, file = "nowe_long.csv", fileEncoding = 'UTF-8')
+        write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
   }
   
   cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(ostatnie_nowe_long[,Data])), "\n")

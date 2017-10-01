@@ -4,7 +4,7 @@ library(RCurl)
 
 source('hasloA.R', encoding = 'UTF-8')
 
-read_counterids<-function(filename="counterids.json") {
+read_counterids<-function(filename="pliki/counterids.json") {
   ids<-read_json(filename,  simplifyVector = TRUE)
   ids
 }
