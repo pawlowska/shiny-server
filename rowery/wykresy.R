@@ -52,7 +52,7 @@ lista_weekendow<-function(dane) {
 #wykres kilku kolumn
 wykres_kilka<-function(dane, start, stop, paleta, linie) {
 #dane w formacie long do łatwiejszego wyboru grup
-  
+    
   krok = time_length(interval(dane[1,Data],dane[2,Data]), unit = "day")
 
   #x data range and ticks  

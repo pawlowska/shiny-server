@@ -33,10 +33,8 @@ suma_licznikow<-function(tabela, podw=podwojne_prefix) {
   
   i<-1
   for (p in podw) {
-    print(i)
     s<-paste(p, "- suma")
     sumuj<-grep(podw[i], nazwy, value = T)
-    print(sumuj)
     tabela[,(s):=get(sumuj[1])+get(sumuj[2])]
     i<-i+1
   }

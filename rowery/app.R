@@ -22,8 +22,8 @@ listy_stylow<-data.table(read.csv(file = "listy_stylow.csv", fileEncoding = 'UTF
 dane_long<-wczytaj_dane("dane_long.csv")
 nazwy<-unique(dane_long[,Miejsce])
 
-dane_tyg<-podsumuj.tygodnie(dane_long)
-dane_m<-podsumuj.miesiace(dane_long)
+#dane_tyg<-podsumuj.tygodnie(dane_long)
+#dane_m<-podsumuj.miesiace(dane_long)
 
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
@@ -166,6 +166,7 @@ server <- function(input, output, session) {
         #nowe_z_pogoda<-dodaj_pogode(nowe_dane)
         nowe_long<-wide_to_long(dodaj_pogode(nowe_dane))
         ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
+        
         setorder(ostatnie_nowe_long, "Data")
         #uaktualnij "nowe" dane
         write.csv(ostatnie_nowe_long, file = "nowe_long.csv", fileEncoding = 'UTF-8')
@@ -173,13 +174,16 @@ server <- function(input, output, session) {
   
   cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(ostatnie_nowe_long[,Data])), "\n")
   
-  
   #polacz ze "starymi" danymi
-  dane_long<-rbind(dane_long[Data<as.Date(zakresDo)], ostatnie_nowe_long)
-  setorder(dane_long, Miejsce)
+  dane_long<-rbind(dane_long, ostatnie_nowe_long[Data>zakresDo])
+  #setorder(dane_long, Miejsce)
   
   dane_tyg<-podsumuj.tygodnie(dane_long)
+  #setorder(dane_tyg, Miejsce)
+  
   dane_m<-podsumuj.miesiace(dane_long)
+  #setorder(dane_m, Miejsce)
+  
   zakresDo<-as.character(Sys.Date()-1)
   
   indeksy<-reactive({ #ktore kolory beda uzyte
