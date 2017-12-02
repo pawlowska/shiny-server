@@ -27,14 +27,19 @@ nazwy<-unique(dane_long[,Miejsce])
 
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
-zakresDoPogoda= '2017-06-30'
+zakresDoPogoda= '2017-10-31'
+plik_temperatura="pliki/IMGW_temp_20171031.csv"
+plik_opady="pliki/IMGW_opady_20171031.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
+#wartosci = c('bezwzględne', 'procentowo')
 wykresyPogody=c('temperatury', 'daty')
 
 #dane godzinowe
 godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
 cat(file=stderr(), "przygotowania zakonczone", "\n")
+cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
+
 
 ui <- fluidPage(
   tags$head(
@@ -79,7 +84,11 @@ ui <- fluidPage(
                    column(7, #dobowo/tygodniowo/miesiecznie
                           radioButtons('okres', 'Podsumuj', okresy, selected = okresy[1], 
                                        inline = TRUE, width = NULL)        
-                   )
+                   )#,
+                   #column(9, 
+                  #        radioButtons('wartosc', 'Wartości', wartosci, selected = wartosci[1], 
+                  #                     inline = TRUE, width = NULL)        
+                  # )
                  ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
@@ -166,8 +175,7 @@ server <- function(input, output, session) {
     ids<-read_counterids()
     nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
     nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
-    #nowe_z_pogoda<-dodaj_pogode(nowe_dane)
-    nowe_long<-wide_to_long(dodaj_pogode(nowe_dane))
+    nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_temperatura, plik_opady))
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
     
     setorder(ostatnie_nowe_long, "Data")

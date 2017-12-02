@@ -1,6 +1,7 @@
 library(RCurl)
+library(data.table)
 
-source('haslo.R', encoding = 'UTF-8')
+#source('haslo.R', encoding = 'UTF-8')
 
 bazaHist="cbdh/"
 bazaO="cbdo/"
@@ -62,6 +63,26 @@ sciagaj_liste<-function(parametr, lista_dat, baza=bazaHist, zakres='/tydzien/') 
   data.table(dane)
 
 }
+
+czytaj_dane_zipy<-function() {
+  nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
+  pogoda<-data.table(matrix(nrow = 0, ncol = 8))
+  setnames(pogoda, names(pogoda), nazwy_kolumn)
+  for (i in 7:10) {
+    nazwa<-sprintf('pogoda/s_d_%02d_2017.csv',i)
+    dane<-fread(nazwa,colClasses="numeric")[V1==warszawaOkecie]
+    dane<-dane[,c('V3', 'V4', 'V5', 'V6', 'V8', 'V10', 'V14', 'V16') ]
+    setnames(dane, names(dane), nazwy_kolumn)
+    pogoda<-rbind(pogoda, dane)
+  }
+  pogoda[,Data:=as.Date(paste(r,m,d, sep='-'))]
+  pogoda[,c('r','m','d'):=NULL]
+  pogoda[,deszcz:=ifelse(rodzaj=='W', opad, 0)]
+  pogoda[,snieg:= ifelse(rodzaj=='S', opad, 0)]
+  write.csv(pogoda, file = "pogoda/IMGW_2017_07_10.csv", fileEncoding = 'UTF-8', row.names = F)
+  pogoda
+}
+
 
 # temp_min<-sciagaj_liste(p_temp_min, poniedzialki[1:100])
 

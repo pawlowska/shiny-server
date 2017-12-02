@@ -128,3 +128,18 @@ write.csv(wiatr, file = "IMGW_wiatr_20170630.csv", fileEncoding = 'UTF-8')
 
 ```
 
+```{r}
+pogoda_new<-read.csv('IMGW_2017_07_10.csv')
+temp_old<-read.csv('IMGW_temp_20170630.csv')
+temperatura<-rbind(temp_old[,c('Data', 'temp_min', 'temp_avg', 'temp_max')],
+                   pogoda_new[,c('Data', 'temp_min', 'temp_avg', 'temp_max')])
+write.csv(temperatura, file = "IMGW_temp_20171031.csv", fileEncoding = 'UTF-8')
+
+opady_old<-read.csv('IMGW_opady_20170630.csv')
+opady<-rbind(
+  opady_old[,c("Data", "deszcz", "snieg")],
+  pogoda_new[,c("Data", "deszcz", "snieg")]
+)
+write.csv(opady, file = "IMGW_opady_20171031.csv", fileEncoding = 'UTF-8')
+```
+

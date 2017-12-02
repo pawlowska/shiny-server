@@ -1,5 +1,5 @@
 library(jsonlite)
-library(data.table)
+#library(data.table)
 library(RCurl)
 
 source('hasloA.R', encoding = 'UTF-8')
@@ -9,8 +9,8 @@ read_counterids<-function(filename="pliki/counterids.json") {
   ids
 }
 
-zaladuj_dane_api<-function(filename="bike_counts.csv", ids=ids, od="2017-07-14") {
-  link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od)
+zaladuj_dane_api<-function(filename="bike_counts.csv", ids=ids, od="2017-07-14", do=Sys.Date()) {
+  link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do)
   txt<- getURL(link, userpwd = credentials)
   #txt<- getURL(link)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))

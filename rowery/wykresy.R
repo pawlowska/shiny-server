@@ -1,6 +1,6 @@
 library(RColorBrewer)
 library(ggplot2)
-library(data.table)
+#library(data.table)
 library(scales) #for nicer y axis
 library(grid)
 
