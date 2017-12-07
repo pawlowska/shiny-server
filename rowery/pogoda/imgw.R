@@ -64,11 +64,11 @@ sciagaj_liste<-function(parametr, lista_dat, baza=bazaHist, zakres='/tydzien/') 
 
 }
 
-czytaj_dane_zipy<-function() {
+czytaj_dane_zipy<-function(do=11, nazwa_out="pogoda/IMGW_2017_07_11.csv") {
   nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
   pogoda<-data.table(matrix(nrow = 0, ncol = 8))
   setnames(pogoda, names(pogoda), nazwy_kolumn)
-  for (i in 7:10) {
+  for (i in 7:do) {
     nazwa<-sprintf('pogoda/s_d_%02d_2017.csv',i)
     dane<-fread(nazwa,colClasses="numeric")[V1==warszawaOkecie]
     dane<-dane[,c('V3', 'V4', 'V5', 'V6', 'V8', 'V10', 'V14', 'V16') ]
@@ -79,7 +79,7 @@ czytaj_dane_zipy<-function() {
   pogoda[,c('r','m','d'):=NULL]
   pogoda[,deszcz:=ifelse(rodzaj=='W', opad, 0)]
   pogoda[,snieg:= ifelse(rodzaj=='S', opad, 0)]
-  write.csv(pogoda, file = "pogoda/IMGW_2017_07_10.csv", fileEncoding = 'UTF-8', row.names = F)
+  write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
   pogoda
 }
 

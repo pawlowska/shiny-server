@@ -27,9 +27,9 @@ nazwy<-unique(dane_long[,Miejsce])
 
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
-zakresDoPogoda= '2017-10-31'
-plik_temperatura="pliki/IMGW_temp_20171031.csv"
-plik_opady="pliki/IMGW_opady_20171031.csv"
+zakresDoPogoda= '2017-11-30'
+plik_temperatura="pliki/IMGW_temp_20171130.csv"
+plik_opady="pliki/IMGW_opady_20171130.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
 #wartosci = c('bezwzględne', 'procentowo')

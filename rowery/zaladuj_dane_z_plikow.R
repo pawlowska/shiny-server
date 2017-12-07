@@ -4,11 +4,14 @@ source('ladowanie_danych.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 
+plik_temperatura="pliki/IMGW_temp_20171130.csv"
+plik_opady="pliki/IMGW_opady_20171130.csv"
+
 #dane od 08.2014 do 09.2017
 dane_dowrzesnia2017<-zaladuj_dane_new('dane/dane_201408_20170925.csv')
 
 ids<-read_counterids("pliki/counterids.json")
-nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2017-10-31")
+nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2017-11-30")
 
 dane<-rbind(dane_dowrzesnia2017, nowe_dane)
 
@@ -22,7 +25,7 @@ nazwy<-names(dane_zsumowane)[4:length(names(dane_zsumowane))]
 listy_stylow<-zrob_listy_stylow(nazwy) #w obsluga_sumowania
 write.csv(listy_stylow, file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', row.names = F)
 write.csv(dane_zsumowane, file = "dane/dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')
-dane_zsumowane<-dodaj_pogode(dane_zsumowane)
+dane_zsumowane<-dodaj_pogode(dane_zsumowane, plik_temperatura, plik_opady)
 write.csv(dane_zsumowane, file = "dane/dane_zsumowane_z_pogoda.csv", fileEncoding = 'UTF-8')
 dane_long<-wide_to_long(dane_zsumowane)
 write.csv(dane_long, file = "pliki/dane_long.csv", fileEncoding = 'UTF-8')
