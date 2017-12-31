@@ -31,7 +31,7 @@ zakresDoPogoda= '2017-11-30'
 plik_temperatura="pliki/IMGW_temp_20171130.csv"
 plik_opady="pliki/IMGW_opady_20171130.csv"
 
-okresy = c('dobowo', 'tygodniowo', 'miesięcznie')
+okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
 #wartosci = c('bezwzględne', 'procentowo')
 wykresyPogody=c('temperatury', 'daty')
 
@@ -190,10 +190,10 @@ server <- function(input, output, session) {
   #setorder(dane_long, Miejsce)
   
   dane_tyg<-podsumuj.tygodnie(dane_long)
-  #setorder(dane_tyg, Miejsce)
   
   dane_m<-podsumuj.miesiace(dane_long)
-  #setorder(dane_m, Miejsce)
+  
+  dane_y<-podsumuj.lata(dane_long)
   
   zakresDo<-as.character(Sys.Date()-1)
   
@@ -208,8 +208,20 @@ server <- function(input, output, session) {
     #pick daily, weekly or monthly data
     if (input$okres==okresy[2])       {wybor<-dane_tyg}
     else if (input$okres==okresy[3])  {wybor<-dane_m}
+    else if (input$okres==okresy[4])  {
+      zakres_dat=interval(as.Date("2014-01-01"), input$zakres[2])
+      wybor<-dane_y
+      }
     else {wybor<-dane_long}
     wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+  })
+  
+  krok<-reactive({
+    if (input$okres==okresy[2])       {k<-7}
+    else if (input$okres==okresy[3])  {k<-31}
+    else if (input$okres==okresy[4])  {k<-366}
+    else {k<-1}
+    k  
   })
   
   data_with_weather <- reactive({
@@ -240,7 +252,8 @@ server <- function(input, output, session) {
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     wykres_kilka(data(), 
-                 start=input$zakres[1], stop=input$zakres[2], paleta=uzyte_kolory(), linie = uzyte_linie())
+                 start=input$zakres[1], stop=input$zakres[2], 
+                 paleta=uzyte_kolory(), linie = uzyte_linie(), krok=krok())
   })
   
   output$plotPogoda <- renderPlot({

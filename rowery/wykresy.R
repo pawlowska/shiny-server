@@ -8,6 +8,7 @@ labelsy<-function(krok) {
   function(x) {
     if (krok==7) {l=format(x, format="%Y-%U")}
     else if (krok==31) {l=format(x, format="%Y-%m")}
+    else if (krok==366) {l=format(x, format="%Y")}
     else l=x
     l
   }
@@ -28,6 +29,7 @@ better_ticks<-function(zakres_dat, krok=1) {
   else if ((iledni<100)&&(krok<=7)) {breaks = "1 week"}
   else if ((iledni<210)&&(krok<=7)) {breaks = "2 weeks"}
   else if (iledni<450) {breaks = "1 month"}
+  else if (krok>50) {breaks="1 year"}
   else {breaks = "2 months"}
   breaks
 }
@@ -50,11 +52,10 @@ lista_weekendow<-function(dane) {
 
 
 #wykres kilku kolumn
-wykres_kilka<-function(dane, start, stop, paleta, linie) {
+wykres_kilka<-function(dane, start, stop, paleta, linie, krok) {
 #dane w formacie long do łatwiejszego wyboru grup
+  start=min(c(start,dane[,Data]))
     
-  krok = time_length(interval(dane[1,Data],dane[2,Data]), unit = "day")
-
   #x data range and ticks  
   zakres_dat=interval(start, stop)
   breaks<-better_ticks(zakres_dat, krok)
@@ -66,8 +67,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie) {
             )+geom_line( aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7
             )#+ggtitle("Liczba rowerów zarejestrowanych przez liczniki")
   
-  if(krok==1) #show weekends only for the daily plot
-  {
+  if(krok==1) { #show weekends only for the daily plot
     lista<-lista_weekendow(dane)
     g<-g+geom_rect(data=lista, 
                    aes(xmin=soboty, xmax=niedziele, ymin=-Inf, ymax=+Inf), 
@@ -75,6 +75,8 @@ wykres_kilka<-function(dane, start, stop, paleta, linie) {
                    alpha=0.2) +
       theme( # remove the vertical grid lines
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
+  } else if(krok>30) {
+    g<-g+geom_point(aes(Data, Liczba_rowerow, colour=Miejsce))
   }
   
   g<-g+scale_x_date(date_breaks = breaks, labels=labelsy(krok),limits=c(min(start),max(stop)),

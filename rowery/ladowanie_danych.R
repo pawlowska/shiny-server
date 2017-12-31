@@ -132,6 +132,13 @@ podsumuj.miesiace <- function(tabela_long) {
   podsumowanie
 }
 
+#podsumowanie po stratY danych w formacie long
+podsumuj.lata <- function(tabela_long) {
+  podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce, cut.POSIXt(as.POSIXct(Data), breaks="year"))]
+  setnames(podsumowanie, c("cut.POSIXt","V1"), c("Data", "Liczba_rowerow"))
+  podsumowanie[,Data:=as.Date(as.character(Data))]
+  podsumowanie
+}
 
 weekend<-function(data) {
   dzien<-weekdays(data)
