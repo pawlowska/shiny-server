@@ -52,7 +52,7 @@ lista_weekendow<-function(dane) {
 
 
 #wykres kilku kolumn
-wykres_kilka<-function(dane, start, stop, paleta, linie, krok) {
+wykres_kilka<-function(dane, start, stop, paleta, linie, krok=1) {
 #dane w formacie long do łatwiejszego wyboru grup
   start=min(c(start,dane[,Data]))
     
