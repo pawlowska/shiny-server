@@ -62,31 +62,26 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
 
   #set theme    
   theme_set(theme_light(base_size = 14))
-
   
-  #g<-ggplot(dane
-  #          )+geom_line( aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7
-  #          )#+ggtitle("Liczba rowerów zarejestrowanych przez liczniki")
-  
+  #start plot
   g<-ggplot(dane)
   
-  if (wartosc=='bezwzględne')
+  if (wartosc=='bezwzględne') {
     g<-g+geom_line(aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7)
-  
+    if(krok>30) {g<-g+geom_point(aes(Data, Liczba_rowerow, colour=Miejsce))}
+  }
   else
     g<-g+geom_area( aes(Data, Liczba_rowerow,  fill=Miejsce, linetype=Miejsce, alpha=Miejsce))
   
-  if(krok==1) { #show weekends only for the daily plot
+  #show weekends only for the daily plot
+  if(krok==1) { 
     lista<-lista_weekendow(dane)
     g<-g+geom_rect(data=lista, 
                    aes(xmin=soboty, xmax=niedziele, ymin=-Inf, ymax=+Inf), 
-                   fill='gray', 
-                   alpha=0.2) +
+                   fill='gray', alpha=0.2) +
       theme( # remove the vertical grid lines
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
-  } else if(krok>30) {
-    g<-g+geom_point(aes(Data, Liczba_rowerow, colour=Miejsce))
-  }
+  } 
   
   g<-g+scale_x_date(date_breaks = breaks, labels=labelsy(krok),limits=c(min(start),max(stop)),
                     expand=c(0,0)) #numer X ticks

@@ -116,14 +116,6 @@ ui <- fluidPage(
                      uiOutput("bike_weather_tooltip")
                  )
         ),
-        # tabPanel("Dane godzinowe",
-        #          tags$p(), 
-        #          div(id = "hoursPlotDiv", 
-        #              style = "position:relative",
-        #              #alt = "Ile rowerów w zależności od pogody",
-        #              plotOutput('plotHours', height=500)
-        #          )
-        # ),
         tabPanel("Położenie liczników",
                  tags$p(), 
                  div(id = "mapPlotDiv", 
@@ -136,10 +128,9 @@ ui <- fluidPage(
                  tags$p(),
                  tags$p('Aplikacja', tags$b('Rowery'),' przedstawia dane z automatycznych liczników rowerów w Warszawie
                         od początku ich funkcjonowania, czyli od ', 
-                        zakresOd, ', do ', zakresDo, 
-                        '. Źródłem danych jest: ',
+                        zakresOd, '. Źródłem danych jest: ',
                    tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
-                   '(otrzymane mailem).'),
+                   '.'),
                  tags$p(
                    'Średnią dobową temperaturę w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
                    tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'),
@@ -148,7 +139,7 @@ ui <- fluidPage(
                  tags$p(
                    'Autorka aplikacji: Monika Pawłowska (kontakt:',
                    tags$a(href='rowery@greenelephant.pl', "rowery@greenelephant.pl"),
-                   '), mapa: Adam Kolipiński. Kod i dane źródłowe dostępne są',
+                   '), współpraca: Adam Kolipiński (mapa) oraz Rowerozofia. Kod i dane źródłowe dostępne są',
                    tags$a(href='https://github.com/pawlowska/shiny-server/tree/master/rowery', 'tu.'))
         ) #end of "O..."
         
