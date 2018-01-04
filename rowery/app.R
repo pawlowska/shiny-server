@@ -78,13 +78,15 @@ ui <- fluidPage(
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl")
                    ),
-                   column(7, #dobowo/tygodniowo/miesiecznie
-                          radioButtons('okres', 'Podsumuj', okresy, selected = okresy[1], 
-                                       inline = TRUE, width = NULL)        
+                   column(3, #dobowo/tygodniowo/miesiecznie
+                          #radioButtons('okres', 'Podsumuj', okresy, selected = okresy[1], 
+                          #             inline = TRUE, width = NULL)
+                          selectInput('okres', 'Podsumuj', okresy, selected = okresy[1])
                    ),#PZ
-                   column(9, 
-                          radioButtons('wartosc', 'Wartości', wartosci, selected = wartosci[1], 
-                                       inline = TRUE, width = NULL)        
+                   column(3, 
+                          #radioButtons('wartosc', 'Wartości', wartosci, selected = wartosci[1], 
+                          #             inline = TRUE, width = NULL)
+                          selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
                    ) #koniec PZ
                  ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
