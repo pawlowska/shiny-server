@@ -88,6 +88,9 @@ in_out_ratio<-function(tabela) {
 source('palety_kolorow.R')
 
 ile_unikatow<-16
+a1=1
+a2=0.7
+a3=0.4
 
 zrob_listy_stylow<-function(nazwy, podw=podwojne_prefix, sumy=sumy_zwykle) {
   podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), nazwy, value = TRUE)
@@ -97,16 +100,19 @@ zrob_listy_stylow<-function(nazwy, podw=podwojne_prefix, sumy=sumy_zwykle) {
   kolory<-kolory_bez_podw[1:ile_unikatow]
   linie<-c(rep("solid", ile_unikatow))
   fonty<-c(rep("bold", ile_unikatow))
+  alfy<-c(rep(a1, ile_unikatow))
   
   for (s in sumy) {
     pos<-match(s, nazwy_bez_podw)
 
     kolory<-append(kolory, rep(kolory[pos], 2), after = pos)
     linie<-append(linie, c("dashed", "dotdash"), after = pos)
+    alfy<-append(alfy, c(a2,a3), after = pos)
+    
     fonty<-append(fonty, rep("normal", 2), after = pos)
     nazwy_bez_podw<-append(nazwy_bez_podw, c('x','x'), after = pos)
     
   }
   
-  cbind(kolory, linie, fonty)
+  cbind(kolory, linie, fonty, alfy)
 }

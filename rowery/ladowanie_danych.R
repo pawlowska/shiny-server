@@ -140,6 +140,14 @@ podsumuj.lata <- function(tabela_long) {
   podsumowanie
 }
 
+#PZ
+podsumuj.procentowo <- function(tabela_long) { 
+  podsumowanie <- tabela_long[,Liczba_rowerow/sum(tabela_long$Liczba_rowerow[tabela_long$Data == Data]), by=.(Miejsce,Data)]
+  setnames(podsumowanie, c("Data","V1"), c("Data", "Liczba_rowerow"))
+  podsumowanie
+}
+#PZ koniec
+
 weekend<-function(data) {
   dzien<-weekdays(data)
   ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")

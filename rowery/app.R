@@ -10,6 +10,7 @@ source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
+source('tooltip.R', encoding = 'UTF-8')
 
 #reading locations
 lokacje <- read.csv("pliki/czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
@@ -21,10 +22,6 @@ listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding 
 #reading data
 dane_long<-wczytaj_dane("pliki/dane_long.csv")
 nazwy<-unique(dane_long[,Miejsce])
-
-#dane_tyg<-podsumuj.tygodnie(dane_long)
-#dane_m<-podsumuj.miesiace(dane_long)
-
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
 zakresDoPogoda= '2017-11-30'
@@ -32,12 +29,12 @@ plik_temperatura="pliki/IMGW_temp_20171130.csv"
 plik_opady="pliki/IMGW_opady_20171130.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
-#wartosci = c('bezwzględne', 'procentowo')
+#PZ
+wartosci = c('bezwzględne', 'procentowo')
 wykresyPogody=c('temperatury', 'daty')
 
 #dane godzinowe
 godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
-cat(file=stderr(), "przygotowania zakonczone", "\n")
 cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
 
@@ -84,11 +81,11 @@ ui <- fluidPage(
                    column(7, #dobowo/tygodniowo/miesiecznie
                           radioButtons('okres', 'Podsumuj', okresy, selected = okresy[1], 
                                        inline = TRUE, width = NULL)        
-                   )#,
-                   #column(9, 
-                  #        radioButtons('wartosc', 'Wartości', wartosci, selected = wartosci[1], 
-                  #                     inline = TRUE, width = NULL)        
-                  # )
+                   ),#PZ
+                   column(9, 
+                          radioButtons('wartosc', 'Wartości', wartosci, selected = wartosci[1], 
+                                       inline = TRUE, width = NULL)        
+                   ) #koniec PZ
                  ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
@@ -213,7 +210,14 @@ server <- function(input, output, session) {
       wybor<-dane_y
       }
     else {wybor<-dane_long}
-    wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+    
+    #wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+    
+    #PZ
+    if(input$wartosc == wartosci[1])
+      wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
+    else
+      podsumuj.procentowo(wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki])
   })
   
   krok<-reactive({
@@ -242,6 +246,10 @@ server <- function(input, output, session) {
   uzyte_linie<-reactive({
     listy_stylow$linie[indeksy()]
   })
+
+  uzyte_alfy<-reactive({
+    as.numeric(listy_stylow$alfy[indeksy()])
+  })
   
   output$plotLiczba <- renderPlot({
     shiny::validate(
@@ -253,7 +261,8 @@ server <- function(input, output, session) {
     )
     wykres_kilka(data(), 
                  start=input$zakres[1], stop=input$zakres[2], 
-                 paleta=uzyte_kolory(), linie = uzyte_linie(), krok=krok())
+                 paleta=uzyte_kolory(), linie = uzyte_linie(), alfy=uzyte_alfy(),
+                 krok=krok(), wartosc = input$wartosc)
   })
   
   output$plotPogoda <- renderPlot({
@@ -263,9 +272,6 @@ server <- function(input, output, session) {
     if(input$rodzajPogody==wykresyPogody[1]) {
       pogoda_basic(data_with_weather(), paleta=uzyte_kolory())
     } else {
-      #zakres_dat=interval(input$zakresPogoda[1], input$zakresPogoda[2])
-      
-      #wykres_pogoda_liczba(data_with_weather()[Data %within% zakres_dat],
       wykres_pogoda_liczba(data_with_weather(),
                            start=input$zakresPogoda[1], stop=input$zakresPogoda[2], 
                            paleta=uzyte_kolory(), linie = uzyte_linie())
@@ -316,27 +322,6 @@ server <- function(input, output, session) {
     addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, radius = 10, color = uzyte_kolory(), opacity=1, weight = 8)
   })
   
-}
-
-tooltip_position<-function(hover, w=130) {   #calculate the position of the tooltip
-  #in relative units
-  left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
-  top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
-  #in pixel units
-  left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
-  if(hover$range$right-left_px<w) left_px<-left_px-(w+5) #tooltips too far right were hidden
-  
-  top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
-  
-  c(left_px, top_px)
-}
-
-tooltip_html<-function(pos_px) {
-  left_px<-pos_px[1]
-  top_px<-pos_px[2]
-  paste0("position:absolute; z-index:100; padding: 0 6px 0 6px; height: 22px; overflow: hidden;
-                    background-color: rgba(245, 245, 245, 0.85); ",
-  "left:", left_px + 2, "px; top:", top_px + 2, "px;")
 }
 
 shinyApp(ui = ui, server = server)

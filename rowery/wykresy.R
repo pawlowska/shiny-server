@@ -52,7 +52,7 @@ lista_weekendow<-function(dane) {
 
 
 #wykres kilku kolumn
-wykres_kilka<-function(dane, start, stop, paleta, linie, krok=1) {
+wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='bezwzględne') {
 #dane w formacie long do łatwiejszego wyboru grup
   start=min(c(start,dane[,Data]))
     
@@ -63,9 +63,18 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, krok=1) {
   #set theme    
   theme_set(theme_light(base_size = 14))
 
-  g<-ggplot(dane
-            )+geom_line( aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7
-            )#+ggtitle("Liczba rowerów zarejestrowanych przez liczniki")
+  
+  #g<-ggplot(dane
+  #          )+geom_line( aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7
+  #          )#+ggtitle("Liczba rowerów zarejestrowanych przez liczniki")
+  
+  g<-ggplot(dane)
+  
+  if (wartosc=='bezwzględne')
+    g<-g+geom_line(aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7)
+  
+  else
+    g<-g+geom_area( aes(Data, Liczba_rowerow,  fill=Miejsce, linetype=Miejsce, alpha=Miejsce))
   
   if(krok==1) { #show weekends only for the daily plot
     lista<-lista_weekendow(dane)
@@ -85,7 +94,9 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, krok=1) {
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
   #colours and line types
-  g<-g+scale_linetype_manual(values=linie)+(scale_colour_manual(values=paleta))
+  g<-g+scale_linetype_manual(values=linie)+scale_colour_manual(values=paleta)+
+    scale_fill_manual(values=paleta)+scale_alpha_manual(values = alfy)
+    
   #axis labels
   g<-g+xlab("Data")+ylab("")
 
