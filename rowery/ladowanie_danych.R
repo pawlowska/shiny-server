@@ -142,7 +142,7 @@ podsumuj.lata <- function(tabela_long) {
 
 #PZ
 podsumuj.procentowo <- function(tabela_long) { 
-  podsumowanie <- tabela_long[,Liczba_rowerow/sum(tabela_long$Liczba_rowerow[tabela_long$Data == Data]), by=.(Miejsce,Data)]
+  podsumowanie <- tabela_long[,100*Liczba_rowerow/sum(tabela_long$Liczba_rowerow[tabela_long$Data == Data]), by=.(Miejsce,Data)]
   setnames(podsumowanie, c("Data","V1"), c("Data", "Liczba_rowerow"))
   podsumowanie
 }

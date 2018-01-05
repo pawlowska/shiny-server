@@ -30,7 +30,7 @@ plik_opady="pliki/IMGW_opady_20171130.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
 #PZ
-wartosci = c('bezwzględne', 'procentowo')
+wartosci = c('bezwzględne', 'procentowe')
 wykresyPogody=c('temperatury', 'daty')
 
 #dane godzinowe
