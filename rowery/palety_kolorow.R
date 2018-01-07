@@ -1,5 +1,26 @@
 #palettes generated using: http://tools.medialab.sciences-po.fr/iwanthue/
 
+paelat18_sorted<-c( #10-350/40-100/35-85
+  "#cf4e5b",
+  "#de4a29",
+  "#bd673a",
+  "#d19a3e",
+  "#bdbe37",
+  "#647b29",
+  "#a0c266",
+  "#6cce3d",
+  "#52b65a",
+  "#47c39d",
+  "#5c82d1",
+  "#6061d7",
+  "#8f46da",
+  "#c083de",
+  "#cf49d5",
+  "#924892",
+  "#d843ae",
+  "#d97ab5"
+)
+
 paleta16_sorted<-c("#d54262",
 "#d13735",
 "#e97d56",
@@ -16,19 +37,3 @@ paleta16_sorted<-c("#d54262",
 "#a967c5",
 "#d346c7",
 "#d14c90")
-
-#H0-360, C45-100, L45-100
-paleta14_sorted<-c("#e15060",
-                   "#e3472f",
-                   "#e76d25",
-                   "#cd7937",
-                   "#d1a939",
-                   "#ccdf34",
-                   "#c2e06e",
-                   "#7d9c30",
-                   "#6cde51",
-                   "#4bad55",
-                   "#5de7ab",
-                   "#8a7ee3",
-                   "#c655d7",
-                   "#e0569d")

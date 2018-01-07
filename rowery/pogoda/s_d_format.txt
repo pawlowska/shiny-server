@@ -1,0 +1,66 @@
+Kod stacji                             9
+Nazwa stacji                          30
+Rok                                    4
+Miesi¹c                                2
+Dzieñ                                  2
+Maksymalna temperatura dobowa          6/1
+Status pomiaru TMAX                    1
+Minimalna temperatura dobowa           6/1
+Status pomiaru TMIN                    1
+Œrednia temperatura dobowa             8/1
+Status pomiaru STD                     1
+Temperatura minimalna przy gruncie     6/1
+Status pomiaru TMNG                    1
+Suma dobowa opadu                      8/1
+Status pomiaru SMDB                    1
+Rodzaj opadu                           1
+Wysokoœæ pokrywy œnie¿nej              5
+Status pomiaru PKSN                    1
+Równowa¿nik wodny œniegu               6/1
+Status pomiaru RWSN                    1
+Us³onecznienie                         6/1
+Status pomiaru USL                     1
+Czas trwania opadu deszczu             6/1
+Status pomiaru DESZ                    1
+Czas trwania opadu œniegu              6/1
+Status pomiaru SNEG                    1
+Czas trwania opadu deszczu ze œniegiem 6/1
+Status pomiaru DISN                    1
+Czas trwania gradu                     6/1
+Status pomiaru GRAD                    1
+Czas trwania mg³y                      6/1
+Status pomiaru MGLA                    1
+Czas trwania zamglenia                 6/1
+Status pomiaru ZMGL                    1
+Czas trwania sadzi                     6/1
+Status pomiaru SADZ                    1
+Czas trwania go³oledzi                 6/1
+Status pomiaru GOLO                    1
+Czas trwania zamieci œnie¿nej niskiej  6/1
+Status pomiaru ZMNI                    1
+Czas trwania zamieci œnie¿nej wysokiej 6/1
+Status pomiaru ZMWS                    1
+Czas trwania zmêtnienia                6/1
+Status pomiaru ZMET                    1
+Czas trwania wiatru >=10m/s            6/1
+Status pomiaru FF10                    1
+Czas trwania wiatru >15m/s             6/1
+Status pomiaru FF15                    1
+Czas trwania burzy                     6/1
+Status pomiaru BRZA                    1
+Czas trwania rosy                      6/1
+Status pomiaru ROSA                    1
+Czas trwania szronu                    6/1
+Status pomiaru SZRO                    1
+Wyst¹pienie pokrywy œnie¿nej           3
+Status pomiaru DZPS                    1
+Wyst¹pienie b³yskawicy                 3
+Status pomiaru DZBL                    1
+Stan gruntu Z/R                        1
+Izoterma dolna                         5
+Status pomiaru IZD                     1
+Izoterma górna                         5
+Status pomiaru IZG                     1
+Aktynometria                           7
+Status pomiaru AKTN                    1
+
