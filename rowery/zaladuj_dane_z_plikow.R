@@ -4,14 +4,14 @@ source('ladowanie_danych.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 
-plik_temperatura="pliki/IMGW_temp_20171130.csv"
-plik_opady="pliki/IMGW_opady_20171130.csv"
+plik_temperatura="pliki/IMGW_temp_20171231.csv"
+plik_opady="pliki/IMGW_opady_20171231.csv"
 
 #dane od 08.2014 do 09.2017
 dane_dowrzesnia2017<-zaladuj_dane_new('dane/dane_201408_20170925.csv')
 
 ids<-read_counterids("pliki/counterids.json")
-nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2017-11-30")
+nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2017-12-31")
 
 dane<-rbind(dane_dowrzesnia2017, nowe_dane)
 
