@@ -13,7 +13,7 @@ source('read_from_api.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
 
 #reading locations
-lokacje <- read.csv("pliki/czujniki_rowerowe.csv",dec=",", encoding='UTF-8')
+lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 
 #reading colors etc
@@ -152,22 +152,27 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   #dane zaladowane od ostatniego git commit
-  cat(file=stderr(), "probuje wczytac nowe_long", "\n")
-  ostatnie_nowe_long<-wczytaj_dane("pliki/nowe_long.csv")
-  ostatnia_data<-max(ostatnie_nowe_long[,Data])
-  cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
+  p<-"pliki/nowe_long.csv"
+  if (file.exists(p)) {
+    cat(file=stderr(), "probuje wczytac nowe_long", "\n")
+    ostatnie_nowe_long<-wczytaj_dane(p)
+    ostatnia_data<-max(ostatnie_nowe_long[,Data])
+    cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
+  }
+  else {
+    cat(file=stderr(), "brak pliku nowe_long", "\n")
+    ostatnie_nowe_long<-dane_long[0,]
+    ostatnia_data<-max(dane_long[,Data])+1
+  }
   
-  #czy są nowsze dane niż w "nowe_long.csv"?  
+  #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
     updateDateRangeInput(session, 'zakres', 
                          end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
-    
-    ids<-read_counterids()
-    nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
-    nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
-    nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_temperatura, plik_opady))
+    #zaladuj
+    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_temperatura, plik_opady)
+    #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
-    
     setorder(ostatnie_nowe_long, "Data")
     #uaktualnij "nowe" dane
     write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')

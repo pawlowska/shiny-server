@@ -11,9 +11,9 @@ plik_opady="pliki/IMGW_opady_20171231.csv"
 dane_dowrzesnia2017<-zaladuj_dane_new('dane/dane_201408_20170925.csv')
 
 ids<-read_counterids("pliki/counterids.json")
-nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2017-12-31")
+nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2018-01-10")
 
-dane<-rbind(dane_dowrzesnia2017, nowe_dane)
+dane<-rbind(dane_dowrzesnia2017, nowe_dane, fill=T)
 
 dane<-numery_dat(dane)
 

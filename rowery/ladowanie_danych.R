@@ -1,5 +1,12 @@
 library(data.table)
 
+zaladuj_nowe_z_api<-function(ostatnia_data, plik_temperatura, plik_opady) {
+  ids<-read_counterids()
+  nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
+  nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
+  nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_temperatura, plik_opady))
+}
+
 zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
   tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
   #kolumny od 2 do końca to liczby
