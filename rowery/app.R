@@ -25,8 +25,7 @@ nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
 zakresDoPogoda= '2017-12-31'
-plik_temperatura="pliki/IMGW_temp_20171231.csv"
-plik_opady="pliki/IMGW_opady_20171231.csv"
+plik_pogoda="pliki/IMGW_pogoda_20171231.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
 #PZ
@@ -170,7 +169,7 @@ server <- function(input, output, session) {
     updateDateRangeInput(session, 'zakres', 
                          end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
     #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_temperatura, plik_opady)
+    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda)
     #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
     setorder(ostatnie_nowe_long, "Data")

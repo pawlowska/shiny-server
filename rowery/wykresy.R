@@ -151,11 +151,11 @@ wykres_pogody_w_czasie<-function(dane) {
     ylab("Temperatura (°C)")+xlab("")
   
   g_d<-ggplot(dane)+
-    geom_segment(aes(x=Data, xend=Data, y=0, yend=deszcz), 
-                 color = "steelblue", lineend = "butt", size=1)+
-    #geom_point(aes(Data, deszcz), color = "steelblue")+
+    geom_segment(aes(x=Data, xend=Data, y=0, yend=deszcz+snieg, color=Rodzaj_opadu), 
+                 lineend = "butt", size=1)+
     scale_x_date(expand=c(0,0), labels=NULL)+ #numer X ticks
-    ylab("Deszcz (mm)")+xlab("")
+    scale_color_manual(values = c("midnightblue","deepskyblue"))+
+    ylab("Opady (mm)")+xlab("")+theme(legend.position="none")
   
   
   lista<-lista_weekendow(dane)
@@ -170,15 +170,14 @@ wykres_pogody_w_czasie<-function(dane) {
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())+
       theme(plot.margin = unit(c(0,0,-5,0), "pt"))
   }
-  
   plot_list
 }
 
 wykres_pogoda_liczba<-function(dane, start, stop, paleta, linie) {
   lista<- wykres_pogody_w_czasie(dane)
   g2<- wykres_kilka(dane, start, stop, paleta, linie)
-  #grid.arrange(g1, g2, ncol=1, heights = c(1, 2),  padding = unit(0, "line"))
+  # #grid.arrange(g1, g2, ncol=1, heights = c(1, 2),  padding = unit(0, "line"))
   grid.newpage()
   grid.draw(rbind(ggplotGrob(lista[[1]]), ggplotGrob(lista[[2]]),
-                  ggplotGrob(g2), size = "last"))
+                   ggplotGrob(g2), size = "last"))
 }
