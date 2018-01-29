@@ -2,6 +2,7 @@ podwojne_prefix<-enc2utf8(c("Al. Jerozolimskie",
                             "Al. USA",
                             "NSR Most Gdański",
                             "NSR Solec",
+                            "Powsińska",
                             "Świętokrzyska/Emilii Plater",
                             "Żwirki i Wigury/Trojdena"))
 
@@ -87,7 +88,7 @@ in_out_ratio<-function(tabela) {
 
 source('palety_kolorow.R')
 
-ile_unikatow<-16
+ile_unikatow<-17
 a1=1
 a2=0.7
 a3=0.4
@@ -96,7 +97,7 @@ zrob_listy_stylow<-function(nazwy, podw=podwojne_prefix, sumy=sumy_zwykle) {
   podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), nazwy, value = TRUE)
   nazwy_bez_podw<-sort(c(nazwy[!(nazwy %in% podwojne_i_sumy)], sumy))
   
-  kolory_bez_podw<-paleta16_sorted
+  kolory_bez_podw<-paleta18_sorted
   kolory<-kolory_bez_podw[1:ile_unikatow]
   linie<-c(rep("solid", ile_unikatow))
   fonty<-c(rep("bold", ile_unikatow))

@@ -64,7 +64,7 @@ sciagaj_liste<-function(parametr, lista_dat, baza=bazaHist, zakres='/tydzien/') 
 
 }
 
-czytaj_dane_zipy<-function(do=11, nazwa_out="pogoda/IMGW_2017_07_11.csv") {
+czytaj_dane_zipy<-function(do=12, nazwa_out="pogoda/IMGW_2017_07_12.csv") {
   nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
   pogoda<-data.table(matrix(nrow = 0, ncol = 8))
   setnames(pogoda, names(pogoda), nazwy_kolumn)

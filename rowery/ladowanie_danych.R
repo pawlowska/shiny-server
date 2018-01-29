@@ -1,5 +1,12 @@
 library(data.table)
 
+zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda) {
+  ids<-read_counterids()
+  nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
+  nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
+  nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
+}
+
 zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
   tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
   #kolumny od 2 do końca to liczby
@@ -111,7 +118,7 @@ numery_dat<-function(tabela) {
   tabela
 }
 
-wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien")) {
+wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Rodzaj_opadu")) {
   #print(str(dane))
   tabela<-melt(dane, 
                id.vars = nazwy_zmiennych, 
@@ -153,7 +160,7 @@ weekend<-function(data) {
   ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
 }
 
-dodaj_pogode<-function(tabela, 
+dodaj_pogode_old<-function(tabela, 
                        plik_temperatura="pliki/IMGW_temp_20171031.csv", 
                        plik_opady="pliki/IMGW_opady_20171031.csv") {
   temperatura<-fread(plik_temperatura, header = TRUE, encoding = "UTF-8", drop=1)
@@ -161,6 +168,20 @@ dodaj_pogode<-function(tabela,
   pogoda<-merge(temperatura, opady, by="Data")
   pogoda[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
   pogoda[,Jaki_dzien:=weekend(Data)]
+  dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
+  dane
+}
+
+rodzaj_opadu<-function(d,s) {
+  ifelse (d>0,'d','s')
+}
+
+dodaj_pogode<-function(tabela, 
+                       plik_pogoda="pliki/IMGW_pogoda_20171231.csv") {
+  pogoda<-fread(plik_pogoda, header = TRUE, encoding = "UTF-8")
+  pogoda[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
+  pogoda[,Jaki_dzien:=weekend(Data)]
+  pogoda[,Rodzaj_opadu:=rodzaj_opadu(deszcz, snieg)]
   dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
   dane
 }
