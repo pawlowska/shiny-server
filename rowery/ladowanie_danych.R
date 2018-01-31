@@ -1,7 +1,5 @@
 library(data.table)
 
-source('read_from_api.R', encoding = 'UTF-8')
-
 zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda) {
   ids<-read_counterids()
   nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)

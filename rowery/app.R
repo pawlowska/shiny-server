@@ -5,11 +5,11 @@ options(shiny.usecairo=T)
 
 library(lubridate)
 library(leaflet) #for maps
-library(shinyWidgets)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
+source('read_from_api.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
 
 #reading locations
@@ -36,7 +36,6 @@ wykresyPogody=c('temperatury', 'daty')
 godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
 cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
-mini=T
 
 ui <- fluidPage(
   tags$head(
@@ -57,26 +56,14 @@ ui <- fluidPage(
   h5('Dane z liczników rowerowych w Warszawie'),
   sidebarLayout(
     sidebarPanel(
-      tags$head(tags$script('
-                                var dimension = [0, 0];
-                            $(document).on("shiny:connected", function(e) {
-                            dimension[0] = window.innerWidth;
-                            dimension[1] = window.innerHeight;
-                            Shiny.onInputChange("dimension", dimension);
-                            });
-                            $(window).resize(function(e) {
-                            dimension[0] = window.innerWidth;
-                            dimension[1] = window.innerHeight;
-                            Shiny.onInputChange("dimension", dimension);
-                            });
-                            ')),
       lapply(1:length(nazwy), function(x) {
         #n <- length(nazwy)
         css_col <- paste0("#liczniki div.checkbox:nth-child(",x,
                           ") span{color: ", listy_stylow$kolory[x],"; font-weight : ",listy_stylow[[x,3]],"}")
         tags$style(type="text/css", css_col)
       }),
-      uiOutput('wyborLicznikow'),
+      checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
+                         selected = nazwy[c(1,7,12)], inline = FALSE, width = NULL),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -163,27 +150,6 @@ ui <- fluidPage(
 ) #end ui
 
 server <- function(input, output, session) {
-  output$wyborLicznikow <- renderUI({
-    req(input$dimension)
-    if (input$dimension[1]<700) {
-      pickerInput(
-             inputId = "liczniki", label = "Wybierz miejsca", choices = nazwy,
-             selected = nazwy[c(1,7,12)],
-             options = list(
-               `actions-box` = TRUE, 
-               size = 10,
-               `selected-text-format` = "count > 3",
-               `select-all-text`="Zaznacz wszystkie",
-               `deselect-all-text`="Odznacz wszystkie"
-             ), 
-             multiple = TRUE
-           )    
-      } else {
-        checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                            selected = nazwy[c(1,7,12)], inline = FALSE, width = NULL)
-      }
-  }) 
-  
   #dane zaladowane od ostatniego git commit
   p<-"pliki/nowe_long.csv"
   if (file.exists(p)) {
