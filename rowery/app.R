@@ -5,6 +5,7 @@ options(shiny.usecairo=T)
 
 library(lubridate)
 library(leaflet) #for maps
+library(shinyWidgets)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
@@ -28,42 +29,48 @@ zakresDoPogoda= '2017-12-31'
 plik_pogoda="pliki/IMGW_pogoda_20171231.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
-#PZ
-wartosci = c('bezwzględne', 'procentowe')
+wartosci = c('bezwzględne', 'procentowe') #PZ
 wykresyPogody=c('temperatury', 'daty')
 
-#dane godzinowe
-godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
+#dane godzinowe chwilowo nieużywane
+#godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
 cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
 
 ui <- fluidPage(
   tags$head(
-    tags$style(HTML("
-                    h1 {
+    tags$style(HTML("h1 {
                       margin-top:0px;
                       margin-bottom: 5px;
-                    }
-                    ")),
-    tags$style(HTML("
-                    h5 {
+                    }")),
+    tags$style(HTML("h5 {
                       padding-left: 16px;
                       margin-top: 3px;
-                    };
-                    "))),
+                    };"))),
   h5('Autorka: Monika Pawłowska', align = 'right'),
   headerPanel('Liczba rowerów'),
   h5('Dane z liczników rowerowych w Warszawie'),
   sidebarLayout(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
-        #n <- length(nazwy)
         css_col <- paste0("#liczniki div.checkbox:nth-child(",x,
-                          ") span{color: ", listy_stylow$kolory[x],"; font-weight : ",listy_stylow[[x,3]],"}")
+                          ") span{color: ", listy_stylow$kolory[x],
+                          "; font-weight : ",listy_stylow[[x,3]],"}")
         tags$style(type="text/css", css_col)
       }),
-      checkboxGroupInput('liczniki', 'Wybierz miejsca', nazwy, 
-                         selected = nazwy[c(1,7,12)], inline = FALSE, width = NULL),
+      tags$head(tags$script('var dimension = [0, 0];
+                        $(document).on("shiny:connected", function(e) {
+                        dimension[0] = window.innerWidth;
+                        dimension[1] = window.innerHeight;
+                        Shiny.onInputChange("dimension", dimension);
+                        });
+                        $(window).resize(function(e) {
+                        dimension[0] = window.innerWidth;
+                        dimension[1] = window.innerHeight;
+                        Shiny.onInputChange("dimension", dimension);
+                        });
+                        ')),
+      uiOutput('wyborLicznikow'),
       style= "padding: 10px 0px 0px 20px;"
     ),
     mainPanel(
@@ -78,13 +85,9 @@ ui <- fluidPage(
                                          separator = 'do', weekstart = 0, language = "pl")
                    ),
                    column(3, #dobowo/tygodniowo/miesiecznie
-                          #radioButtons('okres', 'Podsumuj', okresy, selected = okresy[1], 
-                          #             inline = TRUE, width = NULL)
                           selectInput('okres', 'Podsumuj', okresy, selected = okresy[1])
                    ),#PZ
                    column(3, 
-                          #radioButtons('wartosc', 'Wartości', wartosci, selected = wartosci[1], 
-                          #             inline = TRUE, width = NULL)
                           selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
                    ) #koniec PZ
                  ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
@@ -150,6 +153,25 @@ ui <- fluidPage(
 ) #end ui
 
 server <- function(input, output, session) {
+  output$wyborLicznikow <- renderUI({
+    req(input$dimension)
+    
+    if (input$dimension[1]<750) {
+      pickerInput('liczniki', 'Wybierz miejsca', 
+                  nazwy, selected = isolate(nazwy[indeksy()]), 
+                  options = list(`actions-box` = TRUE, 
+                                 `selected-text-format` = "count > 5",
+                                 `select-all-text`="Zaznacz wszystkie",
+                                 `deselect-all-text`="Odznacz wszystkie"
+                                 ), 
+                  multiple = T)
+    } else {
+      checkboxGroupInput('liczniki', 'Wybierz miejsca', 
+                         choices=nazwy, selected = isolate(nazwy[indeksy()]), 
+                         inline = FALSE, width = NULL)
+    }
+  })
+  
   #dane zaladowane od ostatniego git commit
   p<-"pliki/nowe_long.csv"
   if (file.exists(p)) {
@@ -181,19 +203,17 @@ server <- function(input, output, session) {
   
   #polacz ze "starymi" danymi
   dane_long<-rbind(dane_long, ostatnie_nowe_long[Data>zakresDo])
-  #setorder(dane_long, Miejsce)
   
+  #podsumuj
   dane_tyg<-podsumuj.tygodnie(dane_long)
-  
   dane_m<-podsumuj.miesiace(dane_long)
-  
   dane_y<-podsumuj.lata(dane_long)
   
   zakresDo<-as.character(Sys.Date()-1)
   
   indeksy<-reactive({ #ktore kolory beda uzyte
-    shiny::validate(
-      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
+    #shiny::validate(
+    #  need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     match(unique(data()$Miejsce), nazwy)
   })
   
@@ -207,8 +227,6 @@ server <- function(input, output, session) {
       wybor<-dane_y
       }
     else {wybor<-dane_long}
-    
-    #wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
     
     #PZ
     if(input$wartosc == wartosci[1])
@@ -226,15 +244,14 @@ server <- function(input, output, session) {
   })
   
   data_with_weather <- reactive({
-    #zakres_dat=interval(zakresOd, zakresDoPogoda)
     zakres_dat=interval(input$zakresPogoda[1], input$zakresPogoda[2])
     
     dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
   })
   
-  data_hourly <- reactive({
-    godzinowe[Miejsce %in% input$liczniki]
-  })
+  #data_hourly <- reactive({
+  #  godzinowe[Miejsce %in% input$liczniki]
+  #})
   
   uzyte_kolory<-reactive({
     listy_stylow$kolory[indeksy()]
@@ -275,11 +292,11 @@ server <- function(input, output, session) {
     }
   })
 
-  output$plotHours <- renderPlot({
-    shiny::validate(
-      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
-    wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
-  })
+  #output$plotHours <- renderPlot({
+  #  shiny::validate(
+  #    need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
+  #  wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
+  #})
   
   output$bike_date_tooltip <- renderUI({
     #based on: http://stackoverflow.com/questions/38992270/r-shiny-tooltip-in-ggplot
