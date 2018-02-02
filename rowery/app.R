@@ -17,6 +17,8 @@ source('tooltip.R', encoding = 'UTF-8')
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 
+print(lokacje)
+
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
 
@@ -90,7 +92,7 @@ ui <- fluidPage(
                    column(3, 
                           selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
                    ) #koniec PZ
-                 ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
+                 ), style= "padding: 10px 10px 0px 20px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
                      alt = "Ile rowerów jeździ w Warszawie",
@@ -133,8 +135,8 @@ ui <- fluidPage(
                  tags$p('Aplikacja', tags$b('Rowery'),' przedstawia dane z automatycznych liczników rowerów w Warszawie
                         od początku ich funkcjonowania, czyli od ', 
                         zakresOd, '. Źródłem danych jest: ',
-                   tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
-                   '.'),
+                        tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
+                        '.'),
                  tags$p(
                    'Średnią dobową temperaturę w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
                    tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'),
@@ -146,7 +148,6 @@ ui <- fluidPage(
                    '), współpraca: Adam Kolipiński (mapa) oraz Rowerozofia. Kod i dane źródłowe dostępne są',
                    tags$a(href='https://github.com/pawlowska/shiny-server/tree/master/rowery', 'tu.'))
         ) #end of "O..."
-        
       ) #end tabsetPanel
     ) #end mainPanel
   )
@@ -162,7 +163,8 @@ server <- function(input, output, session) {
                   options = list(`actions-box` = TRUE, 
                                  `selected-text-format` = "count > 5",
                                  `select-all-text`="Zaznacz wszystkie",
-                                 `deselect-all-text`="Odznacz wszystkie"
+                                 `deselect-all-text`="Odznacz wszystkie",
+                                 `none-selected-text`="Nic nie wybrano"
                                  ), 
                   multiple = T)
     } else {
@@ -331,6 +333,9 @@ server <- function(input, output, session) {
   })
 
   output$mymap <- renderLeaflet({
+    shiny::validate(
+      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
+    )
     leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
     addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, radius = 10, color = uzyte_kolory(), opacity=1, weight = 8)

@@ -2,7 +2,7 @@ podwojne_prefix<-enc2utf8(c("Al. Jerozolimskie",
                             "Al. USA",
                             "NSR Most Gdański",
                             "NSR Solec",
-                            "Powsińska",
+                            "Czerniakowska",
                             "Świętokrzyska/Emilii Plater",
                             "Żwirki i Wigury/Trojdena"))
 
