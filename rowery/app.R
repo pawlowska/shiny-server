@@ -17,8 +17,6 @@ source('tooltip.R', encoding = 'UTF-8')
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 
-print(lokacje)
-
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
 
@@ -86,12 +84,18 @@ ui <- fluidPage(
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl")
                    ),
-                   column(3, #dobowo/tygodniowo/miesiecznie
-                          selectInput('okres', 'Podsumuj', okresy, selected = okresy[1])
-                   ),#PZ
-                   column(3, 
-                          selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
-                   ) #koniec PZ
+                   column(7,
+                    splitLayout(
+                       selectInput('okres', 'Podsumuj', okresy, selected = okresy[1]),
+                      selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
+                    )
+                   )
+                   #column(3, #dobowo/tygodniowo/miesiecznie
+                  #        selectInput('okres', 'Podsumuj', okresy, selected = okresy[1])
+                   #),#PZ
+                   #column(3, 
+                  #        selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
+                   #) #koniec PZ
                  ), style= "padding: 10px 10px 0px 20px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
