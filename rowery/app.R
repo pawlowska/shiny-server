@@ -38,27 +38,7 @@ cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
 
 ui <- fluidPage(
-  tags$head(
-    tags$style(HTML("h1 {
-                      margin-top:0px;
-                      margin-bottom: 5px;
-                    }")),
-    tags$style(HTML("h5 {
-                      padding-left: 16px;
-                      margin-top: 3px;
-                    };"))),
-  h5('Autorka: Monika Pawłowska', align = 'right'),
-  headerPanel('Liczba rowerów'),
-  h5('Dane z liczników rowerowych w Warszawie'),
-  sidebarLayout(
-    sidebarPanel(
-      lapply(1:length(nazwy), function(x) {
-        css_col <- paste0("#liczniki div.checkbox:nth-child(",x,
-                          ") span{color: ", listy_stylow$kolory[x],
-                          "; font-weight : ",listy_stylow[[x,3]],"}")
-        tags$style(type="text/css", css_col)
-      }),
-      tags$head(tags$script('var dimension = [0, 0];
+  tags$head(tags$script('var dimension = [0, 0];
                         $(document).on("shiny:connected", function(e) {
                         dimension[0] = window.innerWidth;
                         dimension[1] = window.innerHeight;
@@ -70,8 +50,32 @@ ui <- fluidPage(
                         Shiny.onInputChange("dimension", dimension);
                         });
                         ')),
+  tags$head(
+    tags$style(HTML('.shiny-split-layout>div  { overflow: visible;}')),
+    
+    tags$style(HTML("h1 {
+                      margin-top:0px;
+                      margin-bottom: 5px;
+                    }")),
+    tags$style(HTML("h5 {
+                      padding-left: 16px;
+                      margin-top: 3px;
+                    };"))#,
+    #tags$style(HTML('.selectize-input  { font-size: 13px;} 
+    #           .selectize-dropdown { font-size: 13px;}'))
+    ),
+  
+  h5('Autorka: Monika Pawłowska', align = 'right'),
+  headerPanel('Liczba rowerów'),
+  h5('Dane z liczników rowerowych w Warszawie'),
+  sidebarLayout(
+    sidebarPanel(
+      lapply(1:length(nazwy), function(x) {
+        tags$style(type="text/css", 
+                   css_list(what="#liczniki div.checkbox:nth-child(",listy_stylow, x))
+      }),
       uiOutput('wyborLicznikow'),
-      style= "padding: 10px 0px 0px 20px;"
+      style= "padding: 10px 10px 0px 15px;" #top right bottom left; grey bckgrnd around selections
     ),
     mainPanel(
       tabsetPanel(
@@ -107,18 +111,18 @@ ui <- fluidPage(
         tabPanel("Pogoda",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
-
-                   column(4, #dobowo/tygodniowo/miesiecznie
-                          radioButtons('rodzajPogody', 'Zależność od', wykresyPogody, selected = wykresyPogody[2], 
-                                       inline = TRUE, width = NULL)        
-                   ),
-                   column(6, #daty
-                          dateRangeInput('zakresPogoda', 'Wybierz zakres dat',
-                                         start=as.character(as.Date(zakresDoPogoda)-120), end=zakresDoPogoda,
-                                         min=zakresOd, max=zakresDoPogoda,
-                                         separator = 'do', weekstart = 0, language = "pl")
-                   )
-                 ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel
+                       column(4, #dobowo/tygodniowo/miesiecznie
+                              radioButtons('rodzajPogody', 'Zależność od', wykresyPogody, selected = wykresyPogody[2], 
+                                           inline = TRUE, width = NULL)        
+                       ),
+                       column(6, #daty
+                              dateRangeInput('zakresPogoda', 'Wybierz zakres dat',
+                                             start=as.character(as.Date(zakresDoPogoda)-120), end=zakresDoPogoda,
+                                             min=zakresOd, max=zakresDoPogoda,
+                                             separator = 'do', weekstart = 0, language = "pl")
+                       )
+                    ), style= "padding: 5px 0px 0px 15px, margin:13px;"
+                 ), #end wellPanel
                  div(id = "weatherPlotDiv", 
                      style = "position:relative",
                      alt = "Ile rowerów w zależności od pogody",

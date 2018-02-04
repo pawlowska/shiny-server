@@ -117,3 +117,12 @@ zrob_listy_stylow<-function(nazwy, podw=podwojne_prefix, sumy=sumy_zwykle) {
   
   cbind(kolory, linie, fonty, alfy)
 }
+
+css_list<-function(what="#liczniki div.checkbox:nth-child(", listy_stylow, iterator) {
+  paste0(what,
+         iterator,
+         ") span{color: ", 
+         listy_stylow$kolory[iterator],
+         "; font-weight : ",
+         listy_stylow[[iterator,3]],"}")
+}
