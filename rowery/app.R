@@ -66,7 +66,8 @@ ui <- fluidPage(
     ),
   
   h5('Autorka: Monika Pawłowska', align = 'right'),
-  headerPanel('Liczniki rowerów w Warszawie'),
+  headerPanel('Liczba rowerów'),
+  h5('Dane z liczników rowerowych w Warszawie'),
   sidebarLayout(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
@@ -89,11 +90,17 @@ ui <- fluidPage(
                    ),
                    column(7,
                     splitLayout(
-                      selectInput('okres', 'Podsumuj', okresy, selected = okresy[1]),
+                       selectInput('okres', 'Podsumuj', okresy, selected = okresy[1]),
                       selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
                     )
                    )
-                 ), style= "padding: 10px 10px 0px 15px;"), #end wellPanel
+                   #column(3, #dobowo/tygodniowo/miesiecznie
+                  #        selectInput('okres', 'Podsumuj', okresy, selected = okresy[1])
+                   #),#PZ
+                   #column(3, 
+                  #        selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
+                   #) #koniec PZ
+                 ), style= "padding: 10px 10px 0px 20px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
                      alt = "Ile rowerów jeździ w Warszawie",
@@ -114,7 +121,7 @@ ui <- fluidPage(
                                              min=zakresOd, max=zakresDoPogoda,
                                              separator = 'do', weekstart = 0, language = "pl")
                        )
-                    ), style= "padding: 0px 0px 0px 0px, margin:13px;"
+                    ), style= "padding: 5px 0px 0px 15px, margin:13px;"
                  ), #end wellPanel
                  div(id = "weatherPlotDiv", 
                      style = "position:relative",
@@ -139,7 +146,7 @@ ui <- fluidPage(
                         tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
                         '.'),
                  tags$p(
-                   'Dane o pogodzie w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
+                   'Średnią dobową temperaturę w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
                    tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'),
                    'Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy.'
                  ),
@@ -149,8 +156,7 @@ ui <- fluidPage(
                    '), współpraca: Adam Kolipiński (mapa) oraz Rowerozofia. Kod i dane źródłowe dostępne są',
                    tags$a(href='https://github.com/pawlowska/shiny-server/tree/master/rowery', 'tu.'))
         ) #end of "O..."
-        
-      )#end tabsetPanel
+      ) #end tabsetPanel
     ) #end mainPanel
   )
 ) #end ui
