@@ -66,8 +66,7 @@ ui <- fluidPage(
     ),
   
   h5('Autorka: Monika Pawłowska', align = 'right'),
-  headerPanel('Liczba rowerów'),
-  h5('Dane z liczników rowerowych w Warszawie'),
+  headerPanel('Liczniki rowerów w Warszawie'),
   sidebarLayout(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
@@ -90,16 +89,10 @@ ui <- fluidPage(
                    ),
                    column(7,
                     splitLayout(
-                       selectInput('okres', 'Podsumuj', okresy, selected = okresy[1]),
+                      selectInput('okres', 'Podsumuj', okresy, selected = okresy[1]),
                       selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
                     )
                    )
-                   #column(3, #dobowo/tygodniowo/miesiecznie
-                  #        selectInput('okres', 'Podsumuj', okresy, selected = okresy[1])
-                   #),#PZ
-                   #column(3, 
-                  #        selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
-                   #) #koniec PZ
                  ), style= "padding: 10px 10px 0px 20px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
@@ -146,7 +139,7 @@ ui <- fluidPage(
                         tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
                         '.'),
                  tags$p(
-                   'Średnią dobową temperaturę w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
+                   'Dane o pogodzie w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
                    tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'),
                    'Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy.'
                  ),
