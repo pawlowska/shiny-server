@@ -13,7 +13,17 @@ source('obsluga_sumowania.R', encoding = 'UTF-8')
 ```
 
 ```{r}
-plik_pogoda="pliki/IMGW_pogoda_20171231.csv"
+plik_pogoda_old="pliki/IMGW_pogoda_20171231.csv"
+plik_pogoda="pliki/IMGW_pogoda_20180131.csv"
+pogoda_old<-fread(plik_pogoda_old)
+pogoda_old[,Data:=as.Date(Data)]
+pogoda_new<-czytaj_dane_zipy(do=1, nazwa_out="pogoda/IMGW_2018_01.csv")
+pogoda_new[,opad:=NULL]
+pogoda_new[,rodzaj:=NULL]
+
+pogoda<-rbind(pogoda_old, pogoda_new)
+write.csv(pogoda, file = plik_pogoda, fileEncoding = 'UTF-8', row.names = F)
+
 ```
 
 ```{r}
@@ -23,7 +33,7 @@ dane_dowrzesnia2017<-zaladuj_dane_new('dane/dane_201408_20170925.csv')
 
 ```{r}
 ids<-read_counterids("pliki/counterids.json")
-nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2018-01-10")
+nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2018-01-31")
 print(str(nowe_dane))
 
 ```
@@ -31,12 +41,12 @@ print(str(nowe_dane))
 ```{r}
 dane<-rbind(dane_dowrzesnia2017, nowe_dane, fill=T)
 dane<-numery_dat(dane)
-print(str(dane))
-
 write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
 
 dane_zsumowane<-suma_licznikow(dane)
 rm(dane)
+print(str(dane_zsumowane))
+
 nazwy<-names(dane_zsumowane)[4:length(names(dane_zsumowane))]
 listy_stylow<-zrob_listy_stylow(nazwy) #w obsluga_sumowania
 write.csv(listy_stylow, file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', row.names = F)
@@ -45,6 +55,7 @@ write.csv(dane_zsumowane, file = "dane/dane_polaczone_zsumowane.csv", fileEncodi
 
 ```{r}
 dane_zsumowane<-dodaj_pogode(dane_zsumowane, plik_pogoda)
+print(str(dane_zsumowane))
 write.csv(dane_zsumowane, file = "dane/dane_zsumowane_z_pogoda.csv", fileEncoding = 'UTF-8')
 dane_long<-wide_to_long(dane_zsumowane)
 rm(dane_zsumowane)
