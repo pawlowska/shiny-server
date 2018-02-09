@@ -93,7 +93,7 @@ ui <- fluidPage(
                       selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
                     )
                    )
-                 ), style= "padding: 10px 10px 0px 20px;"), #end wellPanel
+                 ), style= "padding: 10px 10px 0px 15px;"), #end wellPanel
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
                      alt = "Ile rowerów jeździ w Warszawie",
@@ -114,7 +114,7 @@ ui <- fluidPage(
                                              min=zakresOd, max=zakresDoPogoda,
                                              separator = 'do', weekstart = 0, language = "pl")
                        )
-                    ), style= "padding: 5px 0px 0px 15px, margin:13px;"
+                    ), style= "padding: 5px 0px 0px 15px;"
                  ), #end wellPanel
                  div(id = "weatherPlotDiv", 
                      style = "position:relative",
@@ -312,7 +312,7 @@ server <- function(input, output, session) {
     #else add to UI
     wellPanel(
       style = tooltip_html(tooltip_position(hover)),
-      p(HTML(paste0( point$Data,": ", point$Liczba_rowerow)))
+      p(HTML(paste0( point$Data,": ", round(point$Liczba_rowerow, digits=1))))
     )
   })
   

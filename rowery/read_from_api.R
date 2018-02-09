@@ -14,7 +14,6 @@ zaladuj_dane_api<-function(ids=ids, od="2018-01-01", do=Sys.Date()) {
   txt<- getURL(link, userpwd = credentials)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
   setnames(tabela, c("Licznik", "Data", "Liczba_rowerow"))
-  #tabela<-tabela[Licznik!=100042112 & Licznik!=100042111] #powsinska
   tabela[,Data:=as.Date(Data)]
   tabela[,Miejsce:=as.character(Licznik)]
   tabela[,Miejsce:=unlist(ids[Miejsce])]
