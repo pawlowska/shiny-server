@@ -159,13 +159,13 @@ server <- function(input, output, session) {
     req(input$dimension)
     
     if (input$dimension[1]<750) {
-      pickerInput('liczniki', 'Wybierz miejsca', 
+      pickerInput('liczniki', label=NULL,#'Wybierz miejsca', 
                   nazwy, selected = isolate(nazwy[indeksy()]), 
                   options = list(`actions-box` = TRUE, 
                                  `selected-text-format` = "count > 5",
                                  `select-all-text`="Zaznacz wszystkie",
                                  `deselect-all-text`="Odznacz wszystkie",
-                                 `none-selected-text`="Nic nie wybrano"
+                                 `none-selected-text`="Wybierz miejsca"
                                  ), 
                   multiple = T)
     } else {
