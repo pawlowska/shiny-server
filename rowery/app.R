@@ -51,21 +51,13 @@ ui <- fluidPage(
                         });
                         ')),
   tags$head(
-    tags$style(HTML('.shiny-split-layout>div  { overflow: visible;}')),
+    tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
     
-    tags$style(HTML("h1 {
-                      margin-top:0px;
-                      margin-bottom: 5px;
-                    }")),
-    tags$style(HTML("h5 {
-                      padding-left: 16px;
-                      margin-top: 3px;
-                    };"))#,
+    tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
     #tags$style(HTML('.selectize-input  { font-size: 13px;} 
-    #           .selectize-dropdown { font-size: 13px;}'))
+    #                 .selectize-dropdown { font-size: 13px;}'))
     ),
   
-  h5('Autorka: Monika Pawłowska', align = 'right'),
   headerPanel('Liczniki rowerów w Warszawie'),
   sidebarLayout(
     sidebarPanel(
