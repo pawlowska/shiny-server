@@ -29,17 +29,18 @@ write.csv(pogoda, file = plik_pogoda, fileEncoding = 'UTF-8', row.names = F)
 ```{r}
 #dane od 08.2014 do 09.2017
 dane_dowrzesnia2017<-zaladuj_dane_new('dane/dane_201408_20170925.csv')
+dane_dolutego2018<-zaladuj_dane_nazwy('dane/dane_201709_20180213.csv')
 ```
 
 ```{r}
 ids<-read_counterids("pliki/counterids.json")
 nowe_dane<-zaladuj_dane_api(ids=ids, od="2017-09-26", do="2018-01-31")
-print(str(nowe_dane))
 
 ```
 
 ```{r}
-dane<-rbind(dane_dowrzesnia2017, nowe_dane, fill=T)
+dane<-rbind(dane_dowrzesnia2017, dane_dolutego2018, fill=T)
+print(tail(dane))
 dane<-numery_dat(dane)
 write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
 

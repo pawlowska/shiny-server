@@ -43,6 +43,32 @@ zaladuj_dane_new<-function(plik, sep=';', bez_kierunkow=TRUE) {
   tabela
 }
 
+zaladuj_dane_nazwy<-function(plik='dane/2017_09_25-2018_02_13.csv', sep=';') {
+  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
+  #kolumny od 2 do końca to liczby
+  cols<-2:ncol(tabela) 
+  tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 
+  tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
+  setorder(tabela, Data)
+  setnames(tabela,'al. Jerozolimskie - południe', 'Al. Jerozolimskie płd.')
+  setnames(tabela,'al. Jerozolimskie - północ', 'Al. Jerozolimskie płn.')
+  setnames(tabela,'Al. USA - południe', 'Al. USA płd.')
+  setnames(tabela,'Al. USA - północ', 'Al. USA płn.')
+  setnames(tabela,'Czerniakowska - wschód', 'Czerniakowska wsch.')
+  setnames(tabela,'Czerniakowska - zachód', 'Czerniakowska zach.')
+  setnames(tabela,'Dworzec Wilenski (al. Solidarności)', 'Dworzec Wileński (al. Solidarności)')
+  setnames(tabela,'NSR Most Gdanski - ścieżka rowerowa', 'NSR Most Gdański ścieżka rowerowa')
+  setnames(tabela,'NSR Most Gdański - ciąg pieszo-rowerowy', 'NSR Most Gdański ciąg pieszo-rowerowy')
+  setnames(tabela,'NSR Solec - ciąg pieszo-rowerowy', 'NSR Solec ciąg pieszo-rowerowy')
+  setnames(tabela,'NSR Solec - ścieżka rowerowa', 'NSR Solec ścieżka rowerowa')
+  setnames(tabela,'Praska sciezka rekreacyjna', 'Praska ścieżka rekreacyjna')
+  setnames(tabela,'Świętokrzyska - Emilii Plater-płd', 'Świętokrzyska/Emilii Plater płd.')
+  setnames(tabela,'Świętokrzyska - Emilii Plater-płn', 'Świętokrzyska/Emilii Plater płn.')
+  setnames(tabela, names(tabela), enc2utf8(names(tabela)))
+  
+  tabela
+}
+
 zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M", bez_kierunkow=TRUE, ziw=TRUE) {
   library(data.table)
   

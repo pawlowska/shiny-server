@@ -91,7 +91,9 @@ ui <- fluidPage(
                      alt = "Ile rowerów jeździ w Warszawie",
                    plotOutput('plotLiczba', height=480, hover = hoverOpts(id = "plot_hover", delay = 100)),
                    uiOutput("bike_date_tooltip")
-                 )
+                 )#,
+                 
+                 #verbatimTextOutput("queryText")
         ),
         tabPanel("Pogoda",
                  #wybor zakresu i grupowania daty
@@ -147,6 +149,14 @@ ui <- fluidPage(
 ) #end ui
 
 server <- function(input, output, session) {
+  # Parse the GET query string
+  # output$queryText <- renderText({
+  #   query <- parseQueryString(session$clientData$url_search)
+  #   
+  #   # Return a string with key-value pairs
+  #   paste(names(query), query, sep = "=", collapse=", ")
+  # })
+  
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     
