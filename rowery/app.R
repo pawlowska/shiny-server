@@ -10,7 +10,6 @@ library(shinyWidgets)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
-source('read_from_api.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
 
 #reading locations
@@ -91,9 +90,9 @@ ui <- fluidPage(
                      alt = "Ile rowerów jeździ w Warszawie",
                    plotOutput('plotLiczba', height=480, hover = hoverOpts(id = "plot_hover", delay = 100)),
                    uiOutput("bike_date_tooltip")
-                 )#,
+                 ),
                  
-                 #verbatimTextOutput("queryText")
+                 verbatimTextOutput("queryText")
         ),
         tabPanel("Pogoda",
                  #wybor zakresu i grupowania daty
@@ -148,31 +147,42 @@ ui <- fluidPage(
   )
 ) #end ui
 
+nazwa_z_url<-function(session) {
+  query <- parseQueryString(session$clientData$url_search)
+  
+  match(ids[query$licznik], nazwy)
+}
+
 server <- function(input, output, session) {
-  # Parse the GET query string
+  #Parse the GET query string
   # output$queryText <- renderText({
-  #   query <- parseQueryString(session$clientData$url_search)
-  #   
+  # 
   #   # Return a string with key-value pairs
-  #   paste(names(query), query, sep = "=", collapse=", ")
+  #   paste(paste(names(query), query, sep = "=", collapse=", "), ids[query$licznik])
   # })
+
+  #initalization
+  #query <- parseQueryString(session$clientData$url_search)
+  
+  indeksy<-reactiveValues(wybrane=c(1,2,3))
   
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     
+    init_selected<-isolate(nazwy[indeksy$wybrane])
+    
     if (input$dimension[1]<750) {
       pickerInput('liczniki', label=NULL,#'Wybierz miejsca', 
-                  nazwy, selected = isolate(nazwy[indeksy()]), 
+                  nazwy, selected = init_selected, 
                   options = list(`actions-box` = TRUE, 
                                  `selected-text-format` = "count > 5",
                                  `select-all-text`="Zaznacz wszystkie",
                                  `deselect-all-text`="Odznacz wszystkie",
-                                 `none-selected-text`="Wybierz miejsca"
-                                 ), 
+                                 `none-selected-text`="Wybierz miejsca"), 
                   multiple = T)
     } else {
       checkboxGroupInput('liczniki', 'Wybierz miejsca', 
-                         choices=nazwy, selected = isolate(nazwy[indeksy()]), 
+                         choices=nazwy, selected = init_selected, 
                          inline = FALSE, width = NULL)
     }
   })
@@ -197,6 +207,7 @@ server <- function(input, output, session) {
                          end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
     #zaladuj
     nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda)
+    
     #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
     setorder(ostatnie_nowe_long, "Data")
@@ -216,10 +227,8 @@ server <- function(input, output, session) {
   
   zakresDo<-as.character(Sys.Date()-1)
   
-  indeksy<-reactive({ #ktore kolory beda uzyte
-    #shiny::validate(
-    #  need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
-    match(unique(data()$Miejsce), nazwy)
+  observeEvent(input$liczniki, {
+    indeksy$wybrane <- match(unique(data()$Miejsce), nazwy)
   })
   
   data <- reactive({
@@ -232,7 +241,7 @@ server <- function(input, output, session) {
       wybor<-dane_y
       }
     else {wybor<-dane_long}
-    
+
     #PZ
     if(input$wartosc == wartosci[1])
       wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
@@ -257,19 +266,11 @@ server <- function(input, output, session) {
   #data_hourly <- reactive({
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
-  
-  uzyte_kolory<-reactive({
-    listy_stylow$kolory[indeksy()]
-  })
-  
-  uzyte_linie<-reactive({
-    listy_stylow$linie[indeksy()]
-  })
 
-  uzyte_alfy<-reactive({
-    as.numeric(listy_stylow$alfy[indeksy()])
+  uzyte_style<-reactive({
+    listy_stylow[indeksy$wybrane]
   })
-  
+    
   output$plotLiczba <- renderPlot({
     shiny::validate(
       need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
@@ -280,7 +281,7 @@ server <- function(input, output, session) {
     )
     wykres_kilka(data(), 
                  start=input$zakres[1], stop=input$zakres[2], 
-                 paleta=uzyte_kolory(), linie = uzyte_linie(), alfy=uzyte_alfy(),
+                 paleta=uzyte_style()$kolory, linie = uzyte_style()$linie, alfy=as.numeric(uzyte_style()$alfy),
                  krok=krok(), wartosc = input$wartosc)
   })
   
@@ -289,11 +290,11 @@ server <- function(input, output, session) {
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     if(input$rodzajPogody==wykresyPogody[1]) {
-      pogoda_basic(data_with_weather(), paleta=uzyte_kolory())
+      pogoda_basic(data_with_weather(), paleta=uzyte_style()$kolory)
     } else {
       wykres_pogoda_liczba(data_with_weather(),
                            start=input$zakresPogoda[1], stop=input$zakresPogoda[2], 
-                           paleta=uzyte_kolory(), linie = uzyte_linie())
+                           paleta=uzyte_style()$kolory, linie = uzyte_style()$linie)
     }
   })
 
@@ -339,9 +340,10 @@ server <- function(input, output, session) {
     shiny::validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
-    leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
+    leaflet(lokacje[indeksy$wybrane,], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
-    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, radius = 10, color = uzyte_kolory(), opacity=1, weight = 8)
+    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, 
+                     radius = 10, color = uzyte_style()$kolory, opacity=1, weight = 8)
   })
   
 }
