@@ -15,6 +15,7 @@ source('tooltip.R', encoding = 'UTF-8')
 #reading locations
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
+lokacje<-data.table(lokacje)
 
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
@@ -90,9 +91,7 @@ ui <- fluidPage(
                      alt = "Ile rowerów jeździ w Warszawie",
                    plotOutput('plotLiczba', height=480, hover = hoverOpts(id = "plot_hover", delay = 100)),
                    uiOutput("bike_date_tooltip")
-                 ),
-                 
-                 verbatimTextOutput("queryText")
+                 )
         ),
         tabPanel("Pogoda",
                  #wybor zakresu i grupowania daty
@@ -147,29 +146,24 @@ ui <- fluidPage(
   )
 ) #end ui
 
-nazwa_z_url<-function(session) {
-  query <- parseQueryString(session$clientData$url_search)
-  
-  match(ids[query$licznik], nazwy)
-}
-
 server <- function(input, output, session) {
-  #Parse the GET query string
-  # output$queryText <- renderText({
-  # 
-  #   # Return a string with key-value pairs
-  #   paste(paste(names(query), query, sep = "=", collapse=", "), ids[query$licznik])
-  # })
 
-  #initalization
-  #query <- parseQueryString(session$clientData$url_search)
-  
-  indeksy<-reactiveValues(wybrane=c(1,2,3))
+  values<-reactiveValues(first_run=TRUE)
+  indeksy<-reactive(
+    if(values$first_run) {
+      values$first_run<-FALSE
+      query <- parseQueryString(session$clientData$url_search)
+      m<-lokacje[id==query$licznik]$Miejsce
+      match(m, nazwy)
+    } else {
+      match(unique(data()$Miejsce), nazwy)
+    }
+  )
   
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     
-    init_selected<-isolate(nazwy[indeksy$wybrane])
+    init_selected<-isolate(nazwy[indeksy()])
     
     if (input$dimension[1]<750) {
       pickerInput('liczniki', label=NULL,#'Wybierz miejsca', 
@@ -227,9 +221,7 @@ server <- function(input, output, session) {
   
   zakresDo<-as.character(Sys.Date()-1)
   
-  observeEvent(input$liczniki, {
-    indeksy$wybrane <- match(unique(data()$Miejsce), nazwy)
-  })
+
   
   data <- reactive({
     zakres_dat=interval(input$zakres[1], input$zakres[2])
@@ -268,7 +260,7 @@ server <- function(input, output, session) {
   #})
 
   uzyte_style<-reactive({
-    listy_stylow[indeksy$wybrane]
+    listy_stylow[indeksy()]
   })
     
   output$plotLiczba <- renderPlot({
@@ -340,7 +332,7 @@ server <- function(input, output, session) {
     shiny::validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
-    leaflet(lokacje[indeksy$wybrane,], options = leafletOptions(maxZoom = 18)) %>% 
+    leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
     addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, 
                      radius = 10, color = uzyte_style()$kolory, opacity=1, weight = 8)
