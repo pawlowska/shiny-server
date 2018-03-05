@@ -52,11 +52,8 @@ ui <- fluidPage(
                         ')),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
-    
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
-    #tags$style(HTML('.selectize-input  { font-size: 13px;} 
-    #                 .selectize-dropdown { font-size: 13px;}'))
-    ),
+  ),
   
   headerPanel('Liczniki rowerów w Warszawie'),
   sidebarLayout(
@@ -200,7 +197,7 @@ server <- function(input, output, session) {
     updateDateRangeInput(session, 'zakres', 
                          end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
     #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda)
+    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
     
     #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
