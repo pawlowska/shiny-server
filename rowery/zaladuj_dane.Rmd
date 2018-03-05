@@ -8,7 +8,6 @@ Load stuff
 ```{r}
 library(data.table)
 source('ladowanie_danych.R', encoding = 'UTF-8')
-source('read_from_api.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 ```
 

@@ -200,7 +200,7 @@ server <- function(input, output, session) {
     updateDateRangeInput(session, 'zakres', 
                          end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
     #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda)
+    nowe_long<-zaladuj_nowe_z_api(ostatnia_data-2, plik_pogoda)
     
     #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
