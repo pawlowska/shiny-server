@@ -7,7 +7,7 @@ source('hasloA.R', encoding = 'UTF-8')
 
 zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda) {
   ids<-read_counterids()
-  nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
+  nowe_dane<-wczytaj_z_api(ids=ids, od=ostatnia_data)
   #print(str(nowe_dane))
   #print(nowe_dane)
   nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
@@ -19,15 +19,14 @@ read_counterids<-function(filename="pliki/counterids.json") {
   ids
 }
 
-zaladuj_dane_api<-function(ids=ids, od="2018-01-01", do=Sys.Date()) {
+wczytaj_z_api<-function(ids=ids, od="2018-02-25", do=Sys.Date()) {
   link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do)
   #print(link)
   txt<- getURL(link, userpwd = credentials)
-  #print(txt)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
-  setnames(tabela, c("Licznik", "Data", "Liczba_rowerow"))
+  setnames(tabela, c("Miejsce", "Data", "Liczba_rowerow"))
   tabela[,Data:=as.Date(Data)]
-  tabela[,Miejsce:=as.character(Licznik)]
+  tabela[,Miejsce:=as.character(Miejsce)]
   tabela[,Miejsce:=unlist(ids[Miejsce])]
   tabela_wide<-dcast(tabela, Data ~Miejsce, value.var="Liczba_rowerow")
   tabela_wide
