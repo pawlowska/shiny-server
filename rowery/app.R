@@ -25,7 +25,7 @@ dane_long<-wczytaj_dane("pliki/dane_long.csv")
 nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
-zakresDoPogoda= '2018-01-31'
+zakresDoPogoda= '2018-02-28'
 plik_pogoda="pliki/IMGW_pogoda_20180131.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
