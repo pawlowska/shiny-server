@@ -26,7 +26,7 @@ nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
 zakresDoPogoda= '2018-02-28'
-plik_pogoda="pliki/IMGW_pogoda_20180131.csv"
+plik_pogoda="pliki/IMGW_pogoda_20180228.csv"
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
 wartosci = c('bezwzględne', 'procentowe') #PZ
@@ -189,7 +189,8 @@ server <- function(input, output, session) {
   else {
     cat(file=stderr(), "brak pliku nowe_long", "\n")
     ostatnie_nowe_long<-dane_long[0,]
-    ostatnia_data<-max(dane_long[,Data])+1
+    ostatnia_data<-max(dane_long[,Data])
+    cat(file=stderr(), "ostatnia data w pliku dane_long", as.character(ostatnia_data), "\n")
   }
   
   #czy są nowsze dane?  
