@@ -11,6 +11,7 @@ source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 source('read_from_api.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
+source('animacje.R', encoding = 'UTF-8')
 
 #reading locations
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
@@ -125,6 +126,19 @@ ui <- fluidPage(
                      leafletOutput("mymap", height=500)
                  )
         ),
+        tabPanel("Dane kierunkowe - animacja ",
+                 wellPanel(fluidRow(
+                   column(10, 
+                          radioButtons('rodzajAnimacji', 'Rodzaj animacji', c("batoniko-wykresy","ciastko-wykresy"), 
+                                       inline = TRUE, width = NULL)
+                         )
+                 ), style= "padding: 10px 0px 0px 20px;"), #end wellPanel, 
+                 div(id = "mapPlotDiv", 
+                     style = "position:relative",
+                     alt = "animacja",
+                     leafletOutput("mymap2", height=500)
+                 )
+        ),        
         tabPanel("O aplikacji",
                  tags$p(),
                  tags$p('Aplikacja', tags$b('Rowery'),' przedstawia dane z automatycznych liczników rowerów w Warszawie
@@ -189,6 +203,8 @@ server <- function(input, output, session) {
   
   dane_y<-podsumuj.lata(dane_long)
   
+  dane_anim<-dane_do_animacji()
+  
   zakresDo<-as.character(Sys.Date()-1)
   
   indeksy<-reactive({ #ktore kolory beda uzyte
@@ -236,9 +252,20 @@ server <- function(input, output, session) {
     godzinowe[Miejsce %in% input$liczniki]
   })
   
+  data_anim <- reactive({
+    filter(dane_anim, Miejsce %in% input$liczniki)
+  })
+  #data_anim = filter(dane_anim, Miejsce %in% c('Al. USA płn.'))
+  
+  lokacje_anim <- reactive({
+    summarize(group_by(data_anim(),Miejsce,lat,lon))
+  })
+  
+
   uzyte_kolory<-reactive({
     listy_stylow$kolory[indeksy()]
   })
+  
   
   uzyte_linie<-reactive({
     listy_stylow$linie[indeksy()]
@@ -318,6 +345,43 @@ server <- function(input, output, session) {
     addTiles() %>% 
     addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, radius = 10, color = uzyte_kolory(), opacity=1, weight = 8)
   })
+  
+  output$mymap2 <- renderLeaflet({
+    leaflet() %>%  setView(20.986, 52.2241,  zoom = 12) %>%
+      addTiles() %>% addMinicharts(lokacje_anim()$lon, lokacje_anim()$lat,
+                                   layerId = lokacje_anim()$Miejsce,
+                                   chartdata = data_anim()[,c('Do centrum','Od centrum')],
+                                   time = unique(data_anim()$Czas),
+                                   initialTime = '2017-05-08 08:00:00')
+  })
+  
+  observe({
+    if (input$rodzajAnimacji == "ciastko-wykresy"){
+      leafletProxy('mymap2', session) %>% 
+        updateMinicharts(
+          data_anim()$Miejsce,
+          chartdata = data_anim()[,c('Do centrum','Od centrum')],
+          maxValues = max(as.matrix(data_anim()[,c('Do centrum','Od centrum')])),
+          time = data_anim()$Czas,
+          type = 'pie',
+          width = 10+60*sqrt(data_anim()$perc_ruch),
+          transitionTime = 5
+        )
+    }
+    if (input$rodzajAnimacji == "batoniko-wykresy"){
+      leafletProxy('mymap2', session) %>% 
+        updateMinicharts(
+          data_anim()$Miejsce,
+          chartdata = data_anim()[,c('Do centrum','Od centrum')],
+          maxValues = max(as.matrix(data_anim()[,c('Do centrum','Od centrum')])),
+          time = data_anim()$Czas,
+          type = 'bar',
+          width = 20,
+          heigh = 80,
+          transitionTime = 5
+        )
+    }    
+  })  
   
 }
 
