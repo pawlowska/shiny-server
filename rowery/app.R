@@ -6,7 +6,7 @@ options(shiny.usecairo=T)
 library(lubridate)
 library(leaflet) #for maps
 library(shinyWidgets)
-library(shinyjs)
+#library(shinyjs)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
@@ -40,7 +40,7 @@ cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
 
 ui <- fluidPage(
-  useShinyjs(),
+  #useShinyjs(),
   tags$head(tags$script('var dimension = [0, 0];
                         $(document).on("shiny:connected", function(e) {
                         dimension[0] = window.innerWidth;
