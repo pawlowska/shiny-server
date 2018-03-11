@@ -6,11 +6,13 @@ options(shiny.usecairo=T)
 library(lubridate)
 library(leaflet) #for maps
 library(shinyWidgets)
+library(shinyjs)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
+source('text.R', encoding = 'UTF-8')
 
 #reading locations
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
@@ -38,6 +40,7 @@ cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
 
 ui <- fluidPage(
+  useShinyjs(),
   tags$head(tags$script('var dimension = [0, 0];
                         $(document).on("shiny:connected", function(e) {
                         dimension[0] = window.innerWidth;
@@ -50,8 +53,12 @@ ui <- fluidPage(
                         Shiny.onInputChange("dimension", dimension);
                         });
                         ')),
+  # tags$head(tags$script('var top_window=(window.top == window.self);
+  #                       Shiny.onInputChange("top_window", top_window);
+  #                       ')),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
+    tags$style(HTML("body {font-size:12px;}")),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
@@ -66,7 +73,7 @@ ui <- fluidPage(
       style= "padding: 10px 10px 0px 15px;" #top right bottom left; grey bckgrnd around selections
     ),
     mainPanel(
-      tabsetPanel(
+      tabsetPanel(id = "zakladki",
         tabPanel("Wykres",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
@@ -120,31 +127,26 @@ ui <- fluidPage(
                      leafletOutput("mymap", height=500)
                  )
         ),
-        tabPanel("O aplikacji",
+        tabPanel("O aplikacji", value="o_aplikacji",
+                 #title= ifelse(top_window, "O aplikacji", "O licznikach"),
                  tags$p(),
-                 tags$p('Aplikacja', tags$b('Rowery'),' przedstawia dane z automatycznych liczników rowerów w Warszawie
-                        od początku ich funkcjonowania, czyli od ', 
-                        zakresOd, '. Źródłem danych jest: ',
-                        tags$a(href='https://zdm.waw.pl', "Zarząd Dróg Miejskich w Warszawie"),
-                        '.'),
-                 tags$p(
-                   'Dane o pogodzie w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
-                   tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'),
-                   'Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy.'
+                 conditionalPanel(
+                   condition = "window.top == window.self",
+                   tekst1, tekst2, tekst3
                  ),
-                 tags$p(
-                   'Autorka aplikacji: Monika Pawłowska (kontakt:',
-                   tags$a(href='rowery@greenelephant.pl', "rowery@greenelephant.pl"),
-                   '), współpraca: Adam Kolipiński (mapa) oraz Rowerozofia. Kod i dane źródłowe dostępne są',
-                   tags$a(href='https://github.com/pawlowska/shiny-server/tree/master/rowery', 'tu.'))
+                conditionalPanel(
+                   condition = "window.top != window.self",
+                   tekst_zdm1, tekst_zdm2, tekst_zdm3
+                 )
         ) #end of "O..."
-      ) #end tabsetPanel
+        
+      )#end tabsetPanel
+      
     ) #end mainPanel
   )
 ) #end ui
 
 server <- function(input, output, session) {
-
   values<-reactiveValues(first_run=TRUE)
   indeksy<-reactive(
     if(values$first_run) {
