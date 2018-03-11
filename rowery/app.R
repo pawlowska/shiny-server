@@ -58,7 +58,9 @@ ui <- fluidPage(
   #                       ')),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
-    tags$style(HTML("body {font-size:12px;}")),
+    tags$style(HTML("body {font-size:12px; text-align:justify;}")),
+    tags$style(HTML(".dropdown-menu {font-size:12px; }")),
+    tags$style(HTML(".btn {font-size:12px; }")),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
@@ -139,14 +141,13 @@ ui <- fluidPage(
                    tekst_zdm1, tekst_zdm2, tekst_zdm3
                  )
         ) #end of "O..."
-        
       )#end tabsetPanel
-      
     ) #end mainPanel
   )
 ) #end ui
 
 server <- function(input, output, session) {
+  
   values<-reactiveValues(first_run=TRUE)
   indeksy<-reactive(
     if(values$first_run) {
@@ -220,8 +221,6 @@ server <- function(input, output, session) {
   dane_y<-podsumuj.lata(dane_long)
   
   zakresDo<-as.character(Sys.Date()-1)
-  
-
   
   data <- reactive({
     zakres_dat=interval(input$zakres[1], input$zakres[2])

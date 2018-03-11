@@ -61,7 +61,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   breaks<-better_ticks(zakres_dat, krok)
 
   #set theme    
-  theme_set(theme_light(base_size = 14))
+  theme_set(theme_light(base_size = 12))
   
   #start plot
   g<-ggplot(dane)
@@ -101,7 +101,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
 }
 
 wykres_godzinowy<-function(dane, paleta, linie) {
-  theme_set(theme_light(base_size = 14))
+  theme_set(theme_light(base_size = 12))
   
   g<-ggplot(dane, aes(x = Godzina, y = Liczba_rowerow)) +
     geom_line(aes(group=interaction(Data,Miejsce), colour=Miejsce), size=0.3, alpha=0.5) +
@@ -117,7 +117,7 @@ wykres_godzinowy<-function(dane, paleta, linie) {
 
 pogoda_basic<-function(dane, paleta) {
   #set theme    
-  theme_set(theme_light(base_size = 14))
+  theme_set(theme_light(base_size = 12))
   
   method_fit<-ifelse(length(unique(dane[,Data]))<150, "lm", "loess")
   
@@ -142,7 +142,7 @@ pogoda_basic<-function(dane, paleta) {
 
 wykres_pogody_w_czasie<-function(dane) {
   #set theme    
-  theme_set(theme_light(base_size = 14))
+  theme_set(theme_light(base_size = 12))
   
   g_t<-ggplot(dane)+
     geom_line( aes(Data, temp_avg), colour='red3', size=0.5 )+
