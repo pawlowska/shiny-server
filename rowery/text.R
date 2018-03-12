@@ -5,8 +5,8 @@ tekst_zdm1<-tags$p('W 2014 r. zainstalowane zostały pierwsze automatyczne liczn
                    Dane pozwalają precyzyjnie określić m. in. wpływ pory dnia, pogody i pory roku na natęzenie ruchu rowerowego. 
                    Sieć liczników jest stale rozbudowywana o kolejne urządzenia montowane w ramach nowych inwestycji rowerowych oraz przy okazji remontów istniejącej infrastruktury.')
 
-tekst_zdm2<-tags$p('Informacje o pogodzie dla Warszawy pochodzą z Instytutu Meteorologii i Gospodarki Wodnej',
-                   tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'))
+tekst_zdm2<-tags$p('Informacje o pogodzie dla Warszawy pochodzą z ',
+                   tags$a(href='https://dane.imgw.pl', 'Instytutu Meteorologii i Gospodarki Wodnej.'))
 
 tekst_zdm3<-tags$p('Aplikacja do wizualizacji danych z liczników opracowana przez in1woord (więcej informacji',
                    tags$a(href='https://greenelephant.pl/rowery/', 'tutaj'),'). 

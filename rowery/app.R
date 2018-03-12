@@ -6,7 +6,6 @@ options(shiny.usecairo=T)
 library(lubridate)
 library(leaflet) #for maps
 library(shinyWidgets)
-#library(shinyjs)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
@@ -40,27 +39,19 @@ cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
 
 ui <- fluidPage(
-  #useShinyjs(),
-  tags$head(tags$script('var dimension = [0, 0];
-                        $(document).on("shiny:connected", function(e) {
-                        dimension[0] = window.innerWidth;
-                        dimension[1] = window.innerHeight;
-                        Shiny.onInputChange("dimension", dimension);
-                        });
-                        $(window).resize(function(e) {
-                        dimension[0] = window.innerWidth;
-                        dimension[1] = window.innerHeight;
-                        Shiny.onInputChange("dimension", dimension);
-                        });
-                        ')),
-  # tags$head(tags$script('var top_window=(window.top == window.self);
-  #                       Shiny.onInputChange("top_window", top_window);
-  #                       ')),
+  tags$head(tags$script(src="rozmiar.js")),
+  tags$head(tags$script('type = "text/javascript"', 
+    'var ss = document.createElement("link");
+     ss.type = "text/css";
+     ss.rel = "stylesheet";
+     ss.href = window.self === window.top ? "FullSite.css" : "InFrame.css"
+     document.getElementsByTagName("head")[0].appendChild(ss);
+     ')),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
-    tags$style(HTML("body {font-size:12px; text-align:justify;}")),
-    tags$style(HTML(".dropdown-menu {font-size:12px; }")),
-    tags$style(HTML(".btn {font-size:12px; }")),
+    #tags$style(HTML("body {font-size:12px; text-align:justify;}")),
+    #tags$style(HTML(".dropdown-menu {font-size:12px; }")),
+    #tags$style(HTML(".btn {font-size:12px; }")),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
