@@ -24,6 +24,8 @@ listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding 
 #reading data
 dane_long<-wczytaj_dane("pliki/dane_long.csv")
 nazwy<-unique(dane_long[,Miejsce])
+cat(file=stderr(), "nazwy:", nazwy, "\n")
+
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
 zakresDoPogoda= '2018-02-28'
@@ -138,7 +140,7 @@ server <- function(input, output, session) {
   
   values<-reactiveValues(first_run=TRUE)
   indeksy<-reactive(
-    if(values$first_run) {
+    if(values$first_run) { #sprawdz czy nr licznika podany w url
       values$first_run<-FALSE
       query <- parseQueryString(session$clientData$url_search)
       m<-lokacje[id==query$licznik]$Miejsce
@@ -150,7 +152,6 @@ server <- function(input, output, session) {
   
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
-    
     init_selected<-isolate(nazwy[indeksy()])
     
     if (input$dimension[1]<750) {
@@ -176,8 +177,7 @@ server <- function(input, output, session) {
     ostatnie_nowe_long<-wczytaj_dane(p)
     ostatnia_data<-max(ostatnie_nowe_long[,Data])
     cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
-  }
-  else {
+  } else {
     cat(file=stderr(), "brak pliku nowe_long", "\n")
     ostatnie_nowe_long<-dane_long[0,]
     ostatnia_data<-max(dane_long[,Data])
