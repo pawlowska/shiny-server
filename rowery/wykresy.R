@@ -90,7 +90,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
     legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
   #colours and line types
   g<-g+scale_linetype_manual(values=linie)+scale_colour_manual(values=paleta)+
-    scale_fill_manual(values=paleta)+scale_alpha_manual(values = alfy)
+  scale_fill_manual(values=paleta)+scale_alpha_manual(values = alfy)
     
   #axis labels
   g<-g+xlab("Data")+ylab("")

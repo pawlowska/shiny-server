@@ -20,12 +20,16 @@ lokacje<-data.table(lokacje)
 
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
+koloryLicznikow<-listy_stylow$kolory
+names(koloryLicznikow)<-listy_stylow$nazwy
+linieLicznikow<-listy_stylow$linie
+names(linieLicznikow)<-listy_stylow$nazwy
+alfyLicznikow<-listy_stylow$alfy
+names(alfyLicznikow)<-listy_stylow$nazwy
 
 #reading data
 dane_long<-wczytaj_dane("pliki/dane_long.csv")
 nazwy<-unique(dane_long[,Miejsce])
-cat(file=stderr(), "nazwy:", nazwy, "\n")
-
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
 zakresDoPogoda= '2018-02-28'
@@ -246,9 +250,9 @@ server <- function(input, output, session) {
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
 
-  uzyte_style<-reactive({
-    listy_stylow[indeksy()]
-  })
+  # uzyte_style<-reactive({
+  #   listy_stylow[indeksy()]
+  # })
     
   output$plotLiczba <- renderPlot({
     shiny::validate(
@@ -260,7 +264,8 @@ server <- function(input, output, session) {
     )
     wykres_kilka(data(), 
                  start=input$zakres[1], stop=input$zakres[2], 
-                 paleta=uzyte_style()$kolory, linie = uzyte_style()$linie, alfy=as.numeric(uzyte_style()$alfy),
+                 #paleta=uzyte_style()$kolory, linie = uzyte_style()$linie, alfy=as.numeric(uzyte_style()$alfy),
+                 paleta=koloryLicznikow, linie = linieLicznikow, alfy=alfyLicznikow,
                  krok=krok(), wartosc = input$wartosc)
   })
   
@@ -269,11 +274,11 @@ server <- function(input, output, session) {
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     if(input$rodzajPogody==wykresyPogody[1]) {
-      pogoda_basic(data_with_weather(), paleta=uzyte_style()$kolory)
+      pogoda_basic(data_with_weather(), paleta=koloryLicznikow)
     } else {
       wykres_pogoda_liczba(data_with_weather(),
                            start=input$zakresPogoda[1], stop=input$zakresPogoda[2], 
-                           paleta=uzyte_style()$kolory, linie = uzyte_style()$linie)
+                           paleta=koloryLicznikow, linie = linieLicznikow)
     }
   })
 
@@ -319,10 +324,13 @@ server <- function(input, output, session) {
     shiny::validate(
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
+    kolory<-unname(koloryLicznikow[lokacje[indeksy(),]$Miejsce])
+    
     leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
     addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, 
-                     radius = 10, color = uzyte_style()$kolory, opacity=1, weight = 8)
+                     #radius = 10, color = uzyte_style()$kolory, opacity=1, weight = 8)
+                    radius = 10, color = kolory, opacity=1, weight = 8)
   })
   
 }

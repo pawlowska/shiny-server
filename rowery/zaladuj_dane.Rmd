@@ -33,7 +33,7 @@ lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 lokacje<-data.table(lokacje)
 klucz <- lokacje[,c("id", "Miejsce")]
 
-dane<-wczytaj_z_api(klucz=klucz, od="2014-08-13")
+dane<-wczytaj_z_api(klucz=klucz, od="2014-08-13", do="2018-03-07")
 
 ```
 

@@ -1,6 +1,6 @@
 library(data.table)
 library(RCurl)
-library(jsonlite)
+#library(jsonlite)
 
 source('hasloA.R', encoding = 'UTF-8')
 
@@ -42,7 +42,6 @@ wczytaj_dane<-function(plik = "dane_polaczone.csv") {
 
 #numery tygodni i miesiecy
 numery_dat<-function(tabela) { 
-#  tabela[,Tydzien:=format(Data, format="%Y-%U")]
   nazwy<-names(tabela)[2:ncol(tabela)]
   library(lubridate)
   #uses lubridate; correction to make the week start Monday
