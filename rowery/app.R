@@ -166,7 +166,6 @@ server <- function(input, output, session) {
                   nazwy, selected = init_selected, 
                   options = list(`actions-box` = TRUE, 
                                  `selected-text-format` = "count > 5",
-                                 `count-selected-text` = "Wybrano {0}",
                                  `select-all-text`="Zaznacz wszystkie",
                                  `deselect-all-text`="Odznacz wszystkie",
                                  `none-selected-text`="Wybierz miejsca"), 
