@@ -13,6 +13,9 @@ source('wykresy.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 
+Sys.setlocale("LC_ALL", "Polish")
+
+
 #reading locations
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
