@@ -20,9 +20,8 @@ tekst1<-tags$p('Aplikacja', tags$b('Rowery'),' przedstawia dane z automatycznych
                '.')
 
 tekst2<-tags$p(
-  'Dane o pogodzie w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) wzięłam ze strony ',
-  tags$a(href='https://dane.imgw.pl', 'https://dane.imgw.pl.'),
-  'Źródłem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej – Państwowy Instytut Badawczy.'
+  'Dane o pogodzie w Warszawie (a dokładniej - na stacji meteorologicznej na Lotnisku Chopina) pochodzą z ',
+  tags$a(href='https://dane.imgw.pl', 'Instytutu Meteorologii i Gospodarki Wodnej.')
 )
 
 tekst3<-tags$p(
