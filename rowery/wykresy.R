@@ -1,8 +1,9 @@
 library(RColorBrewer)
 library(ggplot2)
-#library(data.table)
 library(scales) #for nicer y axis
 library(grid)
+
+rozmiar_czcionki=12
 
 labelsy<-function(krok) {
   function(x) {
@@ -14,7 +15,7 @@ labelsy<-function(krok) {
   }
 }
 
-wykres_lokalny<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Date("2016-12-19"), paleta=kolory) {
+wykres_lokalny<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Date("2017-08-31"), paleta=kolory) {
   require(lubridate)
   
   #zakres_dat=seq(from=start, to=stop, by=1)
@@ -61,7 +62,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   breaks<-better_ticks(zakres_dat, krok)
 
   #set theme    
-  theme_set(theme_light(base_size = 12))
+  theme_set(theme_light(base_size = rozmiar_czcionki))
   
   #start plot
   g<-ggplot(dane)
@@ -83,43 +84,50 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
   } 
   
+  #oś x
   g<-g+scale_x_date(date_breaks = breaks, labels=labelsy(krok),limits=c(min(start),max(stop)),
                     expand=c(0,0)) #numer X ticks
-  g<-g+scale_y_continuous(breaks = pretty_breaks(7), labels=comma_format())+theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
+  #oś y
+  g<-g+scale_y_continuous(breaks = pretty_breaks(7), labels=comma_format())
+  
+  g<-g+theme(axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
+  
   #colours and line types
-  g<-g+scale_linetype_manual(values=linie)+scale_colour_manual(values=paleta)+
-  scale_fill_manual(values=paleta)+scale_alpha_manual(values = alfy)
+  g<-g+scale_linetype_manual(values=linie)+
+       scale_colour_manual(values=paleta)+
+       scale_fill_manual(values=paleta)+
+       scale_alpha_manual(values = alfy)
     
   #axis labels
   g<-g+xlab("Data")+ylab("")
 
-  g<-g+guides(col = guide_legend(ncol = 3, byrow = TRUE))
+  g<-g+guides(colour = guide_legend(ncol = 3, byrow = TRUE))
+  #g<-g+guides(col = guide_legend(ncol=4))
   
   g
 }
 
-wykres_godzinowy<-function(dane, paleta, linie) {
-  theme_set(theme_light(base_size = 12))
-  
-  g<-ggplot(dane, aes(x = Godzina, y = Liczba_rowerow)) +
-    geom_line(aes(group=interaction(Data,Miejsce), colour=Miejsce), size=0.3, alpha=0.5) +
-    geom_line(aes(x=Godzina, y=Srednia, group=Miejsce, colour=Miejsce, linetype=Miejsce), size=0.95) +
-    scale_colour_manual(values=paleta)+scale_linetype_manual(values=linie) +
-    scale_x_continuous(breaks=pretty_breaks(11), expand=c(0, 1)) +
-    ylab("") +
-    facet_grid(. ~ Jaki_dzien) +
-    guides(col = guide_legend(ncol = 3, byrow = TRUE))+
-    theme(legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
-  g
-}
+# wykres_godzinowy<-function(dane, paleta, linie) {
+#   theme_set(theme_light(base_size = rozmiar_czcionki))
+#   
+#   g<-ggplot(dane, aes(x = Godzina, y = Liczba_rowerow)) +
+#     geom_line(aes(group=interaction(Data,Miejsce), colour=Miejsce), size=0.3, alpha=0.5) +
+#     geom_line(aes(x=Godzina, y=Srednia, group=Miejsce, colour=Miejsce, linetype=Miejsce), size=0.95) +
+#     scale_colour_manual(values=paleta)+scale_linetype_manual(values=linie) +
+#     scale_x_continuous(breaks=pretty_breaks(11), expand=c(0, 1)) +
+#     ylab("") +
+#     facet_grid(. ~ Jaki_dzien) +
+#     guides(col = guide_legend(ncol = 3, byrow = TRUE))+
+#     theme(legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
+#   g
+# }
 
 pogoda_basic<-function(dane, paleta) {
   #set theme    
-  theme_set(theme_light(base_size = 12))
+  theme_set(theme_light(base_size = rozmiar_czcionki))
   
-  method_fit<-ifelse(length(unique(dane[,Data]))<150, "lm", "loess")
+  method_fit<-ifelse(length(unique(dane[,Data]))<100, "lm", "loess")
   
   gg<-ggplot(dane, 
              aes(temp_avg, Liczba_rowerow, colour = Miejsce, shape = Jaki_dzien, size=(deszcz+snieg))) +
@@ -142,7 +150,7 @@ pogoda_basic<-function(dane, paleta) {
 
 wykres_pogody_w_czasie<-function(dane) {
   #set theme    
-  theme_set(theme_light(base_size = 12))
+  theme_set(theme_light(base_size = rozmiar_czcionki))
   
   g_t<-ggplot(dane)+
     geom_line( aes(Data, temp_avg), colour='red3', size=0.5 )+
@@ -176,7 +184,6 @@ wykres_pogody_w_czasie<-function(dane) {
 wykres_pogoda_liczba<-function(dane, start, stop, paleta, linie) {
   lista<- wykres_pogody_w_czasie(dane)
   g2<- wykres_kilka(dane, start, stop, paleta, linie)
-  # #grid.arrange(g1, g2, ncol=1, heights = c(1, 2),  padding = unit(0, "line"))
   grid.newpage()
   grid.draw(rbind(ggplotGrob(lista[[1]]), ggplotGrob(lista[[2]]),
                    ggplotGrob(g2), size = "last"))

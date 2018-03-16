@@ -92,7 +92,7 @@ ui <- fluidPage(
                  div(id = "plotDiv", #wykres
                      style = "position:relative",
                      alt = "Ile rowerów jeździ w Warszawie",
-                   plotOutput('plotLiczba', height=480, hover = hoverOpts(id = "plot_hover", delay = 100)),
+                   plotOutput('plotLiczba', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
                    uiOutput("bike_date_tooltip")
                  )
         ),
@@ -165,7 +165,8 @@ server <- function(input, output, session) {
       pickerInput('liczniki', label=NULL,#'Wybierz miejsca', 
                   nazwy, selected = init_selected, 
                   options = list(`actions-box` = TRUE, 
-                                 `selected-text-format` = "count > 5",
+                                 `selected-text-format` = "values",
+                                 #`selected-text-format` = "count > 5",
                                  #
                                  `select-all-text`="Zaznacz wszystkie",
                                  `deselect-all-text`="Odznacz wszystkie",
@@ -268,7 +269,6 @@ server <- function(input, output, session) {
     )
     wykres_kilka(data(), 
                  start=input$zakres[1], stop=input$zakres[2], 
-                 #paleta=uzyte_style()$kolory, linie = uzyte_style()$linie, alfy=as.numeric(uzyte_style()$alfy),
                  paleta=koloryLicznikow, linie = linieLicznikow, alfy=alfyLicznikow,
                  krok=krok(), wartosc = input$wartosc)
   })
