@@ -167,7 +167,7 @@ server <- function(input, output, session) {
                   options = list(`actions-box` = TRUE, 
                                  `selected-text-format` = "values",
                                  #`selected-text-format` = "count > 5",
-                                 #
+                                 #`count-selected-text` = "Wybrano {0}",
                                  `select-all-text`="Zaznacz wszystkie",
                                  `deselect-all-text`="Odznacz wszystkie",
                                  `none-selected-text`="Wybierz miejsca"), 
@@ -255,10 +255,7 @@ server <- function(input, output, session) {
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
 
-  # uzyte_style<-reactive({
-  #   listy_stylow[indeksy()]
-  # })
-    
+
   output$plotLiczba <- renderPlot({
     shiny::validate(
       need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
