@@ -73,7 +73,7 @@ ui <- fluidPage(
     ),
     mainPanel(
       tabsetPanel(id = "zakladki",
-        tabPanel("Wykres",
+        tabPanel("Wykres", value = "wykres",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
                    column(5, #daty
@@ -96,7 +96,7 @@ ui <- fluidPage(
                    uiOutput("bike_date_tooltip")
                  )
         ),
-        tabPanel("Pogoda",
+        tabPanel("Pogoda", value="pogoda",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
                        column(4, #dobowo/tygodniowo/miesiecznie
@@ -118,7 +118,7 @@ ui <- fluidPage(
                      uiOutput("bike_weather_tooltip")
                  )
         ),
-        tabPanel("Położenie liczników",
+        tabPanel("Mapa", value='mapa',
                  tags$p(), 
                  div(id = "mapPlotDiv", 
                      style = "position:relative",
@@ -144,14 +144,25 @@ ui <- fluidPage(
 ) #end ui
 
 server <- function(input, output, session) {
+  observe({
+    query <- parseQueryString(session$clientData$url_search)
+    if(length(query)>0&&!is.null(query$tab)){
+      updateTabsetPanel(session, inputId = "zakladki", selected = query$tab)
+    }
+  })
+  
   
   values<-reactiveValues(first_run=TRUE)
   indeksy<-reactive(
     if(values$first_run) { #sprawdz czy nr licznika podany w url
       values$first_run<-FALSE
       query <- parseQueryString(session$clientData$url_search)
-      m<-lokacje[id==query$licznik]$Miejsce
-      match(m, nazwy)
+      if (length(query)>0&&(!is.null(query$licznik))&&query$licznik=='all') {
+          c(1:length(nazwy))
+      } else {
+          m<-lokacje[id==query$licznik]$Miejsce
+          match(m, nazwy)
+      }
     } else {
       match(unique(data()$Miejsce), nazwy)
     }

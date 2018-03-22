@@ -102,7 +102,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   #axis labels
   g<-g+xlab("Data")+ylab("")
 
-  g<-g+guides(colour = guide_legend(ncol = 3, byrow = TRUE))
+  g<-g+guides(col = guide_legend(byrow = TRUE))
   #g<-g+guides(col = guide_legend(ncol=4))
   
   g
