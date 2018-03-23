@@ -20,6 +20,7 @@ Sys.setlocale("LC_ALL", "Polish")
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 lokacje<-data.table(lokacje)
+lokacje<-lokacje[order(Miejsce)]
 
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
@@ -135,7 +136,7 @@ ui <- fluidPage(
                  ),
                 conditionalPanel(
                    condition = "window.top != window.self",
-                   tekst_zdm1, tekst_zdm2, tekst_zdm3
+                   tekst_zdm1, tekst_zdm2, tekst_zdm3, tekst_zdm4
                  )
         ) #end of "O..."
       )#end tabsetPanel
