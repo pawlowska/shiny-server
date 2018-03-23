@@ -29,13 +29,6 @@ podwojne_prefix<-znajdz_prefix(sumy_zwykle)
 podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), czytaj_nazwy(), value = TRUE)
 
 
-# podwojne<-enc2utf8(rbind(c("Al. USA - południe", "Al. USA - północ"),
-#             c("Most Gdański - ciąg pieszo-rowerowy", "Most Gdanski - ścieżka rowerowa"),
-#             c("NSR - Solec - ciąg pieszo-rowerowy", "NSR-Solec - ścieżka rowerowa"),
-#             c("Świętokrzyska - Emilii Plater, płd", "Świętokrzyska - Emilii Plater, płn"),
-#             c("Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena wsch."))
-# )
-
 # podw_in_out<-enc2utf8(rbind(podwojne,
 #                    c("Al. USA - południe IN", "Al. USA - północ IN"),
 #                    c("Al. USA - południe OUT", "Al. USA - północ OUT"),
