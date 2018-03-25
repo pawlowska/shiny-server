@@ -20,7 +20,7 @@ Sys.setlocale("LC_ALL", "Polish")
 lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 lokacje<-data.table(lokacje)
-lokacje<-lokacje[order(Miejsce)]
+#lokacje<-lokacje[order(Miejsce)]
 
 
 #reading colors etc
