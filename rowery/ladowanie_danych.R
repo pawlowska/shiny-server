@@ -1,91 +1,28 @@
 library(data.table)
+library(RCurl)
+#library(jsonlite)
 
-zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda) {
-  ids<-read_counterids()
-  nowe_dane<-zaladuj_dane_api(ids=ids, od=ostatnia_data)
+source('hasloA.R', encoding = 'UTF-8')
+
+
+zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda, lokacje) {
+  klucz <- lokacje[,c("id", "Miejsce")]
+  
+  nowe_dane<-wczytaj_z_api(klucz=klucz, od=ostatnia_data)
   nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
   nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
 }
 
-zaladuj_dane<-function(plik, sep=';', zwirki_i_wigury=TRUE) {
-  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
-  #kolumny od 2 do końca to liczby
-  cols<-2:ncol(tabela) 
-  tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 
-  tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
-  setorder(tabela, Data)
-  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", enc2utf8("Dworzec Wileński (Targowa)"))
-  
-  if (zwirki_i_wigury) {
-    setnames(tabela, 19:20, c("Żwirki i Wigury/Trojdena, wsch. Rower", "Żwirki i Wigury/Trojdena, zach. Rower"))
-  }
-  nazwy<-names(tabela)
-  nowe_nazwy<-gsub(" Rower", "", nazwy)
-  setnames(tabela, nazwy, nowe_nazwy)
-  tabela
-}
-
-zaladuj_dane_new<-function(plik, sep=';', bez_kierunkow=TRUE) {
-  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
-  #kolumny od 2 do końca to liczby
-  cols<-2:ncol(tabela) 
-  tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols] 
-  tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
-  setorder(tabela, Data)
-
-  tabela[,Piesi:=NULL]
-  tabela[,'Praska ścieżka rekreacyjna':=Rowery]
-  tabela[,Rowery:=NULL]
-  
-  #odrzuć kierunki
-  if (bez_kierunkow) {tabela<-filtruj_in_out(tabela)}
-
-  tabela
-}
-
-zaladuj_dane_godzinowe<-function(plik, sep=';', format="%d-%m-%y %H:%M", bez_kierunkow=TRUE, ziw=TRUE) {
-  library(data.table)
-  
-  tabela <- fread(plik, sep, colClasses = 'character', encoding = "UTF-8", header = TRUE)
-  #kolumny od 2 do końca to liczby
-  cols<-2:ncol(tabela) 
-  tabela[,(cols):=lapply(.SD, as.numeric),.SDcols=cols]
-  
-  #bledne nazwy Zwirki i Wigury
-  if (ziw) {
-    indeksy<-grep("Wigury", names(tabela))
-    nazwy_ziw<-names(tabela)[indeksy]
-    nazwy_ziw<-c(sub("Trojdena", "Trojdena wsch.", nazwy_ziw[1:3]),
-                 sub("Trojdena", "Trojdena zach.", nazwy_ziw[4:6]))
-    setnames(tabela, indeksy, nazwy_ziw)
-  }
-  
-  #odrzuć kierunki
-  if (bez_kierunkow) {tabela<-filtruj_in_out(tabela)}
-  
-  #podziel na daty i godziny
-  nazwy_licznikow<-names(tabela)[2:ncol(tabela)]
-  nowe_nazwy<-gsub(" Rower", "", nazwy_licznikow)
-  setnames(tabela, nazwy_licznikow, nowe_nazwy)
-  nazwy_licznikow<-names(tabela)[2:ncol(tabela)]
-  tabela[,Czas := as.POSIXct(Data, tz="Europe/Berlin", format=format)]
-  tabela[,Data := as.Date(Czas, tz="Europe/Berlin")]
-  tabela[,Godzina:=hour(Czas)]
-  
-  setcolorder(tabela, c("Czas", "Data", "Godzina", nazwy_licznikow))
-  tabela[,'Praska sciezka rekreacyjna':=NULL]
-  tabela[,'Piesi':=NULL]
-  setnames(tabela, 'Rowery', "Praska ścieżka rekreacyjna")
-  setnames(tabela, "Dworzec Wileński Nowy( Targowa)", enc2utf8("Dworzec Wileński (Targowa)"))
-  
-  tabela
-}
-
-filtruj_in_out<-function(tabela) {
-  nazwy<-names(tabela)
-  nazwy_in_out<-c(grep("IN", nazwy, value = TRUE), grep("OUT", nazwy, value = TRUE))
-  tabela[,(nazwy_in_out):=NULL]
-  tabela
+wczytaj_z_api<-function(klucz=klucz, od="2018-02-01", do=Sys.Date()) {
+  link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do)
+  #print(link)
+  txt<- getURL(link, userpwd = credentials)
+  tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
+  setnames(tabela, c("id", "Data", "Liczba_rowerow"))
+  tabela[,Data:=as.Date(Data)]
+  tabela<-merge(tabela, klucz, by="id")
+  tabela_wide<-dcast(tabela, Data ~Miejsce, value.var="Liczba_rowerow")
+  tabela_wide
 }
 
 wczytaj_dane_godzinowe<-function(plik) {
@@ -103,11 +40,8 @@ wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela
 }
 
-
-
 #numery tygodni i miesiecy
 numery_dat<-function(tabela) { 
-#  tabela[,Tydzien:=format(Data, format="%Y-%U")]
   nazwy<-names(tabela)[2:ncol(tabela)]
   library(lubridate)
   #uses lubridate; correction to make the week start Monday
@@ -158,18 +92,6 @@ podsumuj.procentowo <- function(tabela_long) {
 weekend<-function(data) {
   dzien<-weekdays(data)
   ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
-}
-
-dodaj_pogode_old<-function(tabela, 
-                       plik_temperatura="pliki/IMGW_temp_20171031.csv", 
-                       plik_opady="pliki/IMGW_opady_20171031.csv") {
-  temperatura<-fread(plik_temperatura, header = TRUE, encoding = "UTF-8", drop=1)
-  opady<-fread(plik_opady, header = TRUE, encoding = "UTF-8", drop=1)
-  pogoda<-merge(temperatura, opady, by="Data")
-  pogoda[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
-  pogoda[,Jaki_dzien:=weekend(Data)]
-  dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
-  dane
 }
 
 rodzaj_opadu<-function(d,s) {

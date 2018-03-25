@@ -1,32 +1,46 @@
-podwojne_prefix<-enc2utf8(c("Al. Jerozolimskie", 
-                            "Al. USA",
-                            "NSR Most Gdański",
-                            "NSR Solec",
-                            "Powsińska",
-                            "Świętokrzyska/Emilii Plater",
-                            "Żwirki i Wigury/Trojdena"))
+library(data.table)
 
-sumy_zwykle<-paste(podwojne_prefix,"- suma")
+czytaj_nazwy<-function(plik="pliki/polozenie_licznikow.csv") {
+  lokacje <- data.table(read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8'))
+  miejsca<-lokacje[,Miejsce]
+}
 
-podwojne<-enc2utf8(rbind(c("Al. USA - południe", "Al. USA - północ"),
-            c("Most Gdański - ciąg pieszo-rowerowy", "Most Gdanski - ścieżka rowerowa"),
-            c("NSR - Solec - ciąg pieszo-rowerowy", "NSR-Solec - ścieżka rowerowa"),
-            c("Świętokrzyska - Emilii Plater, płd", "Świętokrzyska - Emilii Plater, płn"),
-            c("Żwirki i Wigury/Trojdena zach.", "Żwirki i Wigury/Trojdena wsch."))
-)
+znajdz_podwojne<-function() {
+  miejsca<-czytaj_nazwy()
+  grep("suma", miejsca, value = T)
+  
+}
 
-podw_in_out<-enc2utf8(rbind(podwojne,
-                   c("Al. USA - południe IN", "Al. USA - północ IN"),
-                   c("Al. USA - południe OUT", "Al. USA - północ OUT"),
-                   c("Świętokrzyska - Emilii Plater, płd IN", "Świętokrzyska - Emilii Plater, płn IN"),
-                   c("Świętokrzyska - Emilii Plater, płd OUT", "Świętokrzyska - Emilii Plater, płn OUT"),
-                   c("Żwirki i Wigury/Trojdena wsch. IN", "Żwirki i Wigury/Trojdena zach. IN"),
-                   c("Żwirki i Wigury/Trojdena wsch. OUT","Żwirki i Wigury/Trojdena zach. OUT")))
+znajdz_prefix<-function(s) {
+  substring(s, 0, regexpr(" - suma", s)-1)
+}
 
-sumy_in_out<-enc2utf8(c(sumy_zwykle,
-         "Al. USA - suma IN", "Al. USA - suma OUT", 
-         "Świętokrzyska - Emilii Plater - suma IN", "Świętokrzyska - Emilii Plater - suma OUT",
-         "Żwirki i Wigury/Trojdena - suma IN", "Żwirki i Wigury/Trojdena - suma OUT"))
+# podwojne_prefix<-enc2utf8(c("Al. Jerozolimskie", 
+#                             "Al. USA",
+#                             "NSR Most Gdański",
+#                             "NSR Solec",
+#                             "Czerniakowska",
+#                             "Świętokrzyska/Emilii Plater",
+#                             "Żwirki i Wigury/Trojdena"))
+
+#sumy_zwykle<-paste(podwojne_prefix,"- suma")
+sumy_zwykle<-znajdz_podwojne()
+podwojne_prefix<-znajdz_prefix(sumy_zwykle)
+podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), czytaj_nazwy(), value = TRUE)
+
+
+# podw_in_out<-enc2utf8(rbind(podwojne,
+#                    c("Al. USA - południe IN", "Al. USA - północ IN"),
+#                    c("Al. USA - południe OUT", "Al. USA - północ OUT"),
+#                    c("Świętokrzyska - Emilii Plater, płd IN", "Świętokrzyska - Emilii Plater, płn IN"),
+#                    c("Świętokrzyska - Emilii Plater, płd OUT", "Świętokrzyska - Emilii Plater, płn OUT"),
+#                    c("Żwirki i Wigury/Trojdena wsch. IN", "Żwirki i Wigury/Trojdena zach. IN"),
+#                    c("Żwirki i Wigury/Trojdena wsch. OUT","Żwirki i Wigury/Trojdena zach. OUT")))
+# 
+# sumy_in_out<-enc2utf8(c(sumy_zwykle,
+#          "Al. USA - suma IN", "Al. USA - suma OUT", 
+#          "Świętokrzyska - Emilii Plater - suma IN", "Świętokrzyska - Emilii Plater - suma OUT",
+#          "Żwirki i Wigury/Trojdena - suma IN", "Żwirki i Wigury/Trojdena - suma OUT"))
 
 suma_licznikow<-function(tabela, podw=podwojne_prefix) {
   nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
@@ -49,28 +63,28 @@ suma_licznikow<-function(tabela, podw=podwojne_prefix) {
 }
 
 
-suma_licznikow_old<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
-  nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
-  nazwy<-names(tabela)[4:ncol(tabela)] #reszta
-  
-  missing <- setdiff(podw, names(tabela))
-  tabela[,(missing):=as.integer(NA)]
-
-  nazwy_bez_podw<-nazwy[!(nazwy %in% podw)] #tych sumowanie nie dotyczy
-  kolej_unikat<-sort(c(nazwy_bez_podw, sumy))
-  kolej<-kolej_unikat
-  i<-1
-  for (s in sumy) {
-    tabela[,(s):=get(podw[i,1])+get(podw[i,2])]
-    pos<-match(s, kolej)
-    n<-length(kolej)
-    kolej<-append(kolej, podw[i,], after = pos)
-    i<-i+1
-  }
-  kolejnosc <-c(nazwy_x, kolej)
-  setcolorder(tabela, kolejnosc)
-  tabela
-}
+# suma_licznikow_old<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
+#   nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
+#   nazwy<-names(tabela)[4:ncol(tabela)] #reszta
+#   
+#   missing <- setdiff(podw, names(tabela))
+#   tabela[,(missing):=as.integer(NA)]
+# 
+#   nazwy_bez_podw<-nazwy[!(nazwy %in% podw)] #tych sumowanie nie dotyczy
+#   kolej_unikat<-sort(c(nazwy_bez_podw, sumy))
+#   kolej<-kolej_unikat
+#   i<-1
+#   for (s in sumy) {
+#     tabela[,(s):=get(podw[i,1])+get(podw[i,2])]
+#     pos<-match(s, kolej)
+#     n<-length(kolej)
+#     kolej<-append(kolej, podw[i,], after = pos)
+#     i<-i+1
+#   }
+#   kolejnosc <-c(nazwy_x, kolej)
+#   setcolorder(tabela, kolejnosc)
+#   tabela
+# }
 
 
 in_out_ratio<-function(tabela) {
@@ -93,9 +107,8 @@ a1=1
 a2=0.7
 a3=0.4
 
-zrob_listy_stylow<-function(nazwy, podw=podwojne_prefix, sumy=sumy_zwykle) {
-  podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), nazwy, value = TRUE)
-  nazwy_bez_podw<-sort(c(nazwy[!(nazwy %in% podwojne_i_sumy)], sumy))
+zrob_listy_stylow<-function(nazwy, podw_sumy=podwojne_i_sumy, sumy=sumy_zwykle) {
+  nazwy_bez_podw<-sort(c(nazwy[!(nazwy %in% podw_sumy)], sumy))
   
   kolory_bez_podw<-paleta18_sorted
   kolory<-kolory_bez_podw[1:ile_unikatow]
@@ -115,5 +128,14 @@ zrob_listy_stylow<-function(nazwy, podw=podwojne_prefix, sumy=sumy_zwykle) {
     
   }
   
-  cbind(kolory, linie, fonty, alfy)
+  cbind(nazwy, kolory, linie, fonty, alfy)
+}
+
+css_list<-function(what="#liczniki div.checkbox:nth-child(", listy_stylow, iterator) {
+  paste0(what,
+         iterator,
+         ") span{color: ", 
+         listy_stylow$kolory[iterator],
+         "; font-weight : ",
+         listy_stylow$fonty[iterator],"}")
 }
