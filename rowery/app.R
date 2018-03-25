@@ -22,6 +22,7 @@ sapply(lokacje,"class")
 lokacje<-data.table(lokacje)
 lokacje<-lokacje[order(Miejsce)]
 
+
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
 koloryLicznikow<-listy_stylow$kolory
