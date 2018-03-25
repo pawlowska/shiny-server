@@ -49,16 +49,11 @@ cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
 
 ui <- fluidPage(
-  tags$head(tags$script(src="rozmiar.js")),
-  tags$head(tags$script('type = "text/javascript"', 
-    'var ss = document.createElement("link");
-     ss.type = "text/css";
-     ss.rel = "stylesheet";
-     ss.href = window.self === window.top ? "FullSite.css" : "InFrame.css"
-     document.getElementsByTagName("head")[0].appendChild(ss);
-     ')),
+  tags$head(tags$script(src="rozmiar.js"),
+            tags$script(src="iframe_css.js")),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
+    #tags$style(HTML('button#caly  {vertical-align: bottom;}')),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
@@ -71,19 +66,22 @@ ui <- fluidPage(
       }),
       uiOutput('wyborLicznikow'),
       style= "padding: 10px 10px 0px 15px;" #top right bottom left; grey bckgrnd around selections
+      
     ),
     mainPanel(
       tabsetPanel(id = "zakladki",
         tabPanel("Wykres", value = "wykres",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
-                   column(5, #daty
-                          dateRangeInput('zakres', 'Wybierz zakres dat',
+                   column(6,  #daty 
+                          #splitLayout(cellWidths = c("85%", "15%"),
+                          dateRangeInput('zakres', 'Wybierz zakres dat', 
                                          start=as.character(Sys.Date()-100), end=as.character(Sys.Date()-1), 
                                          min=zakresOd, max=as.character(Sys.Date()-1),
-                                         separator = 'do', weekstart = 0, language = "pl")
+                                         separator = 'do', weekstart = 0, language = "pl")#,
+                          #actionButton(inputId = "caly", "∞", style = "display: inline-block; vertical-align: bottom;"))
                    ),
-                   column(7,
+                   column(6,
                     splitLayout(
                       selectInput('okres', 'Podsumuj', okresy, selected = okresy[1]),
                       selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
@@ -187,6 +185,14 @@ server <- function(input, output, session) {
       checkboxGroupInput('liczniki', 'Wybierz miejsca', 
                          choices=nazwy, selected = init_selected, 
                          inline = FALSE, width = NULL)
+    }
+  })
+  
+  observeEvent(input$caly, {
+    if (!is.null(data())) {
+      updateDateRangeInput(session, 'zakres', 
+                         start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
+                         end=(as.character(max(dane_long[Miejsce %in% input$liczniki]$Data))))
     }
   })
   

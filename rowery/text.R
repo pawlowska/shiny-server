@@ -13,8 +13,8 @@ tekst_zdm3<-tags$p('Aplikacja do wizualizacji danych z liczników opracowana prz
                    Kontakt w sprawach techicznych: ',
                    tags$a(href='rowery@greenelephant.pl', "rowery@greenelephant.pl."))
 
-tekst_zdm4<-tags$p('Użyte skróty: DDR - droga dla roweróW, CPR - ciąg pieszo-rowerowy, 
-                   NSR - Nadwiślański szlak Rowerowy, N - północ, S - południe, E - wschód, W - zachód.')
+tekst_zdm4<-tags$p('Użyte skróty: DDR - droga dla rowerów, CPR - ciąg pieszo-rowerowy, 
+                   NSR - Nadwiślański Szlak Rowerowy, N - północ, S - południe, E - wschód, W - zachód.')
 
 
 tekst1<-tags$p('Aplikacja', tags$b('Rowery'),' przedstawia dane z automatycznych liczników rowerów w Warszawie
