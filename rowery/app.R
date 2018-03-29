@@ -54,7 +54,6 @@ ui <- fluidPage(
             tags$script(src="iframe_css.js")),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
-    #tags$style(HTML('button#caly  {vertical-align: bottom;}')),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
@@ -75,12 +74,13 @@ ui <- fluidPage(
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
                    column(6,  #daty 
-                          #splitLayout(cellWidths = c("85%", "15%"),
+                          splitLayout(cellWidths = c("90%", "10%"),
+                                      cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
                           dateRangeInput('zakres', 'Wybierz zakres dat', 
                                          start=as.character(Sys.Date()-100), end=as.character(Sys.Date()-1), 
                                          min=zakresOd, max=as.character(Sys.Date()-1),
-                                         separator = 'do', weekstart = 0, language = "pl")#,
-                          #actionButton(inputId = "caly", "∞", style = "display: inline-block; vertical-align: bottom;"))
+                                         separator = 'do', weekstart = 0, language = "pl"),
+                          actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"))
                    ),
                    column(6,
                     splitLayout(
@@ -348,7 +348,6 @@ server <- function(input, output, session) {
     leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
     addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, 
-                     #radius = 10, color = uzyte_style()$kolory, opacity=1, weight = 8)
                     radius = 10, color = kolory, opacity=1, weight = 8)
   })
   
