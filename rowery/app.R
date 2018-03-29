@@ -215,6 +215,8 @@ server <- function(input, output, session) {
   if (ostatnia_data<Sys.Date()-1) {
     updateDateRangeInput(session, 'zakres', 
                          end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
+    cat(file=stderr(), "aktualizuje date w UI", "\n")
+    
     #zaladuj
     nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
     
@@ -273,7 +275,6 @@ server <- function(input, output, session) {
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
 
-
   output$plotLiczba <- renderPlot({
     shiny::validate(
       need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
@@ -325,24 +326,22 @@ server <- function(input, output, session) {
   output$bike_weather_tooltip <- renderUI(
     if (input$rodzajPogody==wykresyPogody[2]) {return(NULL)}
     else {
-    
-    hover <- input$plot_hover
-    #is mouse close to a point?
-    point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg","deszcz","snieg", "Liczba_rowerow")]
-    if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
-    opad=point$deszcz+point$snieg
-    
-    #else add to UI
-    wellPanel(
-      style = tooltip_html(tooltip_position(hover, w=180)),
-      p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ',opad,' mm, ', point$Liczba_rowerow)))
-    )
+      hover <- input$plot_hover
+      #is mouse close to a point?
+      point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg","deszcz","snieg", "Liczba_rowerow")]
+      if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
+      
+      #else add to UI
+      opad=point$deszcz+point$snieg
+      wellPanel(
+        style = tooltip_html(tooltip_position(hover, w=180)),
+        p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ',opad,' mm, ', point$Liczba_rowerow)))
+      )
   })
 
   output$mymap <- renderLeaflet({
-    shiny::validate(
-      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
-    )
+    shiny::validate(need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
+    
     kolory<-unname(koloryLicznikow[lokacje[indeksy(),]$Miejsce])
     
     leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
