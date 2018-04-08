@@ -213,18 +213,18 @@ server <- function(input, output, session) {
   
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
-    updateDateRangeInput(session, 'zakres', 
-                         end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
-    cat(file=stderr(), "aktualizuje date w UI", "\n")
-    
-    #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
-    
-    #polacz
-    ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
-    setorder(ostatnie_nowe_long, "Data")
-    #uaktualnij "nowe" dane
-    write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
+    # updateDateRangeInput(session, 'zakres', 
+    #                      end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
+    # cat(file=stderr(), "aktualizuje date w UI", "\n")
+    # 
+    # #zaladuj
+    # nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
+    # 
+    # #polacz
+    # ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
+    # setorder(ostatnie_nowe_long, "Data")
+    # #uaktualnij "nowe" dane
+    # write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
   }
   
   cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(ostatnie_nowe_long[,Data])), "\n")
@@ -338,18 +338,29 @@ server <- function(input, output, session) {
         p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ',opad,' mm, ', point$Liczba_rowerow)))
       )
   })
+  
+  # create a reactive value that will store the click position
+  data_of_click <- reactiveValues(clickedMarker=NULL)
 
   output$mymap <- renderLeaflet({
     shiny::validate(need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
-    
     kolory<-unname(koloryLicznikow[lokacje[indeksy(),]$Miejsce])
+    
     
     leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
-    addCircleMarkers(lng = ~lon, lat = ~lat, popup = ~Miejsce, 
+    addCircleMarkers(lng = ~lon, lat = ~lat, label = ~Miejsce, 
                     radius = 10, color = kolory, opacity=1, weight = 8)
+    })
+  
+  # store the click
+  observeEvent(input$mymap_marker_click,{
+    #data_of_click$clickedMarker <- input$map_marker_click
+    updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
+    print('click')
   })
   
+
 }
 
 shinyApp(ui = ui, server = server)
