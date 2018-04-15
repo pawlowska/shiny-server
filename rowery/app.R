@@ -339,9 +339,6 @@ server <- function(input, output, session) {
       )
   })
   
-  # create a reactive value that will store the click position
-  data_of_click <- reactiveValues(clickedMarker=NULL)
-
   output$mymap <- renderLeaflet({
     shiny::validate(need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
     kolory<-unname(koloryLicznikow[lokacje[indeksy(),]$Miejsce])
@@ -350,16 +347,15 @@ server <- function(input, output, session) {
     leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
     addCircleMarkers(lng = ~lon, lat = ~lat, label = ~Miejsce, 
-                    radius = 10, color = kolory, opacity=1, weight = 8)
+                    radius = 10, color = kolory, opacity=1, weight = 8,
+                    layerId=~Miejsce)
     })
   
-  # store the click
+  # Obserwacja kliknięć na mapie i przejście do wykresu
   observeEvent(input$mymap_marker_click,{
-    #data_of_click$clickedMarker <- input$map_marker_click
+    updatePickerInput(session, inputId = "liczniki", selected = input$mymap_marker_click$id)
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
-    print('click')
   })
-  
 
 }
 
