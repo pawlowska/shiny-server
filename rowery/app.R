@@ -168,6 +168,15 @@ server <- function(input, output, session) {
     }
   )
   
+  indeksy_mapa <-reactive({
+    indeksy_rob = c()
+    for(indeks in indeksy()){
+      if (is.na(lokacje$lat[indeks])){indeksy_rob = c(indeksy_rob, indeks+1, indeks+2)}
+      else {indeksy_rob = c(indeksy_rob,indeks)}
+    }
+    indeksy_rob}
+  )
+  
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     init_selected<-isolate(nazwy[indeksy()])
@@ -341,10 +350,10 @@ server <- function(input, output, session) {
   
   output$mymap <- renderLeaflet({
     shiny::validate(need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
-    kolory<-unname(koloryLicznikow[lokacje[indeksy(),]$Miejsce])
+    kolory<-unname(koloryLicznikow[lokacje[indeksy_mapa(),]$Miejsce])
     
     
-    leaflet(lokacje[indeksy(),], options = leafletOptions(maxZoom = 18)) %>% 
+    leaflet(lokacje[indeksy_mapa(),], options = leafletOptions(maxZoom = 18)) %>% 
     addTiles() %>% 
     addCircleMarkers(lng = ~lon, lat = ~lat, label = ~Miejsce, 
                     radius = 10, color = kolory, opacity=1, weight = 8,
