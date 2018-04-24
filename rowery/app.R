@@ -222,18 +222,18 @@ server <- function(input, output, session) {
   
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
-    # updateDateRangeInput(session, 'zakres', 
-    #                      end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
-    # cat(file=stderr(), "aktualizuje date w UI", "\n")
-    # 
-    # #zaladuj
-    # nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
-    # 
-    # #polacz
-    # ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
-    # setorder(ostatnie_nowe_long, "Data")
-    # #uaktualnij "nowe" dane
-    # write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
+    updateDateRangeInput(session, 'zakres',
+                         end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
+    cat(file=stderr(), "aktualizuje date w UI", "\n")
+
+    #zaladuj
+    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
+
+    #polacz
+    ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
+    setorder(ostatnie_nowe_long, "Data")
+    #uaktualnij "nowe" dane
+    write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
   }
   
   cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(ostatnie_nowe_long[,Data])), "\n")
