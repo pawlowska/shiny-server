@@ -68,7 +68,7 @@ czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2018_01.csv", form
   nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
   pogoda<-data.table(matrix(nrow = 0, ncol = 8))
   setnames(pogoda, names(pogoda), nazwy_kolumn)
-  for (i in 1:do) {
+  for (i in od:do) {
     nazwa<-sprintf(format,i)
     dane<-fread(nazwa,colClasses="numeric")[V1==warszawaOkecie]
     dane<-dane[,c('V3', 'V4', 'V5', 'V6', 'V8', 'V10', 'V14', 'V16') ]
