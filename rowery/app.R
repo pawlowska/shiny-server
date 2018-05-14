@@ -290,6 +290,7 @@ server <- function(input, output, session) {
            paste("Data spoza zakresu - dostępne dane od", zakresOd)),
       need((input$zakres[1]<=zakresDo)&(input$zakres[2]<=zakresDo), 
            paste("Data spoza zakresu - dostępne dane do", zakresDo)),
+      need(input$zakres[1]<input$zakres[2], "Błędny zakres danych"), 
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     wykres_kilka(data(), 
@@ -300,6 +301,11 @@ server <- function(input, output, session) {
   
   output$plotPogoda <- renderPlot({
     shiny::validate(
+      need((input$zakresPogoda[1]>=zakresOd)&(input$zakresPogoda[2]>=zakresOd), 
+           paste("Data spoza zakresu - dostępne dane od", zakresOd)),
+      need((input$zakresPogoda[1]<=zakresDoPogoda)&(input$zakresPogoda[2]<=zakresDoPogoda), 
+           paste("Data spoza zakresu - dostępne dane do", zakresDo)),
+      need(input$zakresPogoda[1]<input$zakresPogoda[2], "Błędny zakres danych"), 
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     if(input$rodzajPogody==wykresyPogody[1]) {
