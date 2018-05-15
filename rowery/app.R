@@ -210,7 +210,6 @@ server <- function(input, output, session) {
   #dane zaladowane od ostatniego git commit
   p<-"pliki/nowe_long.csv"
   if (file.exists(p)) {
-    cat(file=stderr(), "probuje wczytac nowe_long", "\n")
     ostatnie_nowe_long<-wczytaj_dane(p)
     ostatnia_data<-max(ostatnie_nowe_long[,Data])
     cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
@@ -225,11 +224,13 @@ server <- function(input, output, session) {
   if (ostatnia_data<Sys.Date()-1) {
     updateDateRangeInput(session, 'zakres',
                          end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
-    cat(file=stderr(), "aktualizuje date w UI", "\n")
+    cat(file=stderr(), "ostatnie dane starsze niż 1 dzień, aktualizuje date w UI", "\n")
 
     #zaladuj
     nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
 
+    cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long[,Data])), "\n")
+    
     #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
     setorder(ostatnie_nowe_long, "Data")
@@ -237,17 +238,17 @@ server <- function(input, output, session) {
     write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
   }
   
-  cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(ostatnie_nowe_long[,Data])), "\n")
-  
   #polacz ze "starymi" danymi
   dane_long<-rbind(dane_long, ostatnie_nowe_long[Data>zakresDo])
+  cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long[,Data])), "\n")
+  
+  zakresDo<-as.character(Sys.Date()-1)
+  
   
   #podsumuj
   dane_tyg<-podsumuj.tygodnie(dane_long)
   dane_m<-podsumuj.miesiace(dane_long)
   dane_y<-podsumuj.lata(dane_long)
-  
-  zakresDo<-as.character(Sys.Date()-1)
   
   data <- reactive({
     zakres_dat=interval(input$zakres[1], input$zakres[2])
