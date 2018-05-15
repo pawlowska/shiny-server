@@ -107,7 +107,8 @@ ui <- fluidPage(
                               dateRangeInput('zakresPogoda', 'Wybierz zakres dat',
                                              start=as.character(as.Date(zakresDoPogoda)-120), end=zakresDoPogoda,
                                              min=zakresOd, max=zakresDoPogoda,
-                                             separator = 'do', weekstart = 0, language = "pl")
+                                             separator = 'do', weekstart = 0, language = "pl")#,
+                              #actionButton(inputId = "calyPogoda", "∞", style = "margin-bottom: 15px;")
                        )
                     ), style= "padding: 5px 0px 0px 15px;"
                  ), #end wellPanel
@@ -290,7 +291,7 @@ server <- function(input, output, session) {
            paste("Data spoza zakresu - dostępne dane od", zakresOd)),
       need((input$zakres[1]<=zakresDo)&(input$zakres[2]<=zakresDo), 
            paste("Data spoza zakresu - dostępne dane do", zakresDo)),
-      need(input$zakres[1]<input$zakres[2], "Błędny zakres danych"), 
+      need(input$zakres[1]<input$zakres[2], "Błędny zakres dat"), 
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     wykres_kilka(data(), 
@@ -305,7 +306,7 @@ server <- function(input, output, session) {
            paste("Data spoza zakresu - dostępne dane od", zakresOd)),
       need((input$zakresPogoda[1]<=zakresDoPogoda)&(input$zakresPogoda[2]<=zakresDoPogoda), 
            paste("Data spoza zakresu - dostępne dane do", zakresDo)),
-      need(input$zakresPogoda[1]<input$zakresPogoda[2], "Błędny zakres danych"), 
+      need(input$zakresPogoda[1]<input$zakresPogoda[2], "Błędny zakres dat"), 
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     if(input$rodzajPogody==wykresyPogody[1]) {
