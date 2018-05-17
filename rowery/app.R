@@ -253,7 +253,6 @@ server <- function(input, output, session) {
   #polacz ze "starymi" danymi
   dane_long<-rbind(dane_long, ostatnie_nowe_long[Data>zakresDo])
   cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long[,Data])), "\n")
-  
   zakresDo<-as.character(Sys.Date()-1)
   
   

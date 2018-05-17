@@ -38,14 +38,18 @@ better_ticks<-function(zakres_dat, krok=1) {
 lista_weekendow<-function(dane) {
   przedzial<-seq(min(dane[,Data]), max(dane[,Data]), by="days")
   daty<-przedzial[weekend(przedzial)=="weekend"]
-  #daty<-dane[weekend(Data)=="weekend", Data] #now it's a vector
-  #daty<-unique(daty)
 
   krok = time_length(interval(daty[1], daty[2]), unit = "day")
-  if (krok!=1) daty<-daty[2:length(daty)]
-  soboty<-daty[weekdays(daty) %in% c("sobota","Saturday", "Sat")]
-  niedziele<-daty[weekdays(daty) %in% c("niedziela","Sunday", "Sun")]
-  soboty<-soboty[1:length(niedziele)]
+  if (is.na(krok)) {
+    soboty=as.Date(character())
+    niedziele=as.Date(character())
+  }
+  else {
+    if (krok!=1) daty<-daty[2:length(daty)]
+    soboty<-daty[weekdays(daty) %in% c("sobota","Saturday", "Sat")]
+    niedziele<-daty[weekdays(daty) %in% c("niedziela","Sunday", "Sun")]
+    soboty<-soboty[1:length(niedziele)]
+  }
   l<-data.table(soboty=soboty, niedziele=niedziele)
   l
   
@@ -77,11 +81,13 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   #show weekends only for the daily plot
   if(krok==1) { 
     lista<-lista_weekendow(dane)
-    g<-g+geom_rect(data=lista, 
-                   aes(xmin=soboty, xmax=niedziele, ymin=-Inf, ymax=+Inf), 
-                   fill='gray', alpha=0.2) +
-      theme( # remove the vertical grid lines
-        panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
+    if(nrow(lista)>0) {
+      g<-g+geom_rect(data=lista, 
+                     aes(xmin=soboty, xmax=niedziele, ymin=-Inf, ymax=+Inf), 
+                     fill='gray', alpha=0.2) +
+        theme( # remove the vertical grid lines
+          panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
+    }
   } 
   
   #oś x
@@ -157,11 +163,11 @@ pogoda_opady<-function(dane, paleta) {
   gg<-ggplot(dane, 
              aes(deszcz, Liczba_rowerow, colour = Miejsce, shape = Jaki_dzien, size=temp_avg)) +
     geom_point(alpha=0.8) +
-    scale_size_continuous(range = c(0.01, 8), limits = c(-5,25)) +
+    scale_size_continuous(range = c(0.01, 8), limits = c(5,25)) +
     scale_shape_manual(values=c(16,1)) + #full and empty circles
     scale_x_continuous(breaks=pretty_breaks(8), expand=c(0, 1)) +
     scale_y_continuous(breaks=pretty_breaks(8), limits = c(-20, NA)) +
-    #geom_smooth(size=0.7, alpha=0.2, span = 0.5, method=method_fit) +   # Add a loess smoothed fit curve with confidence region
+    geom_smooth(size=0.7, alpha=0.2, span = 0.5, method=method_fit) +   # Add a loess smoothed fit curve with confidence region
     theme(legend.position="bottom", legend.justification="left", legend.box.just = "left",
           legend.margin=margin(0, -2, 0, 1, "cm"), legend.box="vertical")+
     scale_colour_manual(values=paleta) +
