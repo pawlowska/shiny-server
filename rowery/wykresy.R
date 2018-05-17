@@ -148,6 +148,31 @@ pogoda_basic<-function(dane, paleta) {
   gg
 }
 
+pogoda_opady<-function(dane, paleta) {
+  #set theme    
+  theme_set(theme_light(base_size = rozmiar_czcionki))
+  
+  method_fit<-ifelse(length(unique(dane[,Data]))<100, "lm", "loess")
+  
+  gg<-ggplot(dane, 
+             aes(deszcz, Liczba_rowerow, colour = Miejsce, shape = Jaki_dzien, size=temp_avg)) +
+    geom_point(alpha=0.8) +
+    scale_size_continuous(range = c(0.01, 8), limits = c(-5,25)) +
+    scale_shape_manual(values=c(16,1)) + #full and empty circles
+    scale_x_continuous(breaks=pretty_breaks(8), expand=c(0, 1)) +
+    scale_y_continuous(breaks=pretty_breaks(8), limits = c(-20, NA)) +
+    #geom_smooth(size=0.7, alpha=0.2, span = 0.5, method=method_fit) +   # Add a loess smoothed fit curve with confidence region
+    theme(legend.position="bottom", legend.justification="left", legend.box.just = "left",
+          legend.margin=margin(0, -2, 0, 1, "cm"), legend.box="vertical")+
+    scale_colour_manual(values=paleta) +
+    xlab("Opady (mm)")+ylab("")+ #axis labels
+    guides(shape = guide_legend(title="Jaki dzień", order = 1),
+           size = guide_legend(title="Temperatura", order = 2),
+           colour = guide_legend(ncol = 3, byrow = TRUE, order = 3))
+  
+  gg
+}
+
 wykres_pogody_w_czasie<-function(dane) {
   #set theme    
   theme_set(theme_light(base_size = rozmiar_czcionki))

@@ -37,8 +37,9 @@ dane_long<-wczytaj_dane("pliki/dane_long.csv")
 nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
-zakresDoPogoda= '2018-04-30'
 plik_pogoda="pliki/IMGW_pogoda_20180430.csv"
+temp<-fread(plik_pogoda)
+zakresDoPogoda=as.character(max(temp[,Data]))
 
 okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
 wartosci = c('bezwzględne', 'procentowe') #PZ
@@ -104,11 +105,13 @@ ui <- fluidPage(
                                            inline = TRUE, width = NULL)        
                        ),
                        column(6, #daty
+                              splitLayout(cellWidths = c("90%", "10%"),
+                                          cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
                               dateRangeInput('zakresPogoda', 'Wybierz zakres dat',
                                              start=as.character(as.Date(zakresDoPogoda)-120), end=zakresDoPogoda,
                                              min=zakresOd, max=zakresDoPogoda,
-                                             separator = 'do', weekstart = 0, language = "pl")#,
-                              #actionButton(inputId = "calyPogoda", "∞", style = "margin-bottom: 15px;")
+                                             separator = 'do', weekstart = 0, language = "pl"),
+                              actionButton(inputId = "calyPogoda", "∞", style = "margin-bottom: 15px;"))
                        )
                     ), style= "padding: 5px 0px 0px 15px;"
                  ), #end wellPanel
@@ -204,6 +207,15 @@ server <- function(input, output, session) {
       updateDateRangeInput(session, 'zakres', 
                          start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
                          end=(as.character(max(dane_long[Miejsce %in% input$liczniki]$Data))))
+    }
+  })
+  
+  
+  observeEvent(input$calyPogoda, {
+    if (!is.null(data())) {
+      updateDateRangeInput(session, 'zakresPogoda', 
+                           start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
+                           end=(zakresDoPogoda))
     }
   })
   
