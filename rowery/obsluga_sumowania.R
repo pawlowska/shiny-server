@@ -15,13 +15,6 @@ znajdz_prefix<-function(s) {
   substring(s, 0, regexpr(" - suma", s)-1)
 }
 
-# podwojne_prefix<-enc2utf8(c("Al. Jerozolimskie", 
-#                             "Al. USA",
-#                             "NSR Most Gdański",
-#                             "NSR Solec",
-#                             "Czerniakowska",
-#                             "Świętokrzyska/Emilii Plater",
-#                             "Żwirki i Wigury/Trojdena"))
 
 #sumy_zwykle<-paste(podwojne_prefix,"- suma")
 sumy_zwykle<-znajdz_podwojne()
@@ -102,15 +95,15 @@ in_out_ratio<-function(tabela) {
 
 source('palety_kolorow.R')
 
-ile_unikatow<-17
 a1=1
 a2=0.7
 a3=0.4
 
-zrob_listy_stylow<-function(nazwy, podw_sumy=podwojne_i_sumy, sumy=sumy_zwykle) {
+zrob_listy_stylow<-function(nazwy, podw_sumy=podwojne_i_sumy, sumy=sumy_zwykle, paleta=paleta20_sorted) {
   nazwy_bez_podw<-sort(c(nazwy[!(nazwy %in% podw_sumy)], sumy))
+  ile_unikatow<-length(nazwy_bez_podw)
   
-  kolory_bez_podw<-paleta18_sorted
+  kolory_bez_podw<-paleta
   kolory<-kolory_bez_podw[1:ile_unikatow]
   linie<-c(rep("solid", ile_unikatow))
   fonty<-c(rep("bold", ile_unikatow))

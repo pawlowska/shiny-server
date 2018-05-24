@@ -234,9 +234,6 @@ server <- function(input, output, session) {
   
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
-    updateDateRangeInput(session, 'zakres',
-                         end=as.character(Sys.Date()-1), max=as.character(Sys.Date()-1))
-    cat(file=stderr(), "ostatnie dane starsze niż 1 dzień, aktualizuje date w UI", "\n")
 
     #zaladuj
     nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
@@ -253,7 +250,12 @@ server <- function(input, output, session) {
   #polacz ze "starymi" danymi
   dane_long<-rbind(dane_long, ostatnie_nowe_long[Data>zakresDo])
   cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long[,Data])), "\n")
+  
+  #aktualizacja daty
   zakresDo<-as.character(Sys.Date()-1)
+  cat(file=stderr(), "aktualizuje date w UI", "\n")
+  updateDateRangeInput(session, 'zakres',
+                       end=as.character(zakresDo), max=as.character(zakresDo))
   
   
   #podsumuj
