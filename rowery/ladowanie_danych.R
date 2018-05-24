@@ -5,6 +5,38 @@ library(RCurl)
 source('hasloA.R', encoding = 'UTF-8')
 
 
+dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, zakresDo) {
+  #dane zaladowane od ostatniego git commit
+  if (file.exists(p)) {
+    ostatnie_nowe_long<-wczytaj_dane(p)
+    ostatnia_data<-max(ostatnie_nowe_long[,Data])
+    tekst="ostatnia data w nowe_long"
+  } else {
+    ostatnie_nowe_long<-stare[0,]
+    ostatnia_data<-max(stare[,Data])
+    tekst="brak nowe_long, ostatnia data w dane_long"
+  }
+  cat(file=stderr(), tekst, as.character(ostatnia_data), "\n")
+  
+  #czy są nowsze dane?  
+  if (ostatnia_data<Sys.Date()-1) {
+    #zaladuj
+    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
+    cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long[,Data])), "\n")
+    
+    #polacz
+    ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
+    setorder(ostatnie_nowe_long, "Data")
+    #uaktualnij "nowe" dane
+    write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
+  }
+  
+  #polacz ze "starymi" danymi
+  dane_long<-rbind(stare, ostatnie_nowe_long[Data>zakresDo])
+  cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long[,Data])), "\n")
+  dane_long
+}
+
 zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda, lokacje) {
   klucz <- lokacje[,c("id", "Miejsce")]
   

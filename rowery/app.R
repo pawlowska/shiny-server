@@ -202,7 +202,7 @@ server <- function(input, output, session) {
     }
   })
   
-  observeEvent(input$caly, {
+  observeEvent(input$caly, { #caly zakres dat
     if (!is.null(data())) {
       updateDateRangeInput(session, 'zakres', 
                          start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
@@ -211,7 +211,7 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$calyPogoda, {
+  observeEvent(input$calyPogoda, { #caly zakres dat pogoda
     if (!is.null(data())) {
       updateDateRangeInput(session, 'zakresPogoda', 
                            start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
@@ -219,43 +219,14 @@ server <- function(input, output, session) {
     }
   })
   
-  #dane zaladowane od ostatniego git commit
-  p<-"pliki/nowe_long.csv"
-  if (file.exists(p)) {
-    ostatnie_nowe_long<-wczytaj_dane(p)
-    ostatnia_data<-max(ostatnie_nowe_long[,Data])
-    cat(file=stderr(), "ostatnia data w pliku nowe_long", as.character(ostatnia_data), "\n")
-  } else {
-    cat(file=stderr(), "brak pliku nowe_long", "\n")
-    ostatnie_nowe_long<-dane_long[0,]
-    ostatnia_data<-max(dane_long[,Data])
-    cat(file=stderr(), "ostatnia data w pliku dane_long", as.character(ostatnia_data), "\n")
-  }
-  
-  #czy są nowsze dane?  
-  if (ostatnia_data<Sys.Date()-1) {
-
-    #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
-
-    cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long[,Data])), "\n")
-    
-    #polacz
-    ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
-    setorder(ostatnie_nowe_long, "Data")
-    #uaktualnij "nowe" dane
-    write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
-  }
-  
-  #polacz ze "starymi" danymi
-  dane_long<-rbind(dane_long, ostatnie_nowe_long[Data>zakresDo])
-  cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long[,Data])), "\n")
+  #aktualizacja danych
+  dane_long<-dodaj_nowe_dane(stare=dane_long, p="pliki/nowe_long.csv", 
+                             plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo)
   
   #aktualizacja daty
   zakresDo<-as.character(Sys.Date()-1)
   cat(file=stderr(), "aktualizuje date w UI", "\n")
-  updateDateRangeInput(session, 'zakres',
-                       end=as.character(zakresDo), max=as.character(zakresDo))
+  updateDateRangeInput(session, 'zakres', end=as.character(zakresDo), max=as.character(zakresDo))
   
   
   #podsumuj
