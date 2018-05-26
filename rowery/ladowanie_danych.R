@@ -47,9 +47,9 @@ zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda, lokacje) {
 
 wczytaj_z_api<-function(klucz=klucz, od="2018-02-01", do=Sys.Date()) {
   link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do)
-  #print(link)
   txt<- getURL(link, userpwd = credentials)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
+  #print(tabela)
   setnames(tabela, c("id", "Data", "Liczba_rowerow"))
   tabela[,Data:=as.Date(Data)]
   tabela<-merge(tabela, klucz, by="id")
@@ -85,27 +85,18 @@ numery_dat<-function(tabela) {
 }
 
 wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Rodzaj_opadu")) {
-  #print(str(dane))
   tabela<-melt(dane, 
                id.vars = nazwy_zmiennych, 
                variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
 }
 
-#podsumowanie po stratTyg danych w formacie long
-podsumuj.tygodnie <- function(tabela_long) { 
-  podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce,startTyg)]
-  setnames(podsumowanie, c("startTyg","V1"), c("Data", "Liczba_rowerow"))
+podsumuj.okresy<-function(tabela, kolumna) {
+  podsumowanie <- tabela[,sum(Liczba_rowerow), by=c("Miejsce", kolumna)]
+  setnames(podsumowanie, c(kolumna,"V1"), c("Data", "Liczba_rowerow"))
   podsumowanie
 }
 
-#podsumowanie po stratM danych w formacie long
-podsumuj.miesiace <- function(tabela_long) { 
-  podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce,startM)]
-  setnames(podsumowanie, c("startM","V1"), c("Data", "Liczba_rowerow"))
-  podsumowanie
-}
-
-#podsumowanie po stratY danych w formacie long
+#podsumowanie po roku danych w formacie long
 podsumuj.lata <- function(tabela_long) {
   podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce, cut.POSIXt(as.POSIXct(Data), breaks="year"))]
   setnames(podsumowanie, c("cut.POSIXt","V1"), c("Data", "Liczba_rowerow"))

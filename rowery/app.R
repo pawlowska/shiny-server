@@ -237,8 +237,8 @@ server <- function(input, output, session) {
   
   
   #podsumuj
-  dane_tyg<-podsumuj.tygodnie(dane_long)
-  dane_m<-podsumuj.miesiace(dane_long)
+  dane_tyg<-podsumuj.okresy(dane_long, "startTyg")
+  dane_m<-podsumuj.okresy(dane_long, "startM")
   dane_y<-podsumuj.lata(dane_long)
   
   data <- reactive({
