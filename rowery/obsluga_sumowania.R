@@ -80,18 +80,18 @@ suma_licznikow<-function(tabela, podw=podwojne_prefix) {
 # }
 
 
-# in_out_ratio<-function(tabela) {
-#   nazwy<-names(tabela)
-#   nazwy_in <-grep("IN", nazwy, value = TRUE)
-#   nazwy_out<-grep("OUT", nazwy, value = TRUE)
-#   i=1
-#   for (n_in in nazwy_in) {
-#     n_ratio<-gsub(" IN", " ratio", n_in)
-#     tabela[,(n_ratio):=(get(nazwy_in[i])-get(nazwy_out[i]))/(get(nazwy_in[i])+get(nazwy_out[i]))]
-#     i<-i+1
-#   }
-#   tabela
-# }
+in_out_ratio<-function(tabela) {
+  nazwy<-names(tabela)
+  nazwy_in <-grep("IN", nazwy, value = TRUE)
+  nazwy_out<-grep("OUT", nazwy, value = TRUE)
+  i=1
+  for (n_in in nazwy_in) {
+    n_ratio<-gsub(" IN", " ratio", n_in)
+    tabela[,(n_ratio):=(get(nazwy_in[i])-get(nazwy_out[i]))/(get(nazwy_in[i])+get(nazwy_out[i]))]
+    i<-i+1
+  }
+  tabela
+}
 
 source('palety_kolorow.R')
 
