@@ -6,6 +6,7 @@ options(shiny.usecairo=T)
 library(lubridate)
 library(leaflet) #for maps
 library(shinyWidgets)
+library(shinyBS)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
@@ -75,13 +76,17 @@ ui <- fluidPage(
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
                    column(6,  #daty 
-                          splitLayout(cellWidths = c("90%", "10%"),
+                          #splitLayout(cellWidths = c("80%","10%", "10%"),
+                          splitLayout(cellWidths = c("90%","10%"),
                                       cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
                           dateRangeInput('zakres', 'Wybierz zakres dat', 
                                          start=as.character(Sys.Date()-100), end=as.character(Sys.Date()-1), 
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl"),
-                          actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"))
+                          actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"),
+                          #downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
+                          bsTooltip(id = "caly", title = "Pokaż cały zakres dat", placement = "left", trigger = "hover")
+                          )
                    ),
                    column(6,
                     splitLayout(
@@ -111,7 +116,9 @@ ui <- fluidPage(
                                              start=as.character(as.Date(zakresDoPogoda)-120), end=zakresDoPogoda,
                                              min=zakresOd, max=zakresDoPogoda,
                                              separator = 'do', weekstart = 0, language = "pl"),
-                              actionButton(inputId = "calyPogoda", "∞", style = "margin-bottom: 15px;"))
+                              actionButton(inputId = "calyPogoda", "∞", style = "margin-bottom: 15px;"),
+                              bsTooltip(id = "calyPogoda", title = "Pokaż cały zakres dat", 
+                                        placement = "left", trigger = "hover"))
                        )
                     ), style= "padding: 5px 0px 0px 15px;"
                  ), #end wellPanel
@@ -185,7 +192,7 @@ server <- function(input, output, session) {
     req(input$dimension)
     init_selected<-isolate(nazwy[indeksy()])
     
-    if (input$dimension[1]<750) {
+    if (input$dimension[1]<780) {
       pickerInput('liczniki', label=NULL,#'Wybierz miejsca', 
                   nazwy, selected = init_selected, 
                   options = list(`actions-box` = TRUE, 
@@ -357,6 +364,14 @@ server <- function(input, output, session) {
     updatePickerInput(session, inputId = "liczniki", selected = input$mymap_marker_click$id)
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
   })
+  
+  # output$eksport <- downloadHandler(
+  #   filename = function() { 
+  #     paste("dane-z-licznikow", Sys.Date(), ".csv", sep="")
+  #   },
+  #   content = function(file) {
+  #     write.csv(data(), file)
+  # })
 
 }
 
