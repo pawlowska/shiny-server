@@ -56,6 +56,8 @@ ui <- fluidPage(
             tags$script(src="iframe_css.js")),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
+    tags$style(HTML("#caly, #eksport {height:34px;}")),
+    tags$style(HTML(".input-sm {height:34px;}")),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
@@ -76,15 +78,15 @@ ui <- fluidPage(
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
                    column(6,  #daty 
-                          #splitLayout(cellWidths = c("80%","10%", "10%"),
-                          splitLayout(cellWidths = c("90%","10%"),
+                          splitLayout(cellWidths = c("84%","8%", "8%"),
+                          #splitLayout(cellWidths = c("90%","10%"),
                                       cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
                           dateRangeInput('zakres', 'Wybierz zakres dat', 
                                          start=as.character(Sys.Date()-100), end=as.character(Sys.Date()-1), 
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl"),
                           actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"),
-                          #downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
+                          downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
                           bsTooltip(id = "caly", title = "Pokaż cały zakres dat", placement = "left", trigger = "hover")
                           )
                    ),
@@ -365,13 +367,13 @@ server <- function(input, output, session) {
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
   })
   
-  # output$eksport <- downloadHandler(
-  #   filename = function() { 
-  #     paste("dane-z-licznikow", Sys.Date(), ".csv", sep="")
-  #   },
-  #   content = function(file) {
-  #     write.csv(data(), file)
-  # })
+   output$eksport <- downloadHandler(
+     filename = function() { 
+       paste("dane-z-licznikow", Sys.Date(), ".csv", sep="")
+     },
+     content = function(file) {
+       write.csv(data(), file)
+   })
 
 }
 
