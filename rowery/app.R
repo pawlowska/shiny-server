@@ -56,6 +56,7 @@ ui <- fluidPage(
             tags$script(src="iframe_css.js")),
   tags$head(
     tags$style(HTML('.shiny-split-layout>div  {overflow: visible;}')),
+    tags$style(HTML(".input-sm {height:34px;}")),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
