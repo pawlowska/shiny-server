@@ -13,14 +13,14 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```
 
 ```{r}
-plik_pogoda="pliki/IMGW_pogoda_20180430.csv"
+plik_pogoda="pliki/IMGW_pogoda_20180531.csv"
 ```
 
 ```{r}
-plik_pogoda_old="pliki/IMGW_pogoda_20180331.csv"
+plik_pogoda_old="pliki/IMGW_pogoda_20180430.csv"
 pogoda_old<-fread(plik_pogoda_old)
 pogoda_old[,Data:=as.Date(Data)]
-pogoda_new<-czytaj_dane_zipy(od=4, do=4, nazwa_out="pogoda/IMGW_2018_04.csv")
+pogoda_new<-czytaj_dane_zipy(od=5, do=5, nazwa_out="pogoda/IMGW_2018_04.csv")
 pogoda_new[,opad:=NULL]
 pogoda_new[,rodzaj:=NULL]
 
