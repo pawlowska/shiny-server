@@ -166,12 +166,15 @@ server <- function(input, output, session) {
   
   values<-reactiveValues(first_run=TRUE)
   indeksy<-reactive(
-    if(values$first_run) { #sprawdz czy nr licznika podany w url
+    if(values$first_run) { #first run => sprawdz czy nr licznika podany w url
       values$first_run<-FALSE
       query <- parseQueryString(session$clientData$url_search)
-      if (length(query)>0&&(!is.null(query$licznik))&&query$licznik=='all') {
+      if (length(query)==0) { #none
+        NULL
+      }
+      else if ((!is.null(query$licznik))&&query$licznik=='all') { #all
           c(1:length(nazwy))
-      } else {
+      } else { #one
           m<-lokacje[id==query$licznik]$Miejsce
           match(m, nazwy)
       }
