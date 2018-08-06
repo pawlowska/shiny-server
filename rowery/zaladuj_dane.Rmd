@@ -13,14 +13,14 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```
 
 ```{r}
-plik_pogoda="pliki/IMGW_pogoda_20180630.csv"
+plik_pogoda="pliki/IMGW_pogoda_20180731.csv"
 ```
 
 ```{r}
-plik_pogoda_old="pliki/IMGW_pogoda_20180531.csv"
+plik_pogoda_old="pliki/IMGW_pogoda_20180630.csv"
 pogoda_old<-fread(plik_pogoda_old)
 pogoda_old[,Data:=as.Date(Data)]
-pogoda_new<-czytaj_dane_zipy(od=6, do=6, nazwa_out="pogoda/IMGW_2018_06.csv")
+pogoda_new<-czytaj_dane_zipy(od=7, do=7, nazwa_out="pogoda/IMGW_2018_07.csv")
 pogoda_new[,opad:=NULL]
 pogoda_new[,rodzaj:=NULL]
 
@@ -36,7 +36,7 @@ lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 lokacje<-data.table(lokacje)
 klucz <- lokacje[,c("id", "Miejsce")]
 
-dane<-wczytaj_z_api(klucz=klucz, od="2014-08-13", do="2018-07-20")
+dane<-wczytaj_z_api(klucz=klucz, od="2014-08-13", do="2018-07-31")
 
 ```
 
