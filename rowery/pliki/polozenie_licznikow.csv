@@ -1,11 +1,11 @@
 Miejsce,id,lat,lon
 al. Solidarności/Dworzec Wileński,100017988,"52,2553","21,035776"
 al. Stanów Zjednoczonych - suma,,
-al. Stanów Zjednoczonych S,100027264,"52,23031","21,070719"
 al. Stanów Zjednoczonych N,100027263,"52,23064","21,069704"
+al. Stanów Zjednoczonych S,100027264,"52,23031","21,070719"
 Aleje Jerozolimskie - suma,,
-Aleje Jerozolimskie/pl. Zawiszy S,100038471,"52,22419747287937","20,98675498739875"
 Aleje Jerozolimskie/pl. Zawiszy N,100038470,"52,2240947751839","20,985454407389184"
+Aleje Jerozolimskie/pl. Zawiszy S,100038471,"52,22419747287937","20,98675498739875"
 Banacha/Żwirki i Wigury,100017990,"52,21058","20,986546"
 Bazyliańska/Wysockiego,100018251,"52,29122","21,01915"
 Belwederska,100026727,"52,21154","21,026775"
@@ -22,10 +22,14 @@ NSR Solec - suma,,
 NSR Solec CPR,100015253,"52,231167","21,042242"
 NSR Solec DDR,100015250,"52,230988","21,041431"
 Praska ścieżka rekreacyjna,100015252,"52,24011","21,03948"
+Przyczółkowa/al. Wilanowska,100046911, "52,16534", "21,08400"
+Szaserów N,100046627,"52,25027", "21,088249"
+Szaserów S,100046628,"52,250097", "21,087545"
 Świętokrzyska/Emilii Plater - suma,,
-"Świętokrzyska/Emilii Plater S",100023489,"52,233852","21,00201"
 "Świętokrzyska/Emilii Plater N",100023490,"52,2338912228","21,0018517909"
+"Świętokrzyska/Emilii Plater S",100023489,"52,233852","21,00201"
 Targowa/Dworzec Wileński,100017989,"52,254055","21,035517"
+Wiertnicza,100046912,"52,17824", "21,07309" 
 Wybrzeże Helskie/Starzyńskiego,100034734,"52,2620480441","21,0149154882"
 Wysockiego,100018250,"52,290447","21,019197"
 Żwirki i Wigury/1 Sierpnia,100044505,"52,19090745770377","20,981937576721183"
