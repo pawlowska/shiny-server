@@ -1,4 +1,6 @@
 library(data.table)
+source('palety_kolorow.R')
+
 
 czytaj_nazwy<-function(plik="pliki/polozenie_licznikow.csv") {
   lokacje <- data.table(read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8'))
@@ -15,8 +17,6 @@ znajdz_prefix<-function(s) {
   substring(s, 0, regexpr(" - suma", s)-1)
 }
 
-
-#sumy_zwykle<-paste(podwojne_prefix,"- suma")
 sumy_zwykle<-znajdz_podwojne()
 podwojne_prefix<-znajdz_prefix(sumy_zwykle)
 podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), czytaj_nazwy(), value = TRUE)
@@ -55,31 +55,6 @@ suma_licznikow<-function(tabela, podw=podwojne_prefix) {
   tabela
 }
 
-
-# suma_licznikow_old<-function(tabela, podw=podwojne, sumy=sumy_zwykle) {
-#   nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
-#   nazwy<-names(tabela)[4:ncol(tabela)] #reszta
-#   
-#   missing <- setdiff(podw, names(tabela))
-#   tabela[,(missing):=as.integer(NA)]
-# 
-#   nazwy_bez_podw<-nazwy[!(nazwy %in% podw)] #tych sumowanie nie dotyczy
-#   kolej_unikat<-sort(c(nazwy_bez_podw, sumy))
-#   kolej<-kolej_unikat
-#   i<-1
-#   for (s in sumy) {
-#     tabela[,(s):=get(podw[i,1])+get(podw[i,2])]
-#     pos<-match(s, kolej)
-#     n<-length(kolej)
-#     kolej<-append(kolej, podw[i,], after = pos)
-#     i<-i+1
-#   }
-#   kolejnosc <-c(nazwy_x, kolej)
-#   setcolorder(tabela, kolejnosc)
-#   tabela
-# }
-
-
 in_out_ratio<-function(tabela) {
   nazwy<-names(tabela)
   nazwy_in <-grep("IN", nazwy, value = TRUE)
@@ -93,7 +68,6 @@ in_out_ratio<-function(tabela) {
   tabela
 }
 
-source('palety_kolorow.R')
 
 a1=1
 a2=0.7
