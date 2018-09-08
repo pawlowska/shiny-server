@@ -36,11 +36,10 @@ lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 lokacje<-data.table(lokacje)
 klucz <- lokacje[,c("id", "Miejsce")]
 
-dane<-wczytaj_z_api(klucz=klucz, od="2014-08-13", do="2018-08-31")
-
 ```
 
 ```{r}
+dane<-wczytaj_z_api(klucz=klucz, od="2014-08-13", do="2018-08-31")
 dane<-numery_dat(dane)
 write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
 
@@ -49,7 +48,7 @@ rm(dane)
 ```
 
 ```{r}
-nazwy<-names(dane_zsumowane)[4:length(names(dane_zsumowane))]
+nazwy<-names(dane_zsumowane)[3:length(names(dane_zsumowane))]
 listy_stylow<-zrob_listy_stylow(nazwy, paleta=paleta25_sorted) #w obsluga_sumowania
 write.csv(listy_stylow, file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', row.names = F)
 write.csv(dane_zsumowane, file = "dane/dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')

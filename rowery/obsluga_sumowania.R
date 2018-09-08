@@ -36,8 +36,8 @@ podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), czytaj_nazwy(), value
 #          "Żwirki i Wigury/Trojdena - suma IN", "Żwirki i Wigury/Trojdena - suma OUT"))
 
 suma_licznikow<-function(tabela, podw=podwojne_prefix) {
-  nazwy_x<-names(tabela)[1:3] #Czas, Data, Godzina
-  nazwy<-names(tabela)[4:ncol(tabela)] #reszta
+  nazwy_x<-names(tabela)[1:2] #Data, startTyg
+  nazwy<-names(tabela)[3:ncol(tabela)] #reszta
   
   i<-1
   for (p in podw) {
@@ -47,7 +47,7 @@ suma_licznikow<-function(tabela, podw=podwojne_prefix) {
     i<-i+1
   }
 
-  nazwy<-names(tabela)[4:ncol(tabela)] #reszta
+  nazwy<-names(tabela)[3:ncol(tabela)] #reszta
   nazwy<-sort(nazwy)
   
   kolejnosc <-c(nazwy_x, nazwy)

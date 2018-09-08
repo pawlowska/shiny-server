@@ -1,6 +1,6 @@
 library(data.table)
 library(RCurl)
-#library(jsonlite)
+library(timeDate)
 
 source('hasloA.R', encoding = 'UTF-8')
 
@@ -68,7 +68,6 @@ wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela<-fread(plik, header = TRUE, encoding = "UTF-8", drop=1) #1st column is just row numers, drop it
   tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
   tabela[,startTyg := as.Date(startTyg, tz="Europe/Berlin", format="%Y-%m-%d")]
-  tabela[,startM := as.Date(startM, tz="Europe/Berlin", format="%Y-%m-%d")]
   tabela
 }
 
@@ -78,13 +77,13 @@ numery_dat<-function(tabela) {
   library(lubridate)
   #uses lubridate; correction to make the week start Monday
   tabela[,startTyg:=floor_date(Data-days(1), "week")+days(1)]
-  tabela[,startM:=floor_date(Data, "month")]
-  setcolorder(tabela, c("Data", "startTyg", "startM", nazwy[order(nazwy)]))
+  #tabela[,startM:=floor_date(Data, "month")]
+  setcolorder(tabela, c("Data", "startTyg", nazwy[order(nazwy)]))
   
   tabela
 }
 
-wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg","startM", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Rodzaj_opadu")) {
+wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Wolne","Rodzaj_opadu")) {
   tabela<-melt(dane, 
                id.vars = nazwy_zmiennych, 
                variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
@@ -104,6 +103,14 @@ podsumuj.lata <- function(tabela_long) {
   podsumowanie
 }
 
+#podsumowanie po miesiącu danych w formacie long
+podsumuj.miesiace <- function(tabela_long) {
+  podsumowanie <- tabela_long[,sum(Liczba_rowerow), by=.(Miejsce, cut.POSIXt(as.POSIXct(Data), breaks="month"))]
+  setnames(podsumowanie, c("cut.POSIXt","V1"), c("Data", "Liczba_rowerow"))
+  podsumowanie[,Data:=as.Date(as.character(Data))]
+  podsumowanie
+}
+
 #PZ
 podsumuj.procentowo <- function(tabela_long) { 
   podsumowanie <- tabela_long[,100*Liczba_rowerow/sum(tabela_long$Liczba_rowerow[tabela_long$Data == Data]), by=.(Miejsce,Data)]
@@ -117,6 +124,28 @@ weekend<-function(data) {
   ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
 }
 
+swieto<-function(data) {
+  rok<-year(data)
+  swieta<-c(as.Date(c(
+    NewYearsDay(rok),
+    Epiphany(rok),
+    EasterSunday(rok),
+    EasterMonday(rok),
+    LaborDay(rok),
+    Pentecost(rok),
+    CorpusChristi(rok),
+    AssumptionOfMary(rok),
+    AllSaints(rok),
+    ChristmasDay(rok),
+    BoxingDay(rok)
+  )),as.Date(paste(rok,"-05-03", sep="")),as.Date(paste(rok,"-11-11", sep="")))
+  ifelse (as.Date(data) %in% swieta, "swieto", "nieswieto")
+}
+
+wolne<-function(data) {
+  (weekend(data)=="weekend")|(swieto(data)=="swieto")
+}
+
 rodzaj_opadu<-function(d,s) {
   ifelse (d>0,'d','s')
 }
@@ -125,8 +154,9 @@ dodaj_pogode<-function(tabela,
                        plik_pogoda="pliki/IMGW_pogoda_20171231.csv") {
   pogoda<-fread(plik_pogoda, header = TRUE, encoding = "UTF-8")
   pogoda[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
-  pogoda[,Jaki_dzien:=weekend(Data)]
   pogoda[,Rodzaj_opadu:=rodzaj_opadu(deszcz, snieg)]
   dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
+  dane[,Jaki_dzien:=weekend(Data)]
+  dane[,Wolne:=wolne(Data)]
   dane
 }

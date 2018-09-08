@@ -35,34 +35,31 @@ better_ticks<-function(zakres_dat, krok=1) {
   breaks
 }
 
-lista_weekendow<-function(dane) {
-  przedzial<-seq(min(dane[,Data]), max(dane[,Data]), by="days")
-  daty<-przedzial[weekend(przedzial)=="weekend"]
-
-  krok = time_length(interval(daty[1], daty[2]), unit = "day")
-  if (is.na(krok)) {
-    soboty=as.Date(character())
-    niedziele=as.Date(character())
-  }
-  else {
-    if (krok!=1) daty<-daty[2:length(daty)]
-    soboty<-daty[weekdays(daty) %in% c("sobota","Saturday", "Sat")]
-    niedziele<-daty[weekdays(daty) %in% c("niedziela","Sunday", "Sun")]
-    soboty<-soboty[1:length(niedziele)]
-  }
-  l<-data.table(soboty=soboty, niedziele=niedziele)
-  l
-}
+# lista_weekendow<-function(dane) {
+#   przedzial<-seq(min(dane[,Data]), max(dane[,Data]), by="days")
+#   daty<-przedzial[weekend(przedzial)=="weekend"]
+# 
+#   krok = time_length(interval(daty[1], daty[2]), unit = "day")
+#   if (is.na(krok)) {
+#     soboty=as.Date(character())
+#     niedziele=as.Date(character())
+#   }
+#   else {
+#     if (krok!=1) daty<-daty[2:length(daty)]
+#     soboty<-daty[weekdays(daty) %in% c("sobota","Saturday", "Sat")]
+#     niedziele<-daty[weekdays(daty) %in% c("niedziela","Sunday", "Sun")]
+#     soboty<-soboty[1:length(niedziele)]
+#   }
+#   l<-data.table(soboty=soboty, niedziele=niedziele)
+#   l
+# }
 
 lista_wolnych<-function(dane) {
-  daty<-dane[,Data]
-  soboty<-daty[weekdays(daty) %in% c("sobota","Saturday", "Sat")]
-  niedziele<-daty[weekdays(daty) %in% c("niedziela","Sunday", "Sun")]
-  dni<-c(soboty, niedziele)
-  wolne<-data.table(Data=dni)
-  wolne[,Start_wolnego:=Data-12*60*60+1]
-  wolne[,Stop_wolnego:=Data+12*60*60]
-  wolne
+  dni<-dane[Wolne==TRUE]$Data
+  tab_wolne<-data.table(Data=dni)
+  tab_wolne[,Start_wolnego:=Data-12*60*60+1]
+  tab_wolne[,Stop_wolnego:=Data+12*60*60]
+  tab_wolne
 }
 
 dodaj_wolne<-function(g, wolne) {
