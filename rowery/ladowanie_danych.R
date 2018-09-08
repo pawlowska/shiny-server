@@ -115,6 +115,9 @@ podsumuj.miesiace <- function(tabela_long) {
 podsumuj.procentowo <- function(tabela_long) { 
   podsumowanie <- tabela_long[,100*Liczba_rowerow/sum(tabela_long$Liczba_rowerow[tabela_long$Data == Data]), by=.(Miejsce,Data)]
   setnames(podsumowanie, c("Data","V1"), c("Data", "Liczba_rowerow"))
+  if("Wolne" %in% colnames(tabela_long)) {
+    podsumowanie<-merge(podsumowanie, unique(tabela_long[,c("Data", "Wolne")]), by="Data")
+  }
   podsumowanie
 }
 #PZ koniec
