@@ -21,7 +21,6 @@ lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 lokacje<-data.table(lokacje)
 
-
 #reading colors etc
 listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
 koloryLicznikow<-listy_stylow$kolory

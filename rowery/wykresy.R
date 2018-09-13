@@ -35,25 +35,6 @@ better_ticks<-function(zakres_dat, krok=1) {
   breaks
 }
 
-# lista_weekendow<-function(dane) {
-#   przedzial<-seq(min(dane[,Data]), max(dane[,Data]), by="days")
-#   daty<-przedzial[weekend(przedzial)=="weekend"]
-# 
-#   krok = time_length(interval(daty[1], daty[2]), unit = "day")
-#   if (is.na(krok)) {
-#     soboty=as.Date(character())
-#     niedziele=as.Date(character())
-#   }
-#   else {
-#     if (krok!=1) daty<-daty[2:length(daty)]
-#     soboty<-daty[weekdays(daty) %in% c("sobota","Saturday", "Sat")]
-#     niedziele<-daty[weekdays(daty) %in% c("niedziela","Sunday", "Sun")]
-#     soboty<-soboty[1:length(niedziele)]
-#   }
-#   l<-data.table(soboty=soboty, niedziele=niedziele)
-#   l
-# }
-
 lista_wolnych<-function(dane) {
   dni<-dane[Wolne==TRUE]$Data
   tab_wolne<-data.table(Data=dni)
@@ -72,67 +53,9 @@ dodaj_wolne<-function(g, wolne) {
   g
 }
 
-#wykres kilku kolumn
-# wykres_kilka_stary<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='bezwzględne') {
-# #dane w formacie long do łatwiejszego wyboru grup
-#   start=min(c(start,dane[,Data]))
-#   
-#   #x data range and ticks  
-#   zakres_dat=interval(start, stop)
-#   breaks<-better_ticks(zakres_dat, krok)
-# 
-#   #set theme    
-#   theme_set(theme_light(base_size = rozmiar_czcionki))
-#   
-#   #start plot
-#   g<-ggplot(dane)
-#   
-#   if (wartosc=='bezwzględne') {
-#     g<-g+geom_line(aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7)
-#     if(krok>30) {g<-g+geom_point(aes(Data, Liczba_rowerow, colour=Miejsce))}
-#   }
-#   else
-#     g<-g+geom_area(aes(Data, Liczba_rowerow,  fill=Miejsce, linetype=Miejsce, alpha=Miejsce))
-#   
-#   #show weekends only for the daily plot
-#   if(krok==1) { 
-#     lista<-lista_weekendow(dane)
-#     if(nrow(lista)>0) {
-#       g<-g+geom_rect(data=lista, 
-#                      aes(xmin=soboty, xmax=niedziele, ymin=-Inf, ymax=+Inf), 
-#                      fill='gray', alpha=0.2) +
-#         theme( # remove the vertical grid lines
-#           panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
-#     }
-#   } 
-#   
-#   #oś x
-#   g<-g+scale_x_date(date_breaks = breaks, labels=labelsy(krok),limits=c(min(start),max(stop)),
-#                     expand=c(0,0)) #numer X ticks
-#   #oś y
-#   g<-g+scale_y_continuous(breaks = pretty_breaks(7), labels=comma_format())
-#   
-#   g<-g+theme(axis.text.x = element_text(angle = 45, hjust = 1),
-#     legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
-#   
-#   #colours and line types
-#   g<-g+scale_linetype_manual(values=linie)+
-#        scale_colour_manual(values=paleta)+
-#        scale_fill_manual(values=paleta)+
-#        scale_alpha_manual(values = alfy)
-#     
-#   #axis labels
-#   g<-g+xlab("Data")+ylab("")
-# 
-#   g<-g+guides(col = guide_legend(byrow = TRUE))
-#   #g<-g+guides(col = guide_legend(ncol=4))
-#   
-#   g
-# }
 
 #wykres kilku kolumn
 wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='bezwzględne') {
-  
   dane[,Data:=as.POSIXct(paste(Data,"00:00:00"))]
   
   start_osi_x=min(c(as.POSIXct(start),dane[,Data]))
@@ -146,6 +69,7 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   #start plot
   g<-ggplot(dane)
   
+  #line or area plot
   if (wartosc=='bezwzględne') {
     g<-g+geom_line(aes(Data, Liczba_rowerow, colour=Miejsce, linetype=Miejsce),size=0.7)
     if(krok>30) {g<-g+geom_point(aes(Data, Liczba_rowerow, colour=Miejsce))}
@@ -205,10 +129,11 @@ pogoda_basic<-function(dane, paleta) {
   method_fit<-ifelse(length(unique(dane[,Data]))<100, "lm", "loess")
   
   gg<-ggplot(dane, 
-             aes(temp_avg, Liczba_rowerow, colour = Miejsce, shape = Jaki_dzien, size=(deszcz+snieg))) +
+             #aes(temp_avg, Liczba_rowerow, colour = Miejsce, shape = Jaki_dzien, size=(deszcz+snieg))) +
+             aes(temp_avg, Liczba_rowerow, colour = Miejsce, shape = Wolne, size=(deszcz+snieg))) +
     geom_point(alpha=0.8) +
     scale_size(range = c(1.5, 8)) +
-    scale_shape_manual(values=c(16,1)) + #full and empty circles
+    scale_shape_manual(values=c(16,1), labels=c("roboczy", "wolny")) + #full and empty circles
     scale_x_continuous(breaks=pretty_breaks(8), expand=c(0, 1)) +
     scale_y_continuous(breaks=pretty_breaks(8), limits = c(-20, NA)) +
     geom_smooth(size=0.7, alpha=0.2, span = 0.5, method=method_fit) +   # Add a loess smoothed fit curve with confidence region
