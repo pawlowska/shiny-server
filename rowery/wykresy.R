@@ -37,7 +37,7 @@ better_ticks<-function(zakres_dat, krok=1) {
 
 lista_wolnych<-function(dane) {
   dni<-dane[Wolne==TRUE]$Data
-  tab_wolne<-data.table(Data=dni)
+  tab_wolne<-unique(data.table(Data=dni)) #utwórz nową data.table z jedną kolumną
   tab_wolne[,Start_wolnego:=Data-12*60*60+1]
   tab_wolne[,Stop_wolnego:=Data+12*60*60]
   tab_wolne
@@ -46,7 +46,7 @@ lista_wolnych<-function(dane) {
 dodaj_wolne<-function(g, wolne) {
   if(nrow(wolne)>0) {
     g<-g+geom_rect(data=wolne, aes(xmin=Start_wolnego, xmax=Stop_wolnego, ymin=-Inf, ymax=+Inf), 
-                   fill='gray65', alpha=1/5) +
+                   fill='gray65', alpha=0.2) +
       theme( # remove the vertical grid lines
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
   }
