@@ -46,7 +46,7 @@ lista_wolnych<-function(dane) {
 dodaj_wolne<-function(g, wolne) {
   if(nrow(wolne)>0) {
     g<-g+geom_rect(data=wolne, aes(xmin=Start_wolnego, xmax=Stop_wolnego, ymin=-Inf, ymax=+Inf), 
-                   fill='gray', alpha=0.2) +
+                   fill='gray65', alpha=1/5) +
       theme( # remove the vertical grid lines
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
   }

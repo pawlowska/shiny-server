@@ -47,7 +47,6 @@ wykresyPogody=c('temperatury', 'daty')
 #godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
 cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
 
-
 ui <- fluidPage(
   tags$head(tags$script(src="rozmiar.js"),
             tags$script(src="iframe_css.js")),
