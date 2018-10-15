@@ -25,21 +25,6 @@ p_wiatr_godz = "B200B00400" #"Prędkość wiatru-pomiar godzinowy-synop-obserwat
 #B600K002FG JEST
 #B200B00400
 
-lista_poniedzialkow<-function(od=as.POSIXct("2014-07-28"), do=as.POSIXct("2017-03-30")) {
-  library(lubridate)
-  iledni = time_length(interval(od, do), unit="week")
-  daty<-od+c(0:iledni)*days(7)
-  daty_txt<-as.character(daty)
-  daty_txt
-}
-
-lista_dni<-function(od=as.POSIXct("2014-07-28"), do=as.POSIXct("2017-06-30")) {
-  library(lubridate)
-  iledni = time_length(interval(od, do), unit="day")
-  daty<-od+c(0:iledni)*days(1)
-  daty_txt<-as.character(daty)
-  daty_txt
-}
 
 zrob_link<-function(parametr, data, stacja=warszawaOkecie, baza=bazaO, zakres='/tydzien/') {
   paste("https://dane.imgw.pl/1.0/pomiary/", baza, stacja, '-', parametr, zakres, data, '?format=csv', sep="")

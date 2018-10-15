@@ -1,4 +1,3 @@
-#library(RColorBrewer)
 library(ggplot2)
 library(scales) #for nicer y axis
 library(grid)
@@ -29,8 +28,8 @@ better_ticks<-function(zakres_dat, krok=1) {
   if ((iledni<28)&&(krok==1)) {breaks="1 day"}
   else if ((iledni<100)&&(krok<=7)) {breaks = "1 week"}
   else if ((iledni<210)&&(krok<=7)) {breaks = "2 weeks"}
-  else if (iledni<450) {breaks = "1 month"}
   else if (krok>50) {breaks="1 year"}
+  else if (iledni<450) {breaks = "1 month"}
   else {breaks = "2 months"}
   breaks
 }
@@ -60,9 +59,6 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   
   start_osi_x=min(c(as.POSIXct(start),dane[,Data]))
   
-  #x ticks  
-  breaks<-better_ticks(interval(start, stop), krok)
-  
   #set theme    
   theme_set(theme_light(base_size = rozmiar_czcionki))
   
@@ -79,18 +75,20 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   
   #show weekends only for the daily plot
   if(krok==1) { 
-    wolne<-lista_wolnych(dane)
-    g<-dodaj_wolne(g, wolne)
+    g<-dodaj_wolne(g, lista_wolnych(dane))
   } 
   
   #oś x
-  g<-g+scale_x_datetime(date_breaks = breaks, labels=labelsy(krok), limits=c(start_osi_x, as.POSIXct(stop)),
-                    expand=c(0,0)) #numer X ticks
+  g<-g+scale_x_datetime(date_breaks = better_ticks(interval(start, stop), krok), 
+                        labels=labelsy(krok), 
+                        limits=c(start_osi_x, as.POSIXct(stop)),
+                        expand=c(0,0)) #numer X ticks
   #oś y
   g<-g+scale_y_continuous(breaks = pretty_breaks(7), labels=comma_format())
   
   g<-g+theme(axis.text.x = element_text(angle = 45, hjust = 1),
-             legend.position="bottom", legend.margin=margin(0, -2, 0, 1, "cm"))
+             legend.position="bottom", 
+             legend.margin=margin(0, -2, 0, 1, "cm"))
   
   #colours and line types
   g<-g+scale_linetype_manual(values=linie)+
