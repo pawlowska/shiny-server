@@ -16,14 +16,16 @@ source('text.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
+katalog="pliki"
 
 #reading locations
-lokacje <- read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8')
+lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=",", encoding='UTF-8')
 sapply(lokacje,"class")
 lokacje<-data.table(lokacje)
 
 #reading colors etc
-listy_stylow<-data.table(read.csv(file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', colClasses = "character"))
+listy_stylow<-data.table(read.csv(file = paste(katalog, "listy_stylow.csv", sep="/"), 
+                                  fileEncoding = 'UTF-8', colClasses = "character"))
 koloryLicznikow<-listy_stylow$kolory
 names(koloryLicznikow)<-listy_stylow$nazwy
 linieLicznikow<-listy_stylow$linie
@@ -32,11 +34,11 @@ alfyLicznikow<-listy_stylow$alfy
 names(alfyLicznikow)<-listy_stylow$nazwy
 
 #reading data
-dane_long<-wczytaj_dane("pliki/dane_long.csv")
+dane_long<-wczytaj_dane(paste(katalog, "dane_long.csv", sep="/"))
 nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data]) 
-plik_pogoda="pliki/IMGW_pogoda_20180930.csv"
+plik_pogoda=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
 temp<-fread(plik_pogoda)
 zakresDoPogoda=as.character(max(temp[,Data]))
 
