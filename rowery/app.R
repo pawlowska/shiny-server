@@ -13,6 +13,7 @@ source('wykresy.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
+source('downloadDataModule.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
@@ -85,7 +86,8 @@ ui <- fluidPage(
                                          separator = 'do', weekstart = 0, language = "pl"),
                           actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"),
                           #allDatesInput("caly", label="∞"),
-                          downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
+                          #downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
+                          downloadDataInput("eksport"),
                           bsTooltip(id = "caly", title = "Pokaż cały zakres dat", placement = "left", trigger = "hover")
                           )
                    ),
@@ -343,22 +345,20 @@ server <- function(input, output, session) {
   klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, koloryLicznikow)
   
   observe({
-    #print(klik())
-    #updatePickerInput(session, inputId = "liczniki", selected = input$mapa_leaflet_marker_click$id)
     updatePickerInput(session, inputId = "liczniki", selected = klik())
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
   })
   
-  #long to wide, encoding
-  output$eksport <- downloadHandler(
-   filename = function() { 
-     paste("dane_z_licznikow_", Sys.Date(), ".csv", sep="")
-   },
-   content = function(file) {
-     dane_do_zapisu<-dcast(data(), Data ~Miejsce, value.var="Liczba_rowerow")
-     write.csv(dane_do_zapisu, file, fileEncoding = "UTF-8")
-  })
-
+  # output$eksport <- downloadHandler(
+  #  filename = function() { 
+  #    paste("dane_z_licznikow_", Sys.Date(), ".csv", sep="")
+  #  },
+  #  content = function(file) {
+  #    dane_do_zapisu<-dcast(data(), Data ~Miejsce, value.var="Liczba_rowerow")
+  #    write.csv(dane_do_zapisu, file, fileEncoding = "UTF-8")
+  # })
+  callModule(downloadData, 'eksport', data=data)
+  
 }
 
 shinyApp(ui = ui, server = server)
