@@ -45,7 +45,7 @@ zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda, lokacje) {
   nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
 }
 
-wczytaj_z_api<-function(klucz=klucz, od="2018-02-01", do=Sys.Date()) {
+wczytaj_z_api<-function(klucz=klucz, od="2018-01-01", do=Sys.Date()) {
   link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do)
   txt<- getURL(link, userpwd = credentials)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))

@@ -4,7 +4,6 @@ library(Cairo) #for nice looks of the graph
 options(shiny.usecairo=T)
 
 library(lubridate)
-library(leaflet) #for maps
 library(shinyWidgets)
 library(shinyBS)
 
@@ -13,14 +12,14 @@ source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
+source('mapaModule.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
 katalog="pliki"
 
 #reading locations
-lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=",", encoding='UTF-8')
-sapply(lokacje,"class")
+lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=".", encoding='UTF-8')
 lokacje<-data.table(lokacje)
 
 #reading colors etc
@@ -85,6 +84,7 @@ ui <- fluidPage(
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl"),
                           actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"),
+                          #allDatesInput("caly", label="∞"),
                           downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
                           bsTooltip(id = "caly", title = "Pokaż cały zakres dat", placement = "left", trigger = "hover")
                           )
@@ -131,12 +131,7 @@ ui <- fluidPage(
                  )
         ),
         tabPanel("Mapa", value='mapa',
-                 tags$p(), 
-                 div(id = "mapPlotDiv", 
-                     style = "position:relative",
-                     alt = "mapa liczników",
-                     leafletOutput("mymap", height=500)
-                 )
+                 mapaOutput(id='mapa_licznikow')
         ),
         tabPanel("O aplikacji", value="o_aplikacji",
                  #title= ifelse(top_window, "O aplikacji", "O licznikach"),
@@ -183,15 +178,6 @@ server <- function(input, output, session) {
     }
   )
   
-  indeksy_mapa <-reactive({
-    indeksy_rob = c()
-    for(indeks in indeksy()){
-      if (is.na(lokacje$lat[indeks])){indeksy_rob = c(indeksy_rob, indeks+1, indeks+2)}
-      else {indeksy_rob = c(indeksy_rob,indeks)}
-    }
-    indeksy_rob}
-  )
-  
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     init_selected<-isolate(nazwy[indeksy()])
@@ -213,12 +199,15 @@ server <- function(input, output, session) {
     }
   })
   
+  #callModule(allDates, "caly", reactive(data), reactive(input$zakres),
+  #           as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)),
+  #           as.character(max(dane_long[Miejsce %in% input$liczniki]$Data)))
   observeEvent(input$caly, { #caly zakres dat
-    if (!is.null(data())) {
-      updateDateRangeInput(session, 'zakres', 
-                         start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
-                         end=(as.character(max(dane_long[Miejsce %in% input$liczniki]$Data))))
-    }
+     if (!is.null(data())) {
+       updateDateRangeInput(session, 'zakres', 
+                          start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
+                          end=(as.character(max(dane_long[Miejsce %in% input$liczniki]$Data))))
+     }
   })
   
   
@@ -231,7 +220,7 @@ server <- function(input, output, session) {
   })
   
   #aktualizacja danych
-  dane_long<-dodaj_nowe_dane(stare=dane_long, p="pliki/nowe_long.csv", 
+  dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")), 
                              plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo)
   
   #aktualizacja daty
@@ -351,21 +340,12 @@ server <- function(input, output, session) {
       )
   })
   
-  output$mymap <- renderLeaflet({
-    shiny::validate(need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
-    kolory<-unname(koloryLicznikow[lokacje[indeksy_mapa(),]$Miejsce])
-    
-    
-    leaflet(lokacje[indeksy_mapa(),], options = leafletOptions(maxZoom = 18)) %>% 
-    addTiles() %>% 
-    addCircleMarkers(lng = ~lon, lat = ~lat, label = ~Miejsce, 
-                    radius = 10, color = kolory, opacity=1, weight = 8,
-                    layerId=~Miejsce)
-    })
+  klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, koloryLicznikow)
   
-  # Obserwacja kliknięć na mapie i przejście do wykresu
-  observeEvent(input$mymap_marker_click,{
-    updatePickerInput(session, inputId = "liczniki", selected = input$mymap_marker_click$id)
+  observe({
+    #print(klik())
+    #updatePickerInput(session, inputId = "liczniki", selected = input$mapa_leaflet_marker_click$id)
+    updatePickerInput(session, inputId = "liczniki", selected = klik())
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
   })
   
