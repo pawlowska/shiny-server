@@ -163,3 +163,19 @@ dodaj_pogode<-function(tabela,
   dane[,Wolne:=wolne(Data)]
   dane
 }
+
+wczytaj_style<-function(katalog) {
+  #reading colors etc
+  listy_stylow<-data.table(read.csv(file = paste(katalog, "listy_stylow.csv", sep="/"), 
+                                    fileEncoding = 'UTF-8', colClasses = "character"))
+  koloryLicznikow<-listy_stylow$kolory
+  names(koloryLicznikow)<-listy_stylow$nazwy
+  linieLicznikow<-listy_stylow$linie
+  names(linieLicznikow)<-listy_stylow$nazwy
+  alfyLicznikow<-listy_stylow$alfy
+  names(alfyLicznikow)<-listy_stylow$nazwy
+  fonty<-listy_stylow$fonty
+  names(fonty)<-listy_stylow$nazwy
+  style<-list(kolory=koloryLicznikow, linie=linieLicznikow, alfy=alfyLicznikow, fonty=fonty)
+  style
+}
