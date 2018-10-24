@@ -13,6 +13,7 @@ source('wykresy.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
+source('bikeCountPlotModule.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
@@ -23,14 +24,7 @@ lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=".", 
 lokacje<-data.table(lokacje)
 
 #reading colors etc
-listy_stylow<-data.table(read.csv(file = paste(katalog, "listy_stylow.csv", sep="/"), 
-                                  fileEncoding = 'UTF-8', colClasses = "character"))
-koloryLicznikow<-listy_stylow$kolory
-names(koloryLicznikow)<-listy_stylow$nazwy
-linieLicznikow<-listy_stylow$linie
-names(linieLicznikow)<-listy_stylow$nazwy
-alfyLicznikow<-listy_stylow$alfy
-names(alfyLicznikow)<-listy_stylow$nazwy
+style<-wczytaj_style(katalog)
 
 #reading data
 dane_long<-wczytaj_dane(paste(katalog, "dane_long.csv", sep="/"))
@@ -41,9 +35,11 @@ plik_pogoda=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
 temp<-fread(plik_pogoda)
 zakresDoPogoda=as.character(max(temp[,Data]))
 
-okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
+#okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
 wartosci = c('bezwzględne', 'procentowe') #PZ
 wykresyPogody=c('temperatury', 'daty')
+
+okresy=list('dobowo'=1, 'tygodniowo'=7, 'miesięcznie'=31, 'rocznie'=366)
 
 #dane godzinowe chwilowo nieużywane
 #godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
@@ -64,7 +60,7 @@ ui <- fluidPage(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
         tags$style(type="text/css", 
-                   css_list(what="#liczniki div.checkbox:nth-child(",listy_stylow, x))
+                   css_list(what="#liczniki div.checkbox:nth-child(",style, x))
       }),
       uiOutput('wyborLicznikow'),
       style= "padding: 10px 10px 0px 15px;" #top right bottom left; grey bckgrnd around selections
@@ -91,17 +87,18 @@ ui <- fluidPage(
                    ),
                    column(6,
                     splitLayout(
-                      selectInput('okres', 'Podsumuj', okresy, selected = okresy[1]),
+                      selectInput('okres', 'Podsumuj', names(okresy), selected = names(okresy)[1]),
                       selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
                     )
                    )
                  ), style= "padding: 10px 10px 0px 15px;"), #end wellPanel
-                 div(id = "plotDiv", #wykres
-                     style = "position:relative",
-                     alt = "Ile rowerów jeździ w Warszawie",
-                   plotOutput('plotLiczba', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
-                   uiOutput("bike_date_tooltip")
-                 )
+                 # div(id = "plotDiv", #wykres
+                 #     style = "position:relative",
+                 #     alt = "Ile rowerów jeździ w Warszawie",
+                 #   plotOutput('plotLiczba', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
+                 #   uiOutput("bike_date_tooltip")
+                 # )
+                 bikeCountPlotOutput('plotLiczba')
         ),
         tabPanel("Pogoda", value="pogoda",
                  #wybor zakresu i grupowania daty
@@ -237,9 +234,9 @@ server <- function(input, output, session) {
   data <- reactive({
     zakres_dat=interval(input$zakres[1], input$zakres[2])
     #pick daily, weekly or monthly data
-    if (input$okres==okresy[2])       {wybor<-dane_tyg}
-    else if (input$okres==okresy[3])  {wybor<-dane_m}
-    else if (input$okres==okresy[4])  {
+    if (input$okres==names(okresy)[2])       {wybor<-dane_tyg}
+    else if (input$okres==names(okresy)[3])  {wybor<-dane_m}
+    else if (input$okres==names(okresy)[4])  {
       zakres_dat=interval(as.Date("2014-01-01"), input$zakres[2])
       wybor<-dane_y
       }
@@ -253,11 +250,12 @@ server <- function(input, output, session) {
   })
   
   krok<-reactive({
-    if (input$okres==okresy[2])       {k<-7}
-    else if (input$okres==okresy[3])  {k<-31}
-    else if (input$okres==okresy[4])  {k<-366}
-    else {k<-1}
-    k  
+    okresy[[input$okres]]
+    # if (input$okres==okresy[2])       {k<-7}
+    # else if (input$okres==okresy[3])  {k<-31}
+    # else if (input$okres==okresy[4])  {k<-366}
+    # else {k<-1}
+    # k  
   })
   
   data_with_weather <- reactive({
@@ -270,20 +268,8 @@ server <- function(input, output, session) {
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
 
-  output$plotLiczba <- renderPlot({
-    shiny::validate(
-      need((input$zakres[1]>=zakresOd)&(input$zakres[2]>=zakresOd), 
-           paste("Data spoza zakresu - dostępne dane od", zakresOd)),
-      need((input$zakres[1]<=zakresDo)&(input$zakres[2]<=zakresDo), 
-           paste("Data spoza zakresu - dostępne dane do", zakresDo)),
-      need(input$zakres[1]<input$zakres[2], "Błędny zakres dat"), 
-      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
-    )
-    wykres_kilka(data(), 
-                 start=input$zakres[1], stop=input$zakres[2], 
-                 paleta=koloryLicznikow, linie = linieLicznikow, alfy=alfyLicznikow,
-                 krok=krok(), wartosc = input$wartosc)
-  })
+  callModule(bikeCountPlot, 'plotLiczba', zakres=reactive({input$zakres}), zakresOd, zakresDo, 
+             liczniki=reactive({input$liczniki}), style, data=data, krok, wartosc=reactive({input$wartosc}))
   
   output$plotPogoda <- renderPlot({
     shiny::validate(
@@ -295,11 +281,11 @@ server <- function(input, output, session) {
       need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
     )
     if(input$rodzajPogody==wykresyPogody[1]) {
-      pogoda_basic(data_with_weather(), paleta=koloryLicznikow)
+      pogoda_basic(data_with_weather(), paleta=style$kolory)
     } else {
       wykres_pogoda_liczba(data_with_weather(),
                            start=input$zakresPogoda[1], stop=input$zakresPogoda[2], 
-                           paleta=koloryLicznikow, linie = linieLicznikow)
+                           paleta=style$kolory, linie = style$linie)
     }
   })
 
@@ -340,7 +326,7 @@ server <- function(input, output, session) {
       )
   })
   
-  klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, koloryLicznikow)
+  klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, style$kolory)
   
   observe({
     #print(klik())
