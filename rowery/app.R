@@ -92,12 +92,6 @@ ui <- fluidPage(
                     )
                    )
                  ), style= "padding: 10px 10px 0px 15px;"), #end wellPanel
-                 # div(id = "plotDiv", #wykres
-                 #     style = "position:relative",
-                 #     alt = "Ile rowerów jeździ w Warszawie",
-                 #   plotOutput('plotLiczba', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
-                 #   uiOutput("bike_date_tooltip")
-                 # )
                  bikeCountPlotOutput('plotLiczba')
         ),
         tabPanel("Pogoda", value="pogoda",
@@ -222,9 +216,7 @@ server <- function(input, output, session) {
   
   #aktualizacja daty
   zakresDo<-as.character(Sys.Date()-1)
-  cat(file=stderr(), "aktualizuje date w UI", "\n")
   updateDateRangeInput(session, 'zakres', end=as.character(zakresDo), max=as.character(zakresDo))
-  
   
   #podsumuj
   dane_tyg<-podsumuj.okresy(dane_long, "startTyg")
@@ -249,18 +241,10 @@ server <- function(input, output, session) {
       podsumuj.procentowo(wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki])
   })
   
-  krok<-reactive({
-    okresy[[input$okres]]
-    # if (input$okres==okresy[2])       {k<-7}
-    # else if (input$okres==okresy[3])  {k<-31}
-    # else if (input$okres==okresy[4])  {k<-366}
-    # else {k<-1}
-    # k  
-  })
+  krok<-reactive({okresy[[input$okres]]})
   
   data_with_weather <- reactive({
     zakres_dat=interval(input$zakresPogoda[1], input$zakresPogoda[2])
-    
     dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
   })
   
@@ -295,20 +279,6 @@ server <- function(input, output, session) {
   #  wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   #})
   
-  output$bike_date_tooltip <- renderUI({
-    #based on: http://stackoverflow.com/questions/38992270/r-shiny-tooltip-in-ggplot
-    
-    hover <- input$plot_hover
-    #is mouse close to a point?
-    point <- nearPoints(data(), hover, threshold = 8, maxpoints = 1)[ ,c("Data", "Liczba_rowerow")]
-    if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
-
-    #else add to UI
-    wellPanel(
-      style = tooltip_html(tooltip_position(hover)),
-      p(HTML(paste0( point$Data,": ", round(point$Liczba_rowerow, digits=1))))
-    )
-  })
   
   output$bike_weather_tooltip <- renderUI(
     if (input$rodzajPogody==wykresyPogody[2]) {return(NULL)}
@@ -317,20 +287,19 @@ server <- function(input, output, session) {
       #is mouse close to a point?
       point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg","deszcz","snieg", "Liczba_rowerow")]
       if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
-      
-      #else add to UI
-      opad=point$deszcz+point$snieg
-      wellPanel(
-        style = tooltip_html(tooltip_position(hover, w=180)),
-        p(HTML(paste0( point$Data,": ",point$temp_avg, '&degC, ',opad,' mm, ', point$Liczba_rowerow)))
-      )
-  })
+      else { #else add to UI
+        string<-paste0(point$Data,": ",
+                       point$temp_avg, '&degC, ',
+                       point$deszcz+point$snieg,' mm, ', 
+                       point$Liczba_rowerow)
+        tooltipWellPanel(hover, string)
+      }
+    }
+  )
   
   klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, style$kolory)
   
   observe({
-    #print(klik())
-    #updatePickerInput(session, inputId = "liczniki", selected = input$mapa_leaflet_marker_click$id)
     updatePickerInput(session, inputId = "liczniki", selected = klik())
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
   })

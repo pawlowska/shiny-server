@@ -18,3 +18,10 @@ tooltip_html<-function(pos_px) {
          background-color: rgba(245, 245, 245, 0.85); ",
          "left:", left_px + 2, "px; top:", top_px + 2, "px;")
 }
+
+tooltipWellPanel<-function(hover, string) {
+  wellPanel(
+    style = tooltip_html(tooltip_position(hover)),
+    p(HTML(string))
+  )
+}
