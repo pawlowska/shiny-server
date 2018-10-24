@@ -38,12 +38,6 @@ mapa <- function(input, output, session, indeksy, lokacje, koloryLicznikow) {
                        layerId=~Miejsce)
   })
   
-  # Obserwacja kliknięć na mapie i przejście do wykresu
-  #observeEvent(input$mapa_leaflet_marker_click,{
-    #updatePickerInput(session, inputId = "liczniki", selected = input$mapa_leaflet_marker_click$id)
-    #updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
-  #})
-
  clickedId<-eventReactive(input$mapa_leaflet_marker_click,{
     input$mapa_leaflet_marker_click$id
   })
@@ -51,5 +45,3 @@ mapa <- function(input, output, session, indeksy, lokacje, koloryLicznikow) {
   return(clickedId)
   
 }
-
-#klikanie nie działa
