@@ -14,6 +14,7 @@ source('tooltip.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
 source('bikeCountPlotModule.R', encoding = 'UTF-8')
+source('weatherPlotModule.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
@@ -97,10 +98,6 @@ ui <- fluidPage(
         tabPanel("Pogoda", value="pogoda",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
-                       column(4, #dobowo/tygodniowo/miesiecznie
-                              radioButtons('rodzajPogody', 'Zależność od', wykresyPogody, selected = wykresyPogody[2], 
-                                           inline = TRUE, width = NULL)        
-                       ),
                        column(6, #daty
                               splitLayout(cellWidths = c("90%", "10%"),
                                           cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
@@ -110,16 +107,12 @@ ui <- fluidPage(
                                              separator = 'do', weekstart = 0, language = "pl"),
                               actionButton(inputId = "calyPogoda", "∞", style = "margin-bottom: 15px;"),
                               bsTooltip(id = "calyPogoda", title = "Pokaż cały zakres dat", 
-                                        placement = "left", trigger = "hover"))
+                                        placement = "left", trigger = "hover")
+                              )
                        )
                     ), style= "padding: 5px 0px 0px 15px;"
                  ), #end wellPanel
-                 div(id = "weatherPlotDiv", 
-                     style = "position:relative",
-                     alt = "Ile rowerów w zależności od pogody",
-                     plotOutput('plotPogoda', height=500, hover = hoverOpts(id = "plot_hover", delay = 100)),
-                     uiOutput("bike_weather_tooltip")
-                 )
+                 weatherPlotOutput('plotPogoda')
         ),
         tabPanel("Mapa", value='mapa',
                  mapaOutput(id='mapa_licznikow')
@@ -231,8 +224,7 @@ server <- function(input, output, session) {
     else if (input$okres==names(okresy)[4])  {
       zakres_dat=interval(as.Date("2014-01-01"), input$zakres[2])
       wybor<-dane_y
-      }
-    else {wybor<-dane_long}
+    } else {wybor<-dane_long}
 
     #PZ
     if(input$wartosc == wartosci[1])
@@ -241,61 +233,28 @@ server <- function(input, output, session) {
       podsumuj.procentowo(wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki])
   })
   
-  krok<-reactive({okresy[[input$okres]]})
-  
   data_with_weather <- reactive({
     zakres_dat=interval(input$zakresPogoda[1], input$zakresPogoda[2])
     dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
   })
+
+  callModule(bikeCountPlot, 'plotLiczba', 
+             zakres=reactive({input$zakres}), zakresOd, zakresDo, 
+             liczniki=reactive({input$liczniki}), style, data=data, 
+             krok=reactive({okresy[[input$okres]]}), wartosc=reactive({input$wartosc}))
   
+  callModule(weatherPlot, 'plotPogoda', zakresPogoda=reactive({input$zakresPogoda}), zakresOd, zakresDoPogoda,
+             liczniki=reactive({input$liczniki}), style, data=data_with_weather)
+
   #data_hourly <- reactive({
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
-
-  callModule(bikeCountPlot, 'plotLiczba', zakres=reactive({input$zakres}), zakresOd, zakresDo, 
-             liczniki=reactive({input$liczniki}), style, data=data, krok, wartosc=reactive({input$wartosc}))
   
-  output$plotPogoda <- renderPlot({
-    shiny::validate(
-      need((input$zakresPogoda[1]>=zakresOd)&(input$zakresPogoda[2]>=zakresOd), 
-           paste("Data spoza zakresu - dostępne dane od", zakresOd)),
-      need((input$zakresPogoda[1]<=zakresDoPogoda)&(input$zakresPogoda[2]<=zakresDoPogoda), 
-           paste("Data spoza zakresu - dostępne dane do", zakresDo)),
-      need(input$zakresPogoda[1]<input$zakresPogoda[2], "Błędny zakres dat"), 
-      need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!')
-    )
-    if(input$rodzajPogody==wykresyPogody[1]) {
-      pogoda_basic(data_with_weather(), paleta=style$kolory)
-    } else {
-      wykres_pogoda_liczba(data_with_weather(),
-                           start=input$zakresPogoda[1], stop=input$zakresPogoda[2], 
-                           paleta=style$kolory, linie = style$linie)
-    }
-  })
-
   #output$plotHours <- renderPlot({
   #  shiny::validate(
   #    need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
   #  wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   #})
-  
-  
-  output$bike_weather_tooltip <- renderUI(
-    if (input$rodzajPogody==wykresyPogody[2]) {return(NULL)}
-    else {
-      hover <- input$plot_hover
-      #is mouse close to a point?
-      point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg","deszcz","snieg", "Liczba_rowerow")]
-      if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
-      else { #else add to UI
-        string<-paste0(point$Data,": ",
-                       point$temp_avg, '&degC, ',
-                       point$deszcz+point$snieg,' mm, ', 
-                       point$Liczba_rowerow)
-        tooltipWellPanel(hover, string)
-      }
-    }
-  )
   
   klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, style$kolory)
   
