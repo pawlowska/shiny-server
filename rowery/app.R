@@ -19,6 +19,7 @@ source('weatherPlotModule.R', encoding = 'UTF-8')
 Sys.setlocale("LC_ALL", "Polish")
 
 katalog="pliki"
+tytul='Liczniki rowerów w Warszawie'
 
 #reading locations
 lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=".", encoding='UTF-8')
@@ -36,7 +37,6 @@ plik_pogoda=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
 temp<-fread(plik_pogoda)
 zakresDoPogoda=as.character(max(temp[,Data]))
 
-#okresy = c('dobowo', 'tygodniowo', 'miesięcznie','rocznie')
 wartosci = c('bezwzględne', 'procentowe') #PZ
 wykresyPogody=c('temperatury', 'daty')
 
@@ -56,7 +56,7 @@ ui <- fluidPage(
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
   
-  headerPanel('Liczniki rowerów w Warszawie'),
+  headerPanel(tytul),
   sidebarLayout(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
@@ -193,7 +193,6 @@ server <- function(input, output, session) {
                           end=(as.character(max(dane_long[Miejsce %in% input$liczniki]$Data))))
      }
   })
-  
   
   observeEvent(input$calyPogoda, { #caly zakres dat pogoda
     if (!is.null(data())) {
