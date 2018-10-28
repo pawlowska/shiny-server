@@ -13,7 +13,7 @@ bikeCountPlotOutput <- function(id, label = "wykresLiczby") {
     div(id = "plotDiv", #wykres
         style = "position:relative",
         alt = "Ile rowerów jeździ w Warszawie",
-        plotOutput(ns('plotLiczba'), height=500, hover = hoverOpts(id = ns("plot_hover"), delay = 100)),
+        plotOutput(ns('plotLiczba'), height=500, hover = hoverOpts(id = ns("plot_hover"), delay = 75)),
         uiOutput(ns("bike_date_tooltip"))
     )
   )

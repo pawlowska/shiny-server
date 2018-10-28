@@ -10,11 +10,11 @@ library(shinyBS)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('wykresy.R', encoding = 'UTF-8')
-source('tooltip.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
 source('bikeCountPlotModule.R', encoding = 'UTF-8')
 source('weatherPlotModule.R', encoding = 'UTF-8')
+source('dateWithButtonModule.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
@@ -77,11 +77,10 @@ ui <- fluidPage(
                           #splitLayout(cellWidths = c("90%","10%"),
                                       cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
                           dateRangeInput('zakres', 'Wybierz zakres dat', 
-                                         start=as.character(Sys.Date()-100), end=as.character(Sys.Date()-1), 
+                                         start=Sys.Date()-100, end=Sys.Date()-1, 
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl"),
                           actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"),
-                          #allDatesInput("caly", label="∞"),
                           downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
                           bsTooltip(id = "caly", title = "Pokaż cały zakres dat", placement = "left", trigger = "hover")
                           )
@@ -96,21 +95,8 @@ ui <- fluidPage(
                  bikeCountPlotOutput('plotLiczba')
         ),
         tabPanel("Pogoda", value="pogoda",
-                 #wybor zakresu i grupowania daty
-                 wellPanel(fluidRow(
-                       column(6, #daty
-                              splitLayout(cellWidths = c("90%", "10%"),
-                                          cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
-                              dateRangeInput('zakresPogoda', 'Wybierz zakres dat',
-                                             start=as.character(as.Date(zakresDoPogoda)-120), end=zakresDoPogoda,
-                                             min=zakresOd, max=zakresDoPogoda,
-                                             separator = 'do', weekstart = 0, language = "pl"),
-                              actionButton(inputId = "calyPogoda", "∞", style = "margin-bottom: 15px;"),
-                              bsTooltip(id = "calyPogoda", title = "Pokaż cały zakres dat", 
-                                        placement = "left", trigger = "hover")
-                              )
-                       )
-                    ), style= "padding: 5px 0px 0px 15px;"
+                 wellPanel(dateWithButtonInput('zakresP'),
+                           style= "padding: 5px 0px 0px 15px;"
                  ), #end wellPanel
                  weatherPlotOutput('plotPogoda')
         ),
@@ -183,24 +169,16 @@ server <- function(input, output, session) {
     }
   })
   
-  #callModule(allDates, "caly", reactive(data), reactive(input$zakres),
-  #           as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)),
-  #           as.character(max(dane_long[Miejsce %in% input$liczniki]$Data)))
   observeEvent(input$caly, { #caly zakres dat
      if (!is.null(data())) {
        updateDateRangeInput(session, 'zakres', 
-                          start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
-                          end=(as.character(max(dane_long[Miejsce %in% input$liczniki]$Data))))
+                          start=min(dane_long[Miejsce %in% input$liczniki]$Data), 
+                          end=  max(dane_long[Miejsce %in% input$liczniki]$Data))
      }
   })
   
-  observeEvent(input$calyPogoda, { #caly zakres dat pogoda
-    if (!is.null(data())) {
-      updateDateRangeInput(session, 'zakresPogoda', 
-                           start=as.character(min(dane_long[Miejsce %in% input$liczniki]$Data)), 
-                           end=(zakresDoPogoda))
-    }
-  })
+  zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long, 
+                           liczniki=reactive(input$liczniki), zakresOd=zakresOd, zakresDo=zakresDoPogoda)
   
   #aktualizacja danych
   dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")), 
@@ -208,7 +186,6 @@ server <- function(input, output, session) {
   
   #aktualizacja daty
   zakresDo<-as.character(Sys.Date()-1)
-  updateDateRangeInput(session, 'zakres', end=as.character(zakresDo), max=as.character(zakresDo))
   
   #podsumuj
   dane_tyg<-podsumuj.okresy(dane_long, "startTyg")
@@ -232,19 +209,14 @@ server <- function(input, output, session) {
       podsumuj.procentowo(wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki])
   })
   
-  data_with_weather <- reactive({
-    zakres_dat=interval(input$zakresPogoda[1], input$zakresPogoda[2])
-    dane_long[Data %within% zakres_dat & Miejsce %in% input$liczniki]
-  })
-
   callModule(bikeCountPlot, 'plotLiczba', 
              zakres=reactive({input$zakres}), zakresOd, zakresDo, 
              liczniki=reactive({input$liczniki}), style, data=data, 
              krok=reactive({okresy[[input$okres]]}), wartosc=reactive({input$wartosc}))
   
-  callModule(weatherPlot, 'plotPogoda', zakresPogoda=reactive({input$zakresPogoda}), zakresOd, zakresDoPogoda,
-             liczniki=reactive({input$liczniki}), style, data=data_with_weather)
-
+  callModule(weatherPlot, 'plotPogoda', dane=dane_long, zakresPogoda, zakresOd, zakresDoPogoda,
+             liczniki=reactive({input$liczniki}), style)
+  
   #data_hourly <- reactive({
   #  godzinowe[Miejsce %in% input$liczniki]
   #})

@@ -45,24 +45,23 @@ zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda, lokacje) {
   nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
 }
 
-wczytaj_z_api<-function(klucz=klucz, od="2018-01-01", do=Sys.Date()) {
-  link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do)
+wczytaj_z_api<-function(klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="Warszawa") {
+  link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
   txt<- getURL(link, userpwd = credentials)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
-  #print(tabela)
   setnames(tabela, c("id", "Data", "Liczba_rowerow"))
   tabela[,Data:=as.Date(Data)]
   tabela<-merge(tabela, klucz, by="id")
-  tabela_wide<-dcast(tabela, Data ~Miejsce, value.var="Liczba_rowerow")
+  tabela_wide<-long_to_wide(tabela)
   tabela_wide
 }
 
-wczytaj_dane_godzinowe<-function(plik) {
-  library(data.table)
-  tabela <- fread(plik, encoding = "UTF-8", header = TRUE)
-  tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
-  tabela
-}
+# wczytaj_dane_godzinowe<-function(plik) {
+#   library(data.table)
+#   tabela <- fread(plik, encoding = "UTF-8", header = TRUE)
+#   tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
+#   tabela
+# }
 
 wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela<-fread(plik, header = TRUE, encoding = "UTF-8", drop=1) #1st column is just row numers, drop it
@@ -82,6 +81,12 @@ numery_dat<-function(tabela) {
   
   tabela
 }
+
+long_to_wide<-function(dane, nazwa_zmiennej="Liczba_rowerow") {
+  tabela_wide<-dcast(dane, Data ~Miejsce, value.var=nazwa_zmiennej)
+  tabela_wide
+}
+
 
 wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Wolne","Rodzaj_opadu")) {
   tabela<-melt(dane, 

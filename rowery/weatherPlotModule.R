@@ -2,7 +2,7 @@ library(ggplot2)
 
 source('wykresy.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
-source('validators.R')
+source('validators.R', encoding = 'UTF-8')
 
 
 # Module UI function
@@ -16,51 +16,49 @@ source('validators.R')
         div(id = "plotDiv", #wykres
             style = "position:relative",
             alt = "Ile rowerów w zależności od pogody",
-            plotOutput(ns('plotPogodaTemperatura'), height=500, hover = hoverOpts(id = ns("plot_hover"), delay = 100)),
+            plotOutput(ns('plotPogodaTemperatura'), height=500, hover = hoverOpts(id = ns("plot_hover"), delay = 75)),
             uiOutput(ns("bike_weather_tooltip"))
         )
       ),
       tabPanel("Data", value = "Data",
-        #div(id = "plotDiv", #wykres
-        #    style = "position:relative",
-        #    alt = "Ile rowerów w zależności od pogody",
             plotOutput(ns('plotPogodaData'), height=500)
-        #)
       )
     )
-    
   )
 }
 
 # Module server function
-weatherPlot <- function(input, output, session, zakresPogoda, zakresOd, zakresDoPogoda, liczniki, style, data_with_weather) {
+weatherPlot <- function(input, output, session, dane, zakresPogoda, zakresOd, zakresDoPogoda, liczniki, style) {
+  
+  data_with_weather <- reactive({
+    req(zakresPogoda())
+    validateLiczniki(liczniki())
+    validateZakres(zakresPogoda(), zakresOd, zakresDoPogoda)
+    
+    zakres_dat=interval(zakresPogoda()[1], zakresPogoda()[2])
+    dane[Data %within% zakres_dat & Miejsce %in% liczniki()]
+  })
   
   output$plotPogodaTemperatura <- renderPlot({
-    validateZakres(zakresPogoda(), zakresOd, zakresDoPogoda)
-    validateLiczniki(liczniki())
     pogoda_basic(data_with_weather(), paleta=style$kolory)
   })
 
   output$plotPogodaData<- renderPlot({
-    validateZakres(zakresPogoda(), zakresOd, zakresDoPogoda)
-    validateLiczniki(liczniki())
-    
     wykres_pogoda_liczba(data_with_weather(),
                          start=zakresPogoda()[1], stop=zakresPogoda()[2], 
                          paleta=style$kolory, linie = style$linie)
   })
       
   output$bike_weather_tooltip <- renderUI({
-    hover <- input$plot_hover
     #is mouse close to a point?
-    point <- nearPoints(data_with_weather(), hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg","deszcz","snieg", "Liczba_rowerow")]
+    point <- nearPoints(data_with_weather(), input$plot_hover, threshold = 8, maxpoints = 1)[ ,c("Data","temp_avg","deszcz","snieg", "Liczba_rowerow")]
     if (nrow(point) == 0) return(NULL) #jesli nie ma punktu w poblizu
-    else { #else add to UI
+    else {#else add to UI
       string<-paste0(point$Data,": ",
                      point$temp_avg, '&degC, ',
                      point$deszcz+point$snieg,' mm, ', 
                      point$Liczba_rowerow)
-      tooltipWellPanel(hover, string)
+      tooltipWellPanel(input$plot_hover, string)
     }
   })
 }
