@@ -20,7 +20,7 @@ mapa <- function(input, output, session, indeksy, lokacje, koloryLicznikow) {
   indeksy_mapa <-reactive({
     indeksy_rob = c()
     for(indeks in indeksy()){
-      if (is.na(lokacje$lat[indeks])){indeksy_rob = c(indeksy_rob, indeks+1, indeks+2)}
+      if (is.na(lokacje$latitude[indeks])){indeksy_rob = c(indeksy_rob, indeks+1, indeks+2)}
       else {indeksy_rob = c(indeksy_rob,indeks)}
     }
     indeksy_rob}
@@ -33,7 +33,7 @@ mapa <- function(input, output, session, indeksy, lokacje, koloryLicznikow) {
     
     leaflet(lokacje[indeksy_mapa(),], options = leafletOptions(maxZoom = 18)) %>% 
       addTiles() %>% 
-      addCircleMarkers(lng = ~lon, lat = ~lat, label = ~Miejsce, 
+      addCircleMarkers(lng = ~longitude, lat = ~latitude, label = ~Miejsce, 
                        radius = 10, color = kolory, opacity=1, weight = 8,
                        layerId=~Miejsce)
   })

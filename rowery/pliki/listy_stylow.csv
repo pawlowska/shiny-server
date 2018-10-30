@@ -1,39 +1,44 @@
-"nazwy","kolory","linie","fonty","alfy"
-"al. Solidarności/Dworzec Wileński","#da526e","solid","bold","1"
-"al. Stanów Zjednoczonych - suma","#de3245","solid","bold","1"
-"al. Stanów Zjednoczonych N","#de3245","dashed","normal","0.7"
-"al. Stanów Zjednoczonych S","#de3245","dotdash","normal","0.4"
-"Aleje Jerozolimskie - suma","#a23c35","solid","bold","1"
-"Aleje Jerozolimskie/pl. Zawiszy N","#a23c35","dashed","normal","0.7"
-"Aleje Jerozolimskie/pl. Zawiszy S","#a23c35","dotdash","normal","0.4"
-"Banacha/Żwirki i Wigury","#d76952","solid","bold","1"
-"Bazyliańska/Wysockiego","#e73c1e","solid","bold","1"
-"Belwederska","#d05e21","solid","bold","1"
-"Czerniakowska - suma","#d28851","solid","bold","1"
-"Czerniakowska E","#d28851","dashed","normal","0.7"
-"Czerniakowska W","#d28851","dotdash","normal","0.4"
-"Jagiellońska","#cd8727","solid","bold","1"
-"Marsa","#dfbb24","solid","bold","1"
-"Marszałkowska/Metro Świętokrzyska","#ccb253","solid","bold","1"
-"NSR Most Gdański - suma","#7b7120","solid","bold","1"
-"NSR Most Gdański CPR","#7b7120","dashed","normal","0.7"
-"NSR Most Gdański DDR","#7b7120","dotdash","normal","0.4"
-"NSR Solec - suma","#aece39","solid","bold","1"
-"NSR Solec CPR","#aece39","dashed","normal","0.7"
-"NSR Solec DDR","#aece39","dotdash","normal","0.4"
-"Praska ścieżka rekreacyjna","#95af3b","solid","bold","1"
-"Przyczółkowa/al. Wilanowska","#97bb69","solid","bold","1"
-"Szaserów - suma","#4c8f2b","solid","bold","1"
-"Szaserów N","#4c8f2b","dashed","normal","0.7"
-"Szaserów S","#4c8f2b","dotdash","normal","0.4"
-"Świętokrzyska/Emilii Plater - suma","#5cce3e","solid","bold","1"
-"Świętokrzyska/Emilii Plater N","#5cce3e","dashed","normal","0.7"
-"Świętokrzyska/Emilii Plater S","#5cce3e","dotdash","normal","0.4"
-"Targowa/Dworzec Wileński","#89d372","solid","bold","1"
-"Wiertnicza","#3e9358","solid","bold","1"
-"Wybrzeże Helskie/Starzyńskiego","#4bcf7b","solid","bold","1"
-"Wysockiego","#4fd2b7","solid","bold","1"
-"Żwirki i Wigury/1 Sierpnia","#617cd0","solid","bold","1"
-"Żwirki i Wigury/Trojdena - suma","#7357d6","solid","bold","1"
-"Żwirki i Wigury/Trojdena E","#7357d6","dashed","normal","0.7"
-"Żwirki i Wigury/Trojdena W","#7357d6","dotdash","normal","0.4"
+"Miejsce","kolor","linia","font","alfa"
+"al. Solidarności/Dworzec Wileński","#dd466e","solid","bold",1
+"al. Stanów Zjednoczonych - suma","#d38b85","solid","bold",1
+"al. Stanów Zjednoczonych N","#d38b85","dashed","normal",0.7
+"al. Stanów Zjednoczonych S","#d38b85","dotdash","normal",0.4
+"Aleje Jerozolimskie/pl. Zawiszy - suma","#e25233","solid","bold",1
+"Aleje Jerozolimskie/pl. Zawiszy N","#e25233","dashed","normal",0.7
+"Aleje Jerozolimskie/pl. Zawiszy S","#e25233","dotdash","normal",0.4
+"Banacha/Żwirki i Wigury","#a2432c","solid","bold",1
+"Bazyliańska/Wysockiego","#693525","solid","bold",1
+"Belwederska","#c48738","solid","bold",1
+"Bystra","#dcc435","solid","bold",1
+"Czerniakowska - suma","#c2b47b","solid","bold",1
+"Czerniakowska E","#c2b47b","dashed","normal",0.7
+"Czerniakowska W","#c2b47b","dotdash","normal",0.4
+"Jagiellońska","#b3be56","solid","bold",1
+"Marsa","#4b5827","solid","bold",1
+"Marszałkowska/Metro Świętokrzyska","#a4da3f","solid","bold",1
+"NSR Most Gdański - suma","#5a9239","solid","bold",1
+"NSR Most Gdański CPR","#5a9239","dashed","normal",0.7
+"NSR Most Gdański DDR","#5a9239","dotdash","normal",0.4
+"NSR Solec - suma","#5ad54e","solid","bold",1
+"NSR Solec CPR","#5ad54e","dashed","normal",0.7
+"NSR Solec DDR","#5ad54e","dotdash","normal",0.4
+"Okopowa/rondo Radosława","#64d88f","solid","bold",1
+"Praska ścieżka rekreacyjna","#84cea9","solid","bold",1
+"Przyczółkowa/al. Wilanowska","#43866b","solid","bold",1
+"Radzymińska/Jórskiego","#67ccda","solid","bold",1
+"Szaserów - suma","#5a9dcd","solid","bold",1
+"Szaserów N","#5a9dcd","dashed","normal",0.7
+"Szaserów S","#5a9dcd","dotdash","normal",0.4
+"Świętokrzyska/Emilii Plater - suma","#535c8a","solid","bold",1
+"Świętokrzyska/Emilii Plater N","#535c8a","dashed","normal",0.7
+"Świętokrzyska/Emilii Plater S","#535c8a","dotdash","normal",0.4
+"Świętokrzyska/Zielna (display)","#747ad6","solid","bold",1
+"Targowa/Dworzec Wileński","#614ccf","solid","bold",1
+"Towarowa/Łucka","#b9a7d6","solid","bold",1
+"Wiertnicza","#3e257c","solid","bold",1
+"Wybrzeże Helskie/Starzyńskiego","#8f32d0","solid","bold",1
+"Wysockiego","#3e1e42","solid","bold",1
+"Żwirki i Wigury/1 Sierpnia","#cb55d8","solid","bold",1
+"Żwirki i Wigury/Trojdena - suma","#853d89","solid","bold",1
+"Żwirki i Wigury/Trojdena E","#853d89","dashed","normal",0.7
+"Żwirki i Wigury/Trojdena W","#853d89","dotdash","normal",0.4

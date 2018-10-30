@@ -21,7 +21,7 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, 
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
     #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(ostatnia_data, plik_pogoda, lokacje)
+    nowe_long<-zaladuj_nowe_z_api(credentials, ostatnia_data, plik_pogoda, lokacje)
     cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long[,Data])), "\n")
     
     #polacz
@@ -37,16 +37,19 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, 
   dane_long
 }
 
-zaladuj_nowe_z_api<-function(ostatnia_data, plik_pogoda, lokacje) {
+zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje) {
   klucz <- lokacje[,c("id", "Miejsce")]
   
-  nowe_dane<-wczytaj_z_api(klucz=klucz, od=ostatnia_data)
+  nowe_dane<-wczytaj_z_api(credentials, klucz=klucz, od=ostatnia_data)
   nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
   nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
 }
 
-wczytaj_z_api<-function(klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="Warszawa") {
-  link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
+#credentials as parameter!!!
+
+wczytaj_z_api<-function(credentials, klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="Warszawa") {
+  #link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
+  link <- paste('http://greenelephant.pl/rowery/api/v1/index_city.php?start=',od,'&end=',do,'&city=',miasto)
   txt<- getURL(link, userpwd = credentials)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
   setnames(tabela, c("id", "Data", "Liczba_rowerow"))
@@ -54,6 +57,16 @@ wczytaj_z_api<-function(klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="War
   tabela<-merge(tabela, klucz, by="id")
   tabela_wide<-long_to_wide(tabela)
   tabela_wide
+}
+
+wczytaj_metadane_z_api<-function(credentials, miasto="Warszawa") {
+  link<-'http://greenelephant.pl/rowery/api/v1/metadata.php'
+  txt<- getURL(link, userpwd = credentials)
+  tabela<-data.table(read.csv(text=txt, sep=','))
+  setnames(tabela, 'counterid', 'id')
+  setnames(tabela, 'name', 'Miejsce')
+  tabela[,Miejsce:=as.character(Miejsce)]
+  tabela
 }
 
 # wczytaj_dane_godzinowe<-function(plik) {
@@ -173,14 +186,14 @@ wczytaj_style<-function(katalog) {
   #reading colors etc
   listy_stylow<-data.table(read.csv(file = paste(katalog, "listy_stylow.csv", sep="/"), 
                                     fileEncoding = 'UTF-8', colClasses = "character"))
-  koloryLicznikow<-listy_stylow$kolory
-  names(koloryLicznikow)<-listy_stylow$nazwy
-  linieLicznikow<-listy_stylow$linie
-  names(linieLicznikow)<-listy_stylow$nazwy
-  alfyLicznikow<-listy_stylow$alfy
-  names(alfyLicznikow)<-listy_stylow$nazwy
-  fonty<-listy_stylow$fonty
-  names(fonty)<-listy_stylow$nazwy
+  koloryLicznikow<-listy_stylow$kolor
+  names(koloryLicznikow)<-listy_stylow$Miejsce
+  linieLicznikow<-listy_stylow$linia
+  names(linieLicznikow)<-listy_stylow$Miejsce
+  alfyLicznikow<-listy_stylow$alfa
+  names(alfyLicznikow)<-listy_stylow$Miejsce
+  fonty<-listy_stylow$font
+  names(fonty)<-listy_stylow$Miejsce
   style<-list(kolory=koloryLicznikow, linie=linieLicznikow, alfy=alfyLicznikow, fonty=fonty)
   style
 }

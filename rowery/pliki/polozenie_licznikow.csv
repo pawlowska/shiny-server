@@ -1,39 +1,44 @@
-Miejsce,id,lat,lon
-al. Solidarności/Dworzec Wileński,100017988,"52.2553","21.035776"
-al. Stanów Zjednoczonych - suma,,
-al. Stanów Zjednoczonych N,100027263,"52.23064","21.069704"
-al. Stanów Zjednoczonych S,100027264,"52.23031","21.070719"
-Aleje Jerozolimskie - suma,,
-Aleje Jerozolimskie/pl. Zawiszy N,100038470,"52.2240947751839","20.985454407389184"
-Aleje Jerozolimskie/pl. Zawiszy S,100038471,"52.22419747287937","20.98675498739875"
-Banacha/Żwirki i Wigury,100017990,"52.21058","20.986546"
-Bazyliańska/Wysockiego,100018251,52.29122,21.01915
-Belwederska,100026727,"52.21154","21.026775"
-Czerniakowska - suma,,
-Czerniakowska W,100042112, 52.195617638417296 , 21.05303676808645 
-Czerniakowska E,100042111, 52.19601030874304 , 21.05353331970575 
-Jagiellońska,100045488 , 52.286863 , 21.00711 
-Marsa,100038472, 52.250798536678815 ,  21.147392299143817 
-Marszałkowska/Metro Świętokrzyska,100023491, 52.2359231849 , 21.0077606974 
-"NSR Most Gdański - suma",,
-NSR Most Gdański CPR,100015254, 52.260525 , 21.007986 
-NSR Most Gdański DDR,100015251, 52.260445 , 21.007914 
-NSR Solec - suma,,
-NSR Solec CPR,100015253, 52.231167 , 21.042242 
-NSR Solec DDR,100015250, 52.230988 , 21.041431 
-Praska ścieżka rekreacyjna,100015252, 52.24011 , 21.03948 
-Przyczółkowa/al. Wilanowska,100046911,  52.16534 ,  21.08400 
-Szaserów - suma,,
-Szaserów N,100046627, 52.25027 ,  21.088249 
-Szaserów S,100046628, 52.250097 ,  21.087545 
-Świętokrzyska/Emilii Plater - suma,,
-"Świętokrzyska/Emilii Plater N",100023490, 52.2338912228 , 21.0018517909 
-"Świętokrzyska/Emilii Plater S",100023489, 52.233852 , 21.00201 
-Targowa/Dworzec Wileński,100017989, 52.254055 , 21.035517 
-Wiertnicza,100046912, 52.17824 ,  21.07309  
-Wybrzeże Helskie/Starzyńskiego,100034734, 52.2620480441 , 21.0149154882 
-Wysockiego,100018250, 52.290447 , 21.019197 
-Żwirki i Wigury/1 Sierpnia,100044505,"52.19090745770377","20.981937576721183"
-Żwirki i Wigury/Trojdena - suma,,
-"Żwirki i Wigury/Trojdena E",100030132,"52.205463","20.986628"
-"Żwirki i Wigury/Trojdena W",100030131,"52.205696","20.985958"
+"id","Miejsce","latitude","longitude","has_pair"
+100017988,"al. Solidarności/Dworzec Wileński",52.2553,21.0358,FALSE
+NA,"al. Stanów Zjednoczonych - suma",NA,NA,FALSE
+100027263,"al. Stanów Zjednoczonych N",52.2306,21.0697,TRUE
+100027264,"al. Stanów Zjednoczonych S",52.2303,21.0707,TRUE
+NA,"Aleje Jerozolimskie/pl. Zawiszy - suma",NA,NA,FALSE
+100038470,"Aleje Jerozolimskie/pl. Zawiszy N",52.2241,20.9855,TRUE
+100038471,"Aleje Jerozolimskie/pl. Zawiszy S",52.2242,20.9868,TRUE
+100017990,"Banacha/Żwirki i Wigury",52.2106,20.9865,FALSE
+100018251,"Bazyliańska/Wysockiego",52.2912,21.0191,FALSE
+100026727,"Belwederska",52.2115,21.0268,FALSE
+100046182,"Bystra",52.2942,21.0819,FALSE
+NA,"Czerniakowska - suma",NA,NA,FALSE
+100042111,"Czerniakowska E",52.196,21.0535,TRUE
+100042112,"Czerniakowska W",52.1956,21.053,TRUE
+100045488,"Jagiellońska",52.2869,21.0071,FALSE
+100038472,"Marsa",52.2508,21.1474,FALSE
+100023491,"Marszałkowska/Metro Świętokrzyska",52.2359,21.0078,FALSE
+NA,"NSR Most Gdański - suma",NA,NA,FALSE
+100015254,"NSR Most Gdański CPR",52.2605,21.008,TRUE
+100015251,"NSR Most Gdański DDR",52.2604,21.0079,TRUE
+NA,"NSR Solec - suma",NA,NA,FALSE
+100015253,"NSR Solec CPR",52.2312,21.0422,TRUE
+100015250,"NSR Solec DDR",52.231,21.0414,TRUE
+100046732,"Okopowa/rondo Radosława",52.254,20.9819,FALSE
+100015252,"Praska ścieżka rekreacyjna",52.2401,21.0395,FALSE
+100046911,"Przyczółkowa/al. Wilanowska",52.1653,21.084,FALSE
+100046183,"Radzymińska/Jórskiego",52.2771,21.0669,FALSE
+NA,"Szaserów - suma",NA,NA,FALSE
+100046627,"Szaserów N",52.2503,21.0882,TRUE
+100046628,"Szaserów S",52.2501,21.0875,TRUE
+NA,"Świętokrzyska/Emilii Plater - suma",NA,NA,FALSE
+100023490,"Świętokrzyska/Emilii Plater N",52.2339,21.0019,TRUE
+100023489,"Świętokrzyska/Emilii Plater S",52.2339,21.002,TRUE
+100047575,"Świętokrzyska/Zielna (display)",52.2348,21.0061,FALSE
+100017989,"Targowa/Dworzec Wileński",52.2541,21.0355,FALSE
+100044510,"Towarowa/Łucka",52.2323,20.9832,FALSE
+100046912,"Wiertnicza",52.1782,21.0731,FALSE
+100034734,"Wybrzeże Helskie/Starzyńskiego",52.262,21.0149,FALSE
+100018250,"Wysockiego",52.2904,21.0192,FALSE
+100044505,"Żwirki i Wigury/1 Sierpnia",52.1909,20.9819,FALSE
+NA,"Żwirki i Wigury/Trojdena - suma",NA,NA,FALSE
+100030132,"Żwirki i Wigury/Trojdena E",52.2055,20.9866,TRUE
+100030131,"Żwirki i Wigury/Trojdena W",52.2057,20.986,TRUE

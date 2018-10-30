@@ -1,9 +1,21 @@
 library(data.table)
 source('palety_kolorow.R')
 
+zrob_sumy<-function(metadane) {
+  find.string <- paste(c('N$', 'S$', 'E$', 'W$', 'CPR$', 'DDR$'), collapse = "|")
+  metadane[,has_pair:=!is.na(pair_id)]
+  do_sumowania<-metadane[has_pair==T,]
+  substrings<-unique(gsub(find.string, replacement = "", x = do_sumowania$Miejsce))
+  sumy<-sapply(substrings, function(x) paste(x, '- suma', sep=""), USE.NAMES = F)
+  tabela<-metadane[,c('id', 'Miejsce', 'latitude', 'longitude', 'has_pair')]
+  tabela_sumy<-data.table(Miejsce = sumy, has_pair=F)
+  tabela<-rbind(tabela, tabela_sumy, fill=T)
+  tabela<-tabela[base::order(Miejsce)]
+  tabela
+}
 
 czytaj_nazwy<-function(plik="pliki/polozenie_licznikow.csv") {
-  lokacje <- data.table(read.csv("pliki/polozenie_licznikow.csv",dec=",", encoding='UTF-8'))
+  lokacje <- data.table(read.csv("pliki/polozenie_licznikow.csv", encoding='UTF-8'))
   miejsca<-lokacje[,Miejsce]
 }
 
@@ -17,9 +29,9 @@ znajdz_prefix<-function(s) {
   substring(s, 0, regexpr(" - suma", s)-1)
 }
 
-sumy_zwykle<-znajdz_podwojne()
-podwojne_prefix<-znajdz_prefix(sumy_zwykle)
-podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), czytaj_nazwy(), value = TRUE)
+#sumy_zwykle<-znajdz_podwojne()
+#podwojne_prefix<-znajdz_prefix(sumy_zwykle)
+#podwojne_i_sumy<-grep(paste(podwojne_prefix,collapse="|"), czytaj_nazwy(), value = TRUE)
 
 
 # podw_in_out<-enc2utf8(rbind(podwojne,
@@ -69,33 +81,46 @@ suma_licznikow<-function(tabela, podw=podwojne_prefix) {
 # }
 
 
-a1=1
 a2=0.7
 a3=0.4
 
-zrob_listy_stylow<-function(nazwy, podw_sumy=podwojne_i_sumy, sumy=sumy_zwykle, paleta=paleta20_sorted) {
-  nazwy_bez_podw<-sort(c(nazwy[!(nazwy %in% podw_sumy)], sumy))
-  ile_unikatow<-length(nazwy_bez_podw)
+zrob_listy_stylow<-function(lokacje, paleta=paleta30) {
+  unikaty<-lokacje[has_pair==F]$Miejsce
+  pary<-lokacje[has_pair==T]$Miejsce
+  ile_unikatow<-length(unikaty)
   
-  kolory_bez_podw<-paleta
-  kolory<-kolory_bez_podw[1:ile_unikatow]
-  linie<-c(rep("solid", ile_unikatow))
-  fonty<-c(rep("bold", ile_unikatow))
-  alfy<-c(rep(a1, ile_unikatow))
+  kolory<-paleta[1:ile_unikatow]
+  alfy<-c(rep(1, ile_unikatow))
   
-  for (s in sumy) {
-    pos<-match(s, nazwy_bez_podw)
-
-    kolory<-append(kolory, rep(kolory[pos], 2), after = pos)
-    linie<-append(linie, c("dashed", "dotdash"), after = pos)
-    alfy<-append(alfy, c(a2,a3), after = pos)
-    
-    fonty<-append(fonty, rep("normal", 2), after = pos)
-    nazwy_bez_podw<-append(nazwy_bez_podw, c('x','x'), after = pos)
-    
+  lista<-data.table(Miejsce=unikaty, kolor=kolory, linia="solid", font="bold", alfa=alfy)
+  reszta_listy<-data.table(Miejsce=pary, font="normal")
+  
+  lista<-rbind(lista, reszta_listy, fill=T)
+  lista<-lista[base::order(Miejsce)]
+  
+  ktory<-1
+  kolor<-lista[1]$kolor
+  linia<-"dashed"
+  alfa<-0.7
+  for (i in 1:nrow(lista)) {
+    if (lista[i, 'font']=='normal') {
+      lista[i, 'kolor']<-kolor
+      lista[i]$linia<-linia
+      lista[i]$alfa<-alfa
+      if(ktory==1) {
+        ktory=2
+        linia<-"dotdash"
+        alfa<-0.4
+      }
+    } else {
+      ktory<-1
+      kolor<-lista[i]$kolor
+      linia<-"dashed"
+      alfa<-0.7
+    }
   }
   
-  cbind(nazwy, kolory, linie, fonty, alfy)
+  lista
 }
 
 css_list<-function(what="#liczniki div.checkbox:nth-child(", style, iterator) {
