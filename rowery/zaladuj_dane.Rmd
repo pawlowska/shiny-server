@@ -30,8 +30,7 @@ write.csv(pogoda, file = plik_pogoda, fileEncoding = 'UTF-8', row.names = F)
 ```
 
 ```{r}
-metadane<-wczytaj_metadane_z_api(credentials)
-lokacje<-zrob_sumy(metadane)
+lokacje<-zrob_sumy(wczytaj_metadane_z_api(credentials))
 write.csv(lokacje, "pliki/polozenie_licznikow.csv", row.names = F, fileEncoding = 'UTF-8')
 ```
 
@@ -52,13 +51,11 @@ write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
 ```{r sumuj dane}
 dane_zsumowane<-suma_licznikow(dane)
 write.csv(dane_zsumowane, file = "dane/dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')
-
 ```
 
 ```{r}
 listy_stylow<-zrob_listy_stylow(lokacje, paleta=paleta30) #w obsluga_sumowania
 write.csv(listy_stylow, file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', row.names = F)
-
 ```
 
 ```{r}
@@ -68,5 +65,4 @@ dane_long<-wide_to_long(dane_zsumowane)
 write.csv(dane_long, file = "pliki/dane_long.csv", fileEncoding = 'UTF-8')
 rm(dane)
 rm(dane_zsumowane)
-
 ```
