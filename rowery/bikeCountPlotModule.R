@@ -22,8 +22,9 @@ bikeCountPlotOutput <- function(id, label = "wykresLiczby") {
 # Module server function
 bikeCountPlot <- function(input, output, session, zakres, zakresOd, zakresDo, liczniki, style, data, krok, wartosc) {
   output$plotLiczba <- renderPlot({
-    validateZakres(zakres(), zakresOd, zakresDo)
+    req(zakres())
     validateLiczniki(liczniki())
+    validateZakres(zakres(), zakresOd, zakresDo)
     
     wykres_kilka(data(), 
                  start=zakres()[1], stop=zakres()[2], 

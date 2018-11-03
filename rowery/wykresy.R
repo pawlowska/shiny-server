@@ -9,7 +9,7 @@ labelsy<-function(krok) {
     if (krok==7) {l=format(x, format="%Y-%U")}
     else if (krok==31) {l=format(x, format="%Y-%m")}
     else if (krok==366) {l=format(x, format="%Y")}
-    else l=x
+    else {l=format(x, format="%Y-%m-%d")}
     l
   }
 }

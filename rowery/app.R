@@ -9,7 +9,6 @@ library(shinyBS)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
-source('wykresy.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
 source('bikeCountPlotModule.R', encoding = 'UTF-8')
@@ -71,29 +70,23 @@ ui <- fluidPage(
     mainPanel(
       tabsetPanel(id = "zakladki",
         tabPanel("Wykres", value = "wykres",
-                 #wybor zakresu i grupowania daty
-                 wellPanel(fluidRow(
-                   column(6,  #daty
-                          splitLayout(cellWidths = c("82%","9%", "9%"),
-                          #splitLayout(cellWidths = c("90%","10%"),
-                                      cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
-                          dateRangeInput('zakres', 'Wybierz zakres dat',
-                                         start=Sys.Date()-100, end=Sys.Date()-1,
-                                         min=zakresOd, max=as.character(Sys.Date()-1),
-                                         separator = 'do', weekstart = 0, language = "pl"),
-                          actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"),
-                          downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" ),
-                          bsTooltip(id = "caly", title = "Pokaż cały zakres dat", placement = "left", trigger = "hover")
-                          )
-                   ),
-                   column(6,
-                    splitLayout(
-                      selectInput('okres', 'Podsumuj', names(okresy), selected = names(okresy)[1]),
-                      selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
+            #wybor zakresu i grupowania daty
+            wellPanel(fluidRow(
+                column(6,  #daty
+                    splitLayout(cellWidths = c("90%","10%"),
+                                cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
+                        dateWithButtonInput('zakresW'),
+                        downloadButton(outputId = "eksport", label="", style = "margin-bottom: 15px;" )
                     )
-                   )
-                 ), style= "padding: 10px 10px 0px 15px;"), #end wellPanel
-                 bikeCountPlotOutput('plotLiczba')
+                ),
+                column(6,
+                    splitLayout(
+                        selectInput('okres', 'Podsumuj', names(okresy), selected = names(okresy)[1]),
+                        selectInput('wartosc', 'Wartości', wartosci, selected = wartosci[1])
+                    )
+                ) #end fluidRow
+                ), style= "padding: 10px 10px 0px 15px;"), #end wellPanel
+                bikeCountPlotOutput('plotLiczba')
         ),
         tabPanel("Pogoda", value="pogoda",
                  wellPanel(dateWithButtonInput('zakresP'),
@@ -170,14 +163,9 @@ server <- function(input, output, session) {
     }
   })
 
-  observeEvent(input$caly, { #caly zakres dat
-     if (!is.null(data())) {
-       updateDateRangeInput(session, 'zakres',
-                          start=min(dane_long[Miejsce %in% input$liczniki]$Data),
-                          end=  max(dane_long[Miejsce %in% input$liczniki]$Data))
-     }
-  })
-
+  zakres<-callModule(dateWithButton, 'zakresW', dane=dane_long,
+                           liczniki=reactive(input$liczniki), zakresOd=zakresOd, zakresDo=zakresDo)
+  
   zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long,
                            liczniki=reactive(input$liczniki), zakresOd=zakresOd, zakresDo=zakresDoPogoda)
 
@@ -194,12 +182,13 @@ server <- function(input, output, session) {
   dane_y<-podsumuj.lata(dane_long)
 
   data <- reactive({
-    zakres_dat=interval(input$zakres[1], input$zakres[2])
+    req(zakres())
+    zakres_dat=interval(zakres()[1], zakres()[2])
     #pick daily, weekly or monthly data
     if (input$okres==names(okresy)[2])       {wybor<-dane_tyg}
     else if (input$okres==names(okresy)[3])  {wybor<-dane_m}
     else if (input$okres==names(okresy)[4])  {
-      zakres_dat=interval(as.Date("2014-01-01"), input$zakres[2])
+      zakres_dat=interval(as.Date("2014-01-01"), zakres()[2])
       wybor<-dane_y
     } else {wybor<-dane_long}
 
@@ -211,7 +200,7 @@ server <- function(input, output, session) {
   })
 
   callModule(bikeCountPlot, 'plotLiczba',
-             zakres=reactive({input$zakres}), zakresOd, zakresDo,
+             zakres=zakres, zakresOd, zakresDo,
              liczniki=reactive({input$liczniki}), style, data=data,
              krok=reactive({okresy[[input$okres]]}), wartosc=reactive({input$wartosc}))
 

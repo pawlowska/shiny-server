@@ -1,7 +1,7 @@
 dateWithButtonInput<-function(id, label="zakres dat") {
   ns <- NS(id)
   tagList(
-    splitLayout(cellWidths =c("70%","30%"),
+    splitLayout(cellWidths =c("85%","15%"),
                 cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
     #fluidRow(
                 uiOutput(ns('zakres')),
