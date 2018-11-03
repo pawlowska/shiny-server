@@ -13,8 +13,8 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```
 
 ```{r}
-miasto="Warszawa" #Krak%C3%B3w
-katalog="pliki"
+miasto="Kraków" #Krak%C3%B3w
+katalog="pliki_Krakowz"
 plik_pogoda=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
