@@ -1,6 +1,6 @@
 #palettes generated using: http://tools.medialab.sciences-po.fr/iwanthue/
 
-paleta18_sorted<-c( #10-350/40-100/35-85
+paleta18<-c( #10-350/40-100/35-85
   "#cf4e5b",
   "#de4a29",
   "#bd673a",

@@ -1,14 +1,14 @@
-"nazwy","kolory","linie","fonty","alfy"
-"Bora-Komorowskiego","#cf4e5b","solid","bold","1"
-"Bulwary","#de4a29","solid","bold","1"
-"Dworzec Główny","#bd673a","solid","bold","1"
-"Klimeckiego","#d19a3e","solid","bold","1"
-"Kopernika","#bdbe37","solid","bold","1"
-"Kotlarska","#647b29","solid","bold","1"
-"Mogilska","#a0c266","solid","bold","1"
-"Monte Cassino","#6cce3d","solid","bold","1"
-"Nowohucka","#52b65a","solid","bold","1"
-"Smoleńsk","#47c39d","solid","bold","1"
-"Tyniecka","#5c82d1","solid","bold","1"
-"Wadowicka","#6061d7","solid","bold","1"
-"Wielicka","#8f46da","solid","bold","1"
+"Miejsce","kolor","linia","font","alfa"
+"Bora-Komorowskiego","#dd466e","solid","bold",1
+"Bulwary","#d38b85","solid","bold",1
+"Dworzec Główny","#e25233","solid","bold",1
+"Klimeckiego","#a2432c","solid","bold",1
+"Kopernika","#693525","solid","bold",1
+"Kotlarska","#c48738","solid","bold",1
+"Mogilska","#dcc435","solid","bold",1
+"Monte Cassino","#c2b47b","solid","bold",1
+"Nowohucka","#b3be56","solid","bold",1
+"Smoleńsk","#4b5827","solid","bold",1
+"Tyniecka","#a4da3f","solid","bold",1
+"Wadowicka","#5a9239","solid","bold",1
+"Wielicka","#5ad54e","solid","bold",1

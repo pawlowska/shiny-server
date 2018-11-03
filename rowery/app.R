@@ -19,6 +19,7 @@ source('dateWithButtonModule.R', encoding = 'UTF-8')
 Sys.setlocale("LC_ALL", "Polish")
 
 katalog="pliki"
+miasto="Warszawa"
 tytul='Liczniki rowerów w Warszawie'
 
 #reading locations
@@ -32,7 +33,7 @@ style<-wczytaj_style(katalog)
 dane_long<-wczytaj_dane(paste(katalog, "dane_long.csv", sep="/"))
 nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
-zakresDo = max(dane_long[,Data]) 
+zakresDo = max(dane_long[,Data])
 plik_pogoda=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
 temp<-fread(plik_pogoda)
 zakresDoPogoda=as.character(max(temp[,Data]))
@@ -55,29 +56,29 @@ ui <- fluidPage(
     tags$style(HTML(".input-sm {height:34px;}")),
     tags$style(HTML("h1 {font-size:28px; margin-top:10px; margin-bottom: 5px;}"))#,
   ),
-  
+
   headerPanel(tytul),
   sidebarLayout(
     sidebarPanel(
       lapply(1:length(nazwy), function(x) {
-        tags$style(type="text/css", 
+        tags$style(type="text/css",
                    css_list(what="#liczniki div.checkbox:nth-child(",style, x))
       }),
       uiOutput('wyborLicznikow'),
       style= "padding: 10px 10px 0px 15px;" #top right bottom left; grey bckgrnd around selections
-      
+
     ),
     mainPanel(
       tabsetPanel(id = "zakladki",
         tabPanel("Wykres", value = "wykres",
                  #wybor zakresu i grupowania daty
                  wellPanel(fluidRow(
-                   column(6,  #daty 
+                   column(6,  #daty
                           splitLayout(cellWidths = c("82%","9%", "9%"),
                           #splitLayout(cellWidths = c("90%","10%"),
                                       cellArgs = list(style = " display: inline-block; vertical-align: bottom;"),
-                          dateRangeInput('zakres', 'Wybierz zakres dat', 
-                                         start=Sys.Date()-100, end=Sys.Date()-1, 
+                          dateRangeInput('zakres', 'Wybierz zakres dat',
+                                         start=Sys.Date()-100, end=Sys.Date()-1,
                                          min=zakresOd, max=as.character(Sys.Date()-1),
                                          separator = 'do', weekstart = 0, language = "pl"),
                           actionButton(inputId = "caly", "∞", style = "margin-bottom: 15px;"),
@@ -127,8 +128,8 @@ server <- function(input, output, session) {
       updateTabsetPanel(session, inputId = "zakladki", selected = query$tab)
     }
   })
-  
-  
+
+
   values<-reactiveValues(first_run=TRUE)
   indeksy<-reactive(
     if(values$first_run) { #first run => sprawdz czy nr licznika podany w url
@@ -147,51 +148,51 @@ server <- function(input, output, session) {
       match(unique(data()$Miejsce), nazwy)
     }
   )
-  
+
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     init_selected<-isolate(nazwy[indeksy()])
-    
+
     if (input$dimension[1]<780) {
-      pickerInput('liczniki', label=NULL,#'Wybierz miejsca', 
-                  nazwy, selected = init_selected, 
-                  options = list(`actions-box` = TRUE, 
+      pickerInput('liczniki', label=NULL,#'Wybierz miejsca',
+                  nazwy, selected = init_selected,
+                  options = list(`actions-box` = TRUE,
                                  `selected-text-format` = "count > 5",
                                  `count-selected-text` = "Wybrano {0}",
                                  `select-all-text`="Zaznacz wszystkie",
                                  `deselect-all-text`="Odznacz wszystkie",
-                                 `none-selected-text`="Wybierz miejsca"), 
+                                 `none-selected-text`="Wybierz miejsca"),
                   multiple = T)
     } else {
-      checkboxGroupInput('liczniki', 'Wybierz miejsca', 
-                         choices=nazwy, selected = init_selected, 
+      checkboxGroupInput('liczniki', 'Wybierz miejsca',
+                         choices=nazwy, selected = init_selected,
                          inline = FALSE, width = NULL)
     }
   })
-  
+
   observeEvent(input$caly, { #caly zakres dat
      if (!is.null(data())) {
-       updateDateRangeInput(session, 'zakres', 
-                          start=min(dane_long[Miejsce %in% input$liczniki]$Data), 
+       updateDateRangeInput(session, 'zakres',
+                          start=min(dane_long[Miejsce %in% input$liczniki]$Data),
                           end=  max(dane_long[Miejsce %in% input$liczniki]$Data))
      }
   })
-  
-  zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long, 
+
+  zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long,
                            liczniki=reactive(input$liczniki), zakresOd=zakresOd, zakresDo=zakresDoPogoda)
-  
+
   #aktualizacja danych
-  dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")), 
-                             plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo)
-  
+  dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
+                             plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
+
   #aktualizacja daty
   zakresDo<-as.character(Sys.Date()-1)
-  
+
   #podsumuj
   dane_tyg<-podsumuj.okresy(dane_long, "startTyg")
   dane_m<-podsumuj.miesiace(dane_long)
   dane_y<-podsumuj.lata(dane_long)
-  
+
   data <- reactive({
     zakres_dat=interval(input$zakres[1], input$zakres[2])
     #pick daily, weekly or monthly data
@@ -208,35 +209,35 @@ server <- function(input, output, session) {
     else
       podsumuj.procentowo(wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki])
   })
-  
-  callModule(bikeCountPlot, 'plotLiczba', 
-             zakres=reactive({input$zakres}), zakresOd, zakresDo, 
-             liczniki=reactive({input$liczniki}), style, data=data, 
+
+  callModule(bikeCountPlot, 'plotLiczba',
+             zakres=reactive({input$zakres}), zakresOd, zakresDo,
+             liczniki=reactive({input$liczniki}), style, data=data,
              krok=reactive({okresy[[input$okres]]}), wartosc=reactive({input$wartosc}))
-  
+
   callModule(weatherPlot, 'plotPogoda', dane=dane_long, zakresPogoda, zakresOd, zakresDoPogoda,
              liczniki=reactive({input$liczniki}), style)
-  
+
   #data_hourly <- reactive({
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
-  
+
   #output$plotHours <- renderPlot({
   #  shiny::validate(
   #    need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
   #  wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   #})
-  
+
   klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, style$kolory)
-  
+
   observe({
     updatePickerInput(session, inputId = "liczniki", selected = klik())
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
   })
-  
+
   #long to wide, encoding
   output$eksport <- downloadHandler(
-   filename = function() { 
+   filename = function() {
      paste("dane_z_licznikow_", Sys.Date(), ".csv", sep="")
    },
    content = function(file) {

@@ -1,0 +1,40 @@
+"","Data","startTyg","temp_min","temp_avg","temp_max","deszcz","snieg","Jaki_dzien","Wolne","Rodzaj_opadu","Miejsce","Liczba_rowerow"
+"1",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Bora-Komorowskiego",780
+"2",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Bulwary",1658
+"3",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Dworzec Główny",1205
+"4",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Klimeckiego",1111
+"5",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Kopernika",2209
+"6",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Kotlarska",1925
+"7",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Mogilska",2482
+"8",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Monte Cassino",1359
+"9",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Nowohucka",510
+"10",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Smoleńsk",797
+"11",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Tyniecka",991
+"12",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Wadowicka",938
+"13",2018-10-31,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Wielicka",1035
+"14",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Bora-Komorowskiego",353
+"15",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Bulwary",1080
+"16",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Dworzec Główny",398
+"17",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Klimeckiego",439
+"18",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Kopernika",742
+"19",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Kotlarska",683
+"20",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Mogilska",830
+"21",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Monte Cassino",607
+"22",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Nowohucka",160
+"23",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Smoleńsk",347
+"24",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Tyniecka",1006
+"25",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Wadowicka",272
+"26",2018-11-01,2018-10-29,NA,NA,NA,NA,NA,"roboczy",TRUE,NA,"Wielicka",471
+"27",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Bora-Komorowskiego",584
+"28",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Bulwary",1505
+"29",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Dworzec Główny",682
+"30",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Klimeckiego",753
+"31",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Kopernika",1307
+"32",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Kotlarska",1312
+"33",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Mogilska",1480
+"34",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Monte Cassino",952
+"35",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Nowohucka",355
+"36",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Smoleńsk",515
+"37",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Tyniecka",1187
+"38",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Wadowicka",555
+"39",2018-11-02,2018-10-29,NA,NA,NA,NA,NA,"roboczy",FALSE,NA,"Wielicka",719

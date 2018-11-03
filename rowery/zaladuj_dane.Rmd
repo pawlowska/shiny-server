@@ -13,11 +13,18 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```
 
 ```{r}
-plik_pogoda="pliki/IMGW_pogoda_20180930.csv"
+miasto="Warszawa" #Krak%C3%B3w
+katalog="pliki"
+plik_pogoda=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
+plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
+plik_style=paste(katalog, "listy_stylow.csv", sep="/")
+plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
+dane_polaczone=paste("dane", miasto, "dane_polaczone.csv", sep="/")
+dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv")
 ```
 
-```{r}
-plik_pogoda_old="pliki/IMGW_pogoda_20180831.csv"
+```{r add new weather}
+plik_pogoda_old=paste(katalog, "IMGW_pogoda_20180831.csv", sep="/")
 pogoda_old<-fread(plik_pogoda_old)
 pogoda_old[,Data:=as.Date(Data)]
 pogoda_new<-czytaj_dane_zipy(od=9, do=9, nazwa_out="pogoda/IMGW_2018_09.csv")
@@ -30,39 +37,36 @@ write.csv(pogoda, file = plik_pogoda, fileEncoding = 'UTF-8', row.names = F)
 ```
 
 ```{r}
-lokacje<-zrob_sumy(wczytaj_metadane_z_api(credentials))
-write.csv(lokacje, "pliki/polozenie_licznikow.csv", row.names = F, fileEncoding = 'UTF-8')
-```
+metadane<-wczytaj_metadane_z_api(credentials, miasto=miasto)
+print(head(metadane))
 
+lokacje<-zrob_sumy(metadane)
+write.csv(lokacje, plik_polozenie, row.names = F, fileEncoding = 'UTF-8')
+```
 
 ```{r}
-lokacje <- read.csv("pliki/polozenie_licznikow.csv", encoding='UTF-8')
-lokacje<-data.table(lokacje)
+lokacje<-data.table(read.csv(plik_polozenie, encoding='UTF-8'))
 klucz <- lokacje[,c("id", "Miejsce")]
-
-```
-
-```{r sciagaj dane}
-dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-10-25", miasto="Warszawa")
-dane<-numery_dat(dane)
-write.csv(dane, file = "dane/dane_polaczone.csv", fileEncoding = 'UTF-8')
-```
-
-```{r sumuj dane}
-dane_zsumowane<-suma_licznikow(dane)
-write.csv(dane_zsumowane, file = "dane/dane_polaczone_zsumowane.csv", fileEncoding = 'UTF-8')
 ```
 
 ```{r}
 listy_stylow<-zrob_listy_stylow(lokacje, paleta=paleta30) #w obsluga_sumowania
-write.csv(listy_stylow, file = "pliki/listy_stylow.csv", fileEncoding = 'UTF-8', row.names = F)
+write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F)
 ```
 
-```{r}
+```{r sciagaj dane}
+dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-10-30", miasto)
+dane<-numery_dat(dane)
+write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
+```
+
+
+```{r sumuj dane i dodaj pogode}
+dane_zsumowane<-suma_licznikow(dane)
 dane_zsumowane<-dodaj_pogode(dane_zsumowane, plik_pogoda)
-write.csv(dane_zsumowane, file = "dane/dane_zsumowane_z_pogoda.csv", fileEncoding = 'UTF-8')
+write.csv(dane_zsumowane, file = dane_z_pogoda, fileEncoding = 'UTF-8')
 dane_long<-wide_to_long(dane_zsumowane)
-write.csv(dane_long, file = "pliki/dane_long.csv", fileEncoding = 'UTF-8')
+write.csv(dane_long, file = plik_dane_long, fileEncoding = 'UTF-8')
 rm(dane)
 rm(dane_zsumowane)
 ```

@@ -5,7 +5,7 @@ library(timeDate)
 source('hasloA.R', encoding = 'UTF-8')
 
 
-dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, zakresDo) {
+dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, zakresDo, miasto = "Warszawa") {
   #dane zaladowane od ostatniego git commit
   if (file.exists(p)) {
     ostatnie_nowe_long<-wczytaj_dane(p)
@@ -21,14 +21,14 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, 
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
     #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(credentials, ostatnia_data, plik_pogoda, lokacje)
+    nowe_long<-zaladuj_nowe_z_api(credentials, ostatnia_data, plik_pogoda, lokacje, miasto)
     cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long[,Data])), "\n")
     
     #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
     setorder(ostatnie_nowe_long, "Data")
     #uaktualnij "nowe" dane
-    write.csv(ostatnie_nowe_long[Data>zakresDo], file = "pliki/nowe_long.csv", fileEncoding = 'UTF-8')
+    write.csv(ostatnie_nowe_long[Data>zakresDo], file = p, fileEncoding = 'UTF-8')
   }
   
   #polacz ze "starymi" danymi
@@ -37,10 +37,10 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, 
   dane_long
 }
 
-zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje) {
+zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje, miasto = "Warszawa") {
   klucz <- lokacje[,c("id", "Miejsce")]
   
-  nowe_dane<-wczytaj_z_api(credentials, klucz=klucz, od=ostatnia_data)
+  nowe_dane<-wczytaj_z_api(credentials, klucz=klucz, od=ostatnia_data, miasto = miasto)
   nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
   nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
 }
@@ -49,7 +49,8 @@ zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje) {
 
 wczytaj_z_api<-function(credentials, klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="Warszawa") {
   #link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
-  link <- paste('http://greenelephant.pl/rowery/api/v1/index_city.php?start=',od,'&end=',do,'&city=',miasto)
+  link <- URLencode(paste('http://greenelephant.pl/rowery/api/v1/index_city.php?start=',od,
+                '&end=',do,'&city=',enc2utf8(miasto),sep=""))
   txt<- getURL(link, userpwd = credentials)
   tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
   setnames(tabela, c("id", "Data", "Liczba_rowerow"))
@@ -60,7 +61,7 @@ wczytaj_z_api<-function(credentials, klucz=klucz, od="2018-01-01", do=Sys.Date()
 }
 
 wczytaj_metadane_z_api<-function(credentials, miasto="Warszawa") {
-  link<-'http://greenelephant.pl/rowery/api/v1/metadata.php'
+  link<-URLencode(paste('http://greenelephant.pl/rowery/api/v1/metadata.php?city=',enc2utf8(miasto),sep=""))
   txt<- getURL(link, userpwd = credentials)
   tabela<-data.table(read.csv(text=txt, sep=','))
   setnames(tabela, 'counterid', 'id')
