@@ -106,11 +106,11 @@ ui <- fluidPage(
                  tags$p(),
                  conditionalPanel(
                    condition = "window.top == window.self",
-                   tekst1, tekst2, tekst3, tekst_zdm4
+                   tekst3
                  ),
                 conditionalPanel(
                    condition = "window.top != window.self",
-                   tekst_zdm1, tekst_zdm2, tekst_zdm3, tekst_zdm4
+                   tekst_zdm3
                  )
         ) #end of "O..."
       )#end tabsetPanel
