@@ -1,5 +1,4 @@
 ### KRAKÓW ###
-
 setwd('../rowery')
 
 library(shiny)
@@ -16,8 +15,8 @@ source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
 source('bikeCountPlotModule.R', encoding = 'UTF-8')
-source('weatherPlotModule.R', encoding = 'UTF-8')
 source('dateWithButtonModule.R', encoding = 'UTF-8')
+source('weatherPanelModule.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
@@ -93,10 +92,7 @@ ui <- fluidPage(
                 bikeCountPlotOutput('plotLiczba')
         ),
         tabPanel("Pogoda", value="pogoda",
-                 wellPanel(dateWithButtonInput('zakresP'),
-                           style= "padding: 5px 0px 0px 15px;"
-                 ), #end wellPanel
-                 weatherPlotOutput('plotPogoda')
+                 weatherPanelOutput('pogoda_panel')
         ),
         tabPanel("Mapa", value='mapa',
                  mapaOutput(id='mapa_licznikow')
@@ -125,8 +121,8 @@ server <- function(input, output, session) {
       updateTabsetPanel(session, inputId = "zakladki", selected = query$tab)
     }
   })
-
-
+  
+  
   values<-reactiveValues(first_run=TRUE)
   indeksy<-reactive(
     if(values$first_run) { #first run => sprawdz czy nr licznika podany w url
@@ -150,7 +146,7 @@ server <- function(input, output, session) {
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     init_selected<-isolate(nazwy[indeksy()])
-
+    
     if (input$dimension[1]<780) {
       pickerInput('liczniki', label=NULL,#'Wybierz miejsca',
                   nazwy, selected = init_selected,
@@ -167,25 +163,25 @@ server <- function(input, output, session) {
                          inline = FALSE, width = NULL)
     }
   })
-
+  
   zakres<-callModule(dateWithButton, 'zakresW', dane=dane_long, liczniki=reactive(input$liczniki),
                      zakresMax=c(od=as.Date(zakresOd), do=Sys.Date()-1))
   
-  zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long, liczniki=reactive(input$liczniki),
-                           zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)))
+  callModule(weatherPanel, 'pogoda_panel', dane=dane_long, liczniki=reactive(input$liczniki),
+             zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)), style)
   
   #aktualizacja danych
   dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
                              plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
-
-  #aktualizacja daty
+  
+  #aktualizacja daty 
   zakresDo<-as.character(Sys.Date()-1)
-
+  
   #podsumuj
   dane_tyg<-podsumuj.okresy(dane_long, "startTyg")
   dane_m<-podsumuj.miesiace(dane_long)
   dane_y<-podsumuj.lata(dane_long)
-
+  
   data <- reactive({
     req(zakres())
     zakres_dat=interval(zakres()[1], zakres()[2])
@@ -196,49 +192,46 @@ server <- function(input, output, session) {
       zakres_dat=interval(as.Date("2014-01-01"), zakres()[2])
       wybor<-dane_y
     } else {wybor<-dane_long}
-
+    
     #PZ
     if(input$wartosc == wartosci[1])
       wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki]
     else
       podsumuj.procentowo(wybor[Data %within% zakres_dat & Miejsce %in% input$liczniki])
   })
-
+  
   callModule(bikeCountPlot, 'plotLiczba',
              zakres=zakres, zakresOd, zakresDo,
              liczniki=reactive({input$liczniki}), style, data=data,
              krok=reactive({okresy[[input$okres]]}), wartosc=reactive({input$wartosc}))
-
-  callModule(weatherPlot, 'plotPogoda', dane=dane_long, zakresPogoda, zakresOd, zakresDoPogoda,
-             liczniki=reactive({input$liczniki}), style)
-
+  
   #data_hourly <- reactive({
   #  godzinowe[Miejsce %in% input$liczniki]
   #})
-
+  
   #output$plotHours <- renderPlot({
   #  shiny::validate(
   #    need(input$liczniki, 'Wybierz przynajmniej jedno miejsce!'))
   #  wykres_godzinowy(data_hourly(), paleta=uzyte_kolory(), linie = uzyte_linie())
   #})
-
+  
   klik<-callModule(mapa, 'mapa_licznikow', indeksy=indeksy, lokacje, style$kolory)
-
+  
   observe({
     updatePickerInput(session, inputId = "liczniki", selected = klik())
     updateTabsetPanel(session, inputId = "zakladki", selected = "wykres")
   })
-
+  
   #long to wide, encoding
   output$eksport <- downloadHandler(
-   filename = function() {
-     paste("dane_z_licznikow_", Sys.Date(), ".csv", sep="")
-   },
-   content = function(file) {
-     dane_do_zapisu<-dcast(data(), Data ~Miejsce, value.var="Liczba_rowerow")
-     write.csv(dane_do_zapisu, file, fileEncoding = "UTF-8")
-  })
-
+    filename = function() {
+      paste("dane_z_licznikow_", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      dane_do_zapisu<-dcast(data(), Data ~Miejsce, value.var="Liczba_rowerow")
+      write.csv(dane_do_zapisu, file, fileEncoding = "UTF-8")
+    })
+  
 }
 
 shinyApp(ui = ui, server = server)

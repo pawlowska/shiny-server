@@ -12,8 +12,8 @@ source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
 source('bikeCountPlotModule.R', encoding = 'UTF-8')
-source('weatherPlotModule.R', encoding = 'UTF-8')
 source('dateWithButtonModule.R', encoding = 'UTF-8')
+source('weatherPanelModule.R', encoding = 'UTF-8')
 
 Sys.setlocale("LC_ALL", "Polish")
 
@@ -89,10 +89,7 @@ ui <- fluidPage(
                 bikeCountPlotOutput('plotLiczba')
         ),
         tabPanel("Pogoda", value="pogoda",
-                 wellPanel(dateWithButtonInput('zakresP'),
-                           style= "padding: 5px 0px 0px 15px;"
-                 ), #end wellPanel
-                 weatherPlotOutput('plotPogoda')
+                 weatherPanelOutput('pogoda_panel')
         ),
         tabPanel("Mapa", value='mapa',
                  mapaOutput(id='mapa_licznikow')
@@ -167,14 +164,14 @@ server <- function(input, output, session) {
   zakres<-callModule(dateWithButton, 'zakresW', dane=dane_long, liczniki=reactive(input$liczniki),
                      zakresMax=c(od=as.Date(zakresOd), do=Sys.Date()-1))
   
-  zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long, liczniki=reactive(input$liczniki),
-                           zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)))
-
+  callModule(weatherPanel, 'pogoda_panel', dane=dane_long, liczniki=reactive(input$liczniki),
+             zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)), style)
+  
   #aktualizacja danych
   dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
                              plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
 
-  #aktualizacja daty
+  #aktualizacja daty 
   zakresDo<-as.character(Sys.Date()-1)
 
   #podsumuj
@@ -204,9 +201,6 @@ server <- function(input, output, session) {
              zakres=zakres, zakresOd, zakresDo,
              liczniki=reactive({input$liczniki}), style, data=data,
              krok=reactive({okresy[[input$okres]]}), wartosc=reactive({input$wartosc}))
-
-  callModule(weatherPlot, 'plotPogoda', dane=dane_long, zakresPogoda, zakresOd, zakresDoPogoda,
-             liczniki=reactive({input$liczniki}), style)
 
   #data_hourly <- reactive({
   #  godzinowe[Miejsce %in% input$liczniki]

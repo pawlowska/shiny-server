@@ -10,7 +10,6 @@ dateWithButtonInput<-function(id, label="zakres dat") {
                           placement = "left", trigger = "hover")
     )
   )
-  
 }
 
 dateWithButton <- function(input, output, session, dane, liczniki, zakresMax) {

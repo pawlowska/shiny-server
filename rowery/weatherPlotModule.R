@@ -1,4 +1,5 @@
 library(ggplot2)
+library(data.table)
 
 source('wykresy.R', encoding = 'UTF-8')
 source('tooltip.R', encoding = 'UTF-8')
@@ -28,12 +29,12 @@ source('validators.R', encoding = 'UTF-8')
 }
 
 # Module server function
-weatherPlot <- function(input, output, session, dane, zakresPogoda, zakresOd, zakresDoPogoda, liczniki, style) {
+weatherPlot <- function(input, output, session, dane, zakresPogoda, zakresMax, liczniki, style) {
   
   data_with_weather <- reactive({
     req(zakresPogoda())
     validateLiczniki(liczniki())
-    validateZakres(zakresPogoda(), zakresOd, zakresDoPogoda)
+    validateZakres(zakresPogoda(), zakresMax[1], zakresMax[2])
     
     zakres_dat=interval(zakresPogoda()[1], zakresPogoda()[2])
     dane[Data %within% zakres_dat & Miejsce %in% liczniki()]
