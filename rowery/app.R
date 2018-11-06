@@ -131,15 +131,16 @@ server <- function(input, output, session) {
       if (length(query)==0) { #none
         NULL
       }
-      else if ((!is.null(query$licznik))&&query$licznik=='all') { #all
+      else if (!is.null(query$licznik)) {
+        if (query$licznik=='all') { #all
           c(1:length(nazwy))
-      } else { #one
+        } else { #one
           m<-lokacje[id==query$licznik]$Miejsce
           match(m, nazwy)
+        }
       }
-    } else {
-      match(unique(data()$Miejsce), nazwy)
     }
+     else match(unique(data()$Miejsce), nazwy)
   )
 
   output$wyborLicznikow <- renderUI({
