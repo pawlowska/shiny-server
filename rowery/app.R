@@ -164,11 +164,11 @@ server <- function(input, output, session) {
     }
   })
 
-  zakres<-callModule(dateWithButton, 'zakresW', dane=dane_long,
-                           liczniki=reactive(input$liczniki), zakresOd=zakresOd, zakresDo=zakresDo)
+  zakres<-callModule(dateWithButton, 'zakresW', dane=dane_long, liczniki=reactive(input$liczniki),
+                     zakresMax=c(od=as.Date(zakresOd), do=Sys.Date()-1))
   
-  zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long,
-                           liczniki=reactive(input$liczniki), zakresOd=zakresOd, zakresDo=zakresDoPogoda)
+  zakresPogoda<-callModule(dateWithButton, 'zakresP', dane=dane_long, liczniki=reactive(input$liczniki),
+                           zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)))
 
   #aktualizacja danych
   dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),

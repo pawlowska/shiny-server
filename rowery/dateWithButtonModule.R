@@ -13,12 +13,12 @@ dateWithButtonInput<-function(id, label="zakres dat") {
   
 }
 
-dateWithButton <- function(input, output, session, dane, liczniki, zakresOd, zakresDo=as.character(Sys.Date()-1)) {
+dateWithButton <- function(input, output, session, dane, liczniki, zakresMax) {
   output$zakres <- renderUI({
     ns <- session$ns
     dateRangeInput(ns('zakres'), 'Wybierz zakres dat',
-                   start=as.character(as.Date(zakresDo)-90), end=zakresDo,
-                   min=zakresOd, max=zakresDo,
+                   start=as.character(zakresMax[['do']]-90), end=zakresMax[['do']],
+                   min=zakresMax[['od']], max=zakresMax[['do']],
                    separator = 'do', weekstart = 0, language = "pl")
   })
   
@@ -27,7 +27,7 @@ dateWithButton <- function(input, output, session, dane, liczniki, zakresOd, zak
       daty<-dane[Miejsce %in% liczniki()]$Data
       updateDateRangeInput(session, inputId='zakres', 
                            start=min(daty), 
-                           end=min(as.Date(zakresDo), max(daty)))
+                           end=min(zakresMax[['do']], max(daty)))
     }
   })
   
