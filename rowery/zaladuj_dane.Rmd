@@ -13,8 +13,8 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```
 
 ```{r}
-miasto="Warszawa" #Krak%C3%B3w
-katalog="pliki"
+miasto="Kraków" #Krak%C3%B3w
+katalog="pliki_Krakow"
 plik_pogoda=paste(katalog, "IMGW_pogoda_20181031.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
@@ -27,7 +27,7 @@ dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv")
 plik_pogoda_old=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
 pogoda_old<-fread(plik_pogoda_old)
 pogoda_old[,Data:=as.Date(Data)]
-pogoda_new<-czytaj_dane_zipy(od=10, do=10)
+pogoda_new<-czytaj_dane_zipy(od=10, do=10, stacja = krakowBalice)
 pogoda_new[,opad:=NULL]
 pogoda_new[,rodzaj:=NULL]
 
@@ -54,7 +54,7 @@ listy_stylow<-zrob_listy_stylow(lokacje, paleta=paleta30) #w obsluga_sumowania
 write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F)
 ```
 
-```{r sciagaj dane}
+```{r sciagaj dane z api}
 dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-11-01", miasto)
 dane<-numery_dat(dane)
 write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
