@@ -13,17 +13,12 @@ p_snieg_doba="B650B008FD"
 p_zachmurzenie_godz = "B314B00400" #Zachmurzenie całkowite-pomiar godzinowy-synop
 p_wiatr_godz = "B200B00400" #"Prędkość wiatru-pomiar godzinowy-synop-obserwator"
 
-#B600B018FD - Suma dobowa opadu - woda - NIE MA
-#B601E002FD - Czas trwania opadu za ostatnie 24 h-synop - NIE MA
-#B609B00400 - Opad za 6 godzin-synop - JEST
-#B200B00400
+#zrob_link<-function(parametr, data, stacja=warszawaOkecie, baza=bazaO, zakres='/tydzien/') {
+#  paste("https://dane.imgw.pl/1.0/pomiary/", baza, stacja, '-', parametr, zakres, data, '?format=csv', sep="")
+#}
 
-
-zrob_link<-function(parametr, data, stacja=warszawaOkecie, baza=bazaO, zakres='/tydzien/') {
-  paste("https://dane.imgw.pl/1.0/pomiary/", baza, stacja, '-', parametr, zakres, data, '?format=csv', sep="")
-}
-
-czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2018_01.csv", format='pogoda/s_d_%02d_2018.csv', stacja=warszawaOkecie) {
+czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2018_01.csv", 
+                           format='pogoda/raw/s_d_%02d_2018.csv', stacja=warszawaOkecie) {
   nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
   pogoda<-data.table(matrix(nrow = 0, ncol = 8))
   setnames(pogoda, names(pogoda), nazwy_kolumn)
@@ -39,6 +34,6 @@ czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2018_01.csv", form
   pogoda[,deszcz:=ifelse(rodzaj=='W', opad, 0)]
   pogoda[,snieg:= ifelse(rodzaj=='S', opad, 0)]
   setcolorder(pogoda, c('Data', nazwy_kolumn[4:8], 'deszcz', 'snieg'))
-  write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
+  #write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
   pogoda
 }
