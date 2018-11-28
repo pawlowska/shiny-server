@@ -21,6 +21,7 @@ katalog="pliki"
 miasto="Warszawa"
 tytul='Liczniki rowerów w Warszawie'
 
+
 #reading locations
 lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=".", encoding='UTF-8')
 lokacje<-data.table(lokacje)

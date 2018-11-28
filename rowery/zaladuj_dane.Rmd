@@ -13,14 +13,14 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```
 
 ```{r}
-miasto="Kraków" #Krak%C3%B3w
-katalog="pliki_Krakow"
+miasto="Warszawa" #Krak%C3%B3w
+katalog="pliki"
 plik_pogoda=paste(katalog, "IMGW_pogoda_20181031.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
 dane_polaczone=paste("dane", miasto, "dane_polaczone.csv", sep="/")
-dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv")
+dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv", sep="/")
 ```
 
 ```{r add new weather}
@@ -55,7 +55,7 @@ write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F
 ```
 
 ```{r sciagaj dane z api}
-dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-11-01", miasto)
+dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-11-26", miasto)
 dane<-numery_dat(dane)
 write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
 ```
