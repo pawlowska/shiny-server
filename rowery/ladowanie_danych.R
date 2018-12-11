@@ -79,8 +79,8 @@ wczytaj_metadane_z_api<-function(credentials, miasto="Warszawa") {
 
 wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela<-fread(plik, header = TRUE, encoding = "UTF-8", drop=1) #1st column is just row numers, drop it
-  tabela[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
-  tabela[,startTyg := as.Date(startTyg, tz="Europe/Berlin", format="%Y-%m-%d")]
+  tabela[,Data := as.Date(Data, format="%Y-%m-%d")]
+  tabela[,startTyg := as.Date(startTyg, format="%Y-%m-%d")]
   tabela
 }
 
@@ -175,7 +175,7 @@ rodzaj_opadu<-function(d,s) {
 dodaj_pogode<-function(tabela, 
                        plik_pogoda="pliki/IMGW_pogoda_20171231.csv") {
   pogoda<-fread(plik_pogoda, header = TRUE, encoding = "UTF-8")
-  pogoda[,Data := as.Date(Data, tz="Europe/Berlin", format="%Y-%m-%d")]
+  pogoda[,Data := as.Date(Data, format="%Y-%m-%d")]
   pogoda[,Rodzaj_opadu:=rodzaj_opadu(deszcz, snieg)]
   dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
   dane[,Jaki_dzien:=weekend(Data)]

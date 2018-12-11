@@ -28,8 +28,7 @@ bikeCountPlot <- function(input, output, session, zakres, zakresOd, zakresDo, li
     
     wykres_kilka(data(), 
                  start=zakres()[1], stop=zakres()[2], 
-                 paleta=style$kolory, linie = style$linie, alfy=style$alfy,
-                 krok=krok(), wartosc = wartosc())
+                 style, krok=krok(), wartosc = wartosc())
   })
   
   output$bike_date_tooltip <- renderUI({

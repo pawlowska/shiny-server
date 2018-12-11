@@ -21,7 +21,6 @@ katalog="pliki"
 miasto="Warszawa"
 tytul='Liczniki rowerów w Warszawie'
 
-
 #reading locations
 lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=".", encoding='UTF-8')
 lokacje<-data.table(lokacje)
@@ -45,7 +44,9 @@ okresy=list('dobowo'=1, 'tygodniowo'=7, 'miesięcznie'=31, 'rocznie'=366)
 
 #dane godzinowe chwilowo nieużywane
 #godzinowe<-wczytaj_dane_godzinowe("pliki/dane_godzinowe_long.csv")
+
 cat(file=stderr(), "jest", as.character(Sys.Date()), "\n")
+
 
 ui <- fluidPage(
   tags$head(tags$script(src="rozmiar.js"),
@@ -141,6 +142,8 @@ server <- function(input, output, session) {
      else match(unique(data()$Miejsce), nazwy)
   )
 
+  
+  
   output$wyborLicznikow <- renderUI({
     req(input$dimension)
     init_selected<-isolate(nazwy[indeksy()])

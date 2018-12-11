@@ -23,6 +23,7 @@ wykres_lokalny<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Dat
   wykres_kilka(dane_zakres, start, stop)
 }
   
+
 better_ticks<-function(zakres_dat, krok=1) {
   iledni = time_length(zakres_dat, unit="day")
   if ((iledni<28)&&(krok==1)) {breaks="1 day"}
@@ -34,11 +35,12 @@ better_ticks<-function(zakres_dat, krok=1) {
   breaks
 }
 
+
 lista_wolnych<-function(dane) {
   dni<-dane[Wolne==TRUE]$Data
   tab_wolne<-unique(data.table(Data=dni)) #utwórz nową data.table z jedną kolumną
-  tab_wolne[,Start_wolnego:=Data-12*60*60+1]
-  tab_wolne[,Stop_wolnego:=Data+12*60*60]
+  tab_wolne[,Start_wolnego:=Data-0.5]
+  tab_wolne[,Stop_wolnego:=Data+0.5]
   tab_wolne
 }
 
@@ -54,10 +56,8 @@ dodaj_wolne<-function(g, wolne) {
 
 
 #wykres kilku kolumn
-wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='bezwzględne') {
-  dane[,Data:=as.POSIXct(paste(Data,"00:00:00"))]
-  
-  start_osi_x=min(c(as.POSIXct(start),dane[,Data]))
+wykres_kilka<-function(dane, start, stop, style, krok=1, wartosc='bezwzględne') {
+  start_osi_x=min(start,dane[,Data])
   
   #set theme    
   theme_set(theme_light(base_size = rozmiar_czcionki))
@@ -79,25 +79,23 @@ wykres_kilka<-function(dane, start, stop, paleta, linie, alfy, krok=1, wartosc='
   } 
   
   #oś x
-  g<-g+scale_x_datetime(date_breaks = better_ticks(interval(start, stop), krok), 
+  g<-g+scale_x_date(name="Data",
+                        date_breaks = better_ticks(interval(start, stop), krok),
                         labels=labelsy(krok), 
-                        limits=c(start_osi_x, as.POSIXct(stop)),
-                        expand=c(0,0)) #numer X ticks
+                        limits=c(start_osi_x, stop), 
+                        expand=c(0,0))
   #oś y
-  g<-g+scale_y_continuous(breaks = pretty_breaks(7), labels=comma_format())
+  g<-g+ylab("")+scale_y_continuous(breaks = pretty_breaks(7), labels=comma_format())
   
   g<-g+theme(axis.text.x = element_text(angle = 45, hjust = 1),
              legend.position="bottom", 
              legend.margin=margin(0, -2, 0, 1, "cm"))
   
   #colours and line types
-  g<-g+scale_linetype_manual(values=linie)+
-    scale_colour_manual(values=paleta)+
-    scale_fill_manual(values=paleta)+
-    scale_alpha_manual(values = alfy)
-  
-  #axis labels
-  g<-g+xlab("Data")+ylab("")
+  g<-g+scale_linetype_manual(values=style$linie)+
+    scale_colour_manual(values=style$kolory)+
+    scale_fill_manual(values=style$kolory)+
+    scale_alpha_manual(values = style$alfy)
   
   g<-g+guides(col = guide_legend(byrow = TRUE))
   #g<-g+guides(col = guide_legend(ncol=4))

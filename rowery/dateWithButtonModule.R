@@ -16,7 +16,7 @@ dateWithButton <- function(input, output, session, dane, liczniki, zakresMax) {
   output$zakres <- renderUI({
     ns <- session$ns
     dateRangeInput(ns('zakres'), 'Wybierz zakres dat',
-                   start=as.character(zakresMax[['do']]-90), end=zakresMax[['do']],
+                   start=as.character(zakresMax[['do']]-60), end=zakresMax[['do']],
                    min=zakresMax[['od']], max=zakresMax[['do']],
                    separator = 'do', weekstart = 0, language = "pl")
   })
