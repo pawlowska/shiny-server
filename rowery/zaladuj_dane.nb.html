@@ -97,6 +97,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -179,11 +182,8 @@ $(document).ready(function () {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkYXRhLnRhYmxlKVxuYGBgIn0= -->
 <pre class="r"><code>library(data.table)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiZGF0YS50YWJsZSAxLjEwLjQuM1xuICBUaGUgZmFzdGVzdCB3YXkgdG8gbGVhcm4gKGJ5IGRhdGEudGFibGUgYXV0aG9ycyk6IGh0dHBzOi8vd3d3LmRhdGFjYW1wLmNvbS9jb3Vyc2VzL2RhdGEtYW5hbHlzaXMtdGhlLWRhdGEtdGFibGUtd2F5XG4gIERvY3VtZW50YXRpb246ID9kYXRhLnRhYmxlLCBleGFtcGxlKGRhdGEudGFibGUpIGFuZCBicm93c2VWaWduZXR0ZXMoXCJkYXRhLnRhYmxlXCIpXG4gIFJlbGVhc2Ugbm90ZXMsIHZpZGVvcyBhbmQgc2xpZGVzOiBodHRwOi8vci1kYXRhdGFibGUuY29tXG5cbkRv5oi847iz5oi847i5Y3phbmllIHBha2lldHU6IOOkvOO4sWRhdGEudGFibGXjpLzjuLJcblxuTmFzdOaUvOO5oXB1auaIvOO4uWN5IG9iaWVrdCB6b3N0YeaIvOO4syB6YWtyeXR5IF9wcnplel8g46S847ixLkdsb2JhbEVuduOkvOO4sjpcblxuICAgIC5OXG4ifQ== -->
-<pre><code>data.table 1.10.4.3
-  The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way
-  Documentation: ?data.table, example(data.table) and browseVignettes(&quot;data.table&quot;)
-  Release notes, videos and slides: http://r-datatable.com
+<!-- rnb-output-begin eyJkYXRhIjoiZGF0YS50YWJsZSAxLjExLjggIExhdGVzdCBuZXdzOiByLWRhdGF0YWJsZS5jb21cblxuRG/miLzjuLPmiLzjuLljemFuaWUgcGFraWV0dTog46S847ixZGF0YS50YWJsZeOkvOO4slxuXG5OYXN05pS847mhcHVq5oi847i5Y3kgb2JpZWt0IHpvc3Rh5oi847izIHpha3J5dHkgX3ByemV6XyDjpLzjuLEuR2xvYmFsRW5246S847iyOlxuXG4gICAgLk5cbiJ9 -->
+<pre><code>data.table 1.11.8  Latest news: r-datatable.com
 
 Do戼㸳戼㸹czanie pakietu: 㤼㸱data.table㤼㸲
 
@@ -205,118 +205,102 @@ source('pogoda/imgw.R', encoding = 'UTF-8')</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxpa19wb2dvZGE9XCJwbGlraS9JTUdXX3BvZ29kYV8yMDE4MDUzMS5jc3ZcIlxuYGBgIn0= -->
-<pre class="r"><code>plik_pogoda=&quot;pliki/IMGW_pogoda_20180531.csv&quot;</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWlhc3RvPVwiV2Fyc3phd2FcIiAjS3JhayVDMyVCM3dcbmthdGFsb2c9XCJwbGlraVwiXG5wbGlrX3BvZ29kYT1wYXN0ZShrYXRhbG9nLCBcIklNR1dfcG9nb2RhXzIwMTgxMDMxLmNzdlwiLCBzZXA9XCIvXCIpXG5wbGlrX3BvbG96ZW5pZT1wYXN0ZShrYXRhbG9nLFwicG9sb3plbmllX2xpY3puaWtvdy5jc3ZcIiwgc2VwPVwiL1wiKVxucGxpa19zdHlsZT1wYXN0ZShrYXRhbG9nLCBcImxpc3R5X3N0eWxvdy5jc3ZcIiwgc2VwPVwiL1wiKVxucGxpa19kYW5lX2xvbmc9cGFzdGUoa2F0YWxvZywgXCJkYW5lX2xvbmcuY3N2XCIsIHNlcD1cIi9cIilcbmRhbmVfcG9sYWN6b25lPXBhc3RlKFwiZGFuZVwiLCBtaWFzdG8sIFwiZGFuZV9wb2xhY3pvbmUuY3N2XCIsIHNlcD1cIi9cIilcbmRhbmVfel9wb2dvZGE9cGFzdGUoXCJkYW5lXCIsbWlhc3RvLFwiZGFuZV96c3Vtb3dhbmVfel9wb2dvZGEuY3N2XCIsIHNlcD1cIi9cIilcbmBgYCJ9 -->
+<pre class="r"><code>miasto=&quot;Warszawa&quot; #Krak%C3%B3w
+katalog=&quot;pliki&quot;
+plik_pogoda=paste(katalog, &quot;IMGW_pogoda_20181031.csv&quot;, sep=&quot;/&quot;)
+plik_polozenie=paste(katalog,&quot;polozenie_licznikow.csv&quot;, sep=&quot;/&quot;)
+plik_style=paste(katalog, &quot;listy_stylow.csv&quot;, sep=&quot;/&quot;)
+plik_dane_long=paste(katalog, &quot;dane_long.csv&quot;, sep=&quot;/&quot;)
+dane_polaczone=paste(&quot;dane&quot;, miasto, &quot;dane_polaczone.csv&quot;, sep=&quot;/&quot;)
+dane_z_pogoda=paste(&quot;dane&quot;,miasto,&quot;dane_zsumowane_z_pogoda.csv&quot;, sep=&quot;/&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxpa19wb2dvZGFfb2xkPVwicGxpa2kvSU1HV19wb2dvZGFfMjAxODA0MzAuY3N2XCJcbnBvZ29kYV9vbGQ8LWZyZWFkKHBsaWtfcG9nb2RhX29sZClcbnBvZ29kYV9vbGRbLERhdGE6PWFzLkRhdGUoRGF0YSldXG5wb2dvZGFfbmV3PC1jenl0YWpfZGFuZV96aXB5KG9kPTUsIGRvPTUsIG5hendhX291dD1cInBvZ29kYS9JTUdXXzIwMThfMDQuY3N2XCIpXG5wb2dvZGFfbmV3WyxvcGFkOj1OVUxMXVxucG9nb2RhX25ld1sscm9kemFqOj1OVUxMXVxucG9nb2RhPC11bmlxdWUocmJpbmQocG9nb2RhX29sZCwgcG9nb2RhX25ldykpXG53cml0ZS5jc3YocG9nb2RhLCBmaWxlID0gcGxpa19wb2dvZGEsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcsIHJvdy5uYW1lcyA9IEYpXG5gYGAifQ== -->
-<pre class="r"><code>plik_pogoda_old=&quot;pliki/IMGW_pogoda_20180430.csv&quot;
-pogoda_old&lt;-fread(plik_pogoda_old)
-pogoda_old[,Data:=as.Date(Data)]
-pogoda_new&lt;-czytaj_dane_zipy(od=5, do=5, nazwa_out=&quot;pogoda/IMGW_2018_04.csv&quot;)
-pogoda_new[,opad:=NULL]
-pogoda_new[,rodzaj:=NULL]
-pogoda&lt;-unique(rbind(pogoda_old, pogoda_new))
-write.csv(pogoda, file = plik_pogoda, fileEncoding = 'UTF-8', row.names = F)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxpa19wb2dvZGFfb2xkPXBhc3RlKGthdGFsb2csIFwiSU1HV19wb2dvZGFfMjAxODA5MzAuY3N2XCIsIHNlcD1cIi9cIilcbnBvZ29kYV9vbGQ8LWZyZWFkKHBsaWtfcG9nb2RhX29sZClcbmBgYCJ9 -->
+<pre class="r"><code>plik_pogoda_old=paste(katalog, &quot;IMGW_pogoda_20180930.csv&quot;, sep=&quot;/&quot;)
+pogoda_old&lt;-fread(plik_pogoda_old)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9rYWNqZSA8LSByZWFkLmNzdihcInBsaWtpL3BvbG96ZW5pZV9saWN6bmlrb3cuY3N2XCIsZGVjPVwiLFwiLCBlbmNvZGluZz0nVVRGLTgnKVxubG9rYWNqZTwtZGF0YS50YWJsZShsb2thY2plKVxua2x1Y3ogPC0gbG9rYWNqZVssYyhcImlkXCIsIFwiTWllanNjZVwiKV1cbmRhbmU8LXdjenl0YWpfel9hcGkoa2x1Y3o9a2x1Y3osIG9kPVwiMjAxNC0wOC0xM1wiLCBkbz1cIjIwMTgtMDYtMTBcIilcbmBgYCJ9 -->
-<pre class="r"><code>lokacje &lt;- read.csv(&quot;pliki/polozenie_licznikow.csv&quot;,dec=&quot;,&quot;, encoding='UTF-8')
-lokacje&lt;-data.table(lokacje)
-klucz &lt;- lokacje[,c(&quot;id&quot;, &quot;Miejsce&quot;)]
-dane&lt;-wczytaj_z_api(klucz=klucz, od=&quot;2014-08-13&quot;, do=&quot;2018-06-10&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGFuZTwtbnVtZXJ5X2RhdChkYW5lKVxud3JpdGUuY3N2KGRhbmUsIGZpbGUgPSBcImRhbmUvZGFuZV9wb2xhY3pvbmUuY3N2XCIsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpXG5kYW5lX3pzdW1vd2FuZTwtc3VtYV9saWN6bmlrb3coZGFuZSlcbnJtKGRhbmUpXG5gYGAifQ== -->
-<pre class="r"><code>dane&lt;-numery_dat(dane)
-write.csv(dane, file = &quot;dane/dane_polaczone.csv&quot;, fileEncoding = 'UTF-8')
-dane_zsumowane&lt;-suma_licznikow(dane)
-rm(dane)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmF6d3k8LW5hbWVzKGRhbmVfenN1bW93YW5lKVs0Omxlbmd0aChuYW1lcyhkYW5lX3pzdW1vd2FuZSkpXVxubGlzdHlfc3R5bG93PC16cm9iX2xpc3R5X3N0eWxvdyhuYXp3eSwgcGFsZXRhPXBhbGV0YTIwX3NvcnRlZCkgI3cgb2JzbHVnYV9zdW1vd2FuaWFcbndyaXRlLmNzdihsaXN0eV9zdHlsb3csIGZpbGUgPSBcInBsaWtpL2xpc3R5X3N0eWxvdy5jc3ZcIiwgZmlsZUVuY29kaW5nID0gJ1VURi04Jywgcm93Lm5hbWVzID0gRilcbndyaXRlLmNzdihkYW5lX3pzdW1vd2FuZSwgZmlsZSA9IFwiZGFuZS9kYW5lX3BvbGFjem9uZV96c3Vtb3dhbmUuY3N2XCIsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpXG5gYGAifQ== -->
-<pre class="r"><code>nazwy&lt;-names(dane_zsumowane)[4:length(names(dane_zsumowane))]
-listy_stylow&lt;-zrob_listy_stylow(nazwy, paleta=paleta20_sorted) #w obsluga_sumowania
-write.csv(listy_stylow, file = &quot;pliki/listy_stylow.csv&quot;, fileEncoding = 'UTF-8', row.names = F)
-write.csv(dane_zsumowane, file = &quot;dane/dane_polaczone_zsumowane.csv&quot;, fileEncoding = 'UTF-8')</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGFuZV96c3Vtb3dhbmU8LWRvZGFqX3BvZ29kZShkYW5lX3pzdW1vd2FuZSwgcGxpa19wb2dvZGEpXG5wcmludChzdHIoZGFuZV96c3Vtb3dhbmUpKVxuYGBgIn0= -->
-<pre class="r"><code>dane_zsumowane&lt;-dodaj_pogode(dane_zsumowane, plik_pogoda)
-print(str(dane_zsumowane))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ2xhc3NlcyDigJhkYXRhLnRhYmxl4oCZIGFuZCAnZGF0YS5mcmFtZSc6XHQxMzk4IG9icy4gb2YgIDQyIHZhcmlhYmxlczpcbiAkIERhdGEgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6IERhdGUsIGZvcm1hdDogXCIyMDE0LTA4LTEzXCIgXCIyMDE0LTA4LTE0XCIgXCIyMDE0LTA4LTE1XCIgLi4uXG4gJCBzdGFydFR5ZyAgICAgICAgICAgICAgICAgICAgICAgICAgOiBEYXRlLCBmb3JtYXQ6IFwiMjAxNC0wOC0xMVwiIFwiMjAxNC0wOC0xMVwiIFwiMjAxNC0wOC0xMVwiIC4uLlxuICQgc3RhcnRNICAgICAgICAgICAgICAgICAgICAgICAgICAgIDogRGF0ZSwgZm9ybWF0OiBcIjIwMTQtMDgtMDFcIiBcIjIwMTQtMDgtMDFcIiBcIjIwMTQtMDgtMDFcIiAuLi5cbiAkIGFsLiBTb2xpZGFybm/Fm2NpL0R3b3J6ZWMgV2lsZcWEc2tpIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBhbC4gU3RhbsOzdyBaamVkbm9jem9ueWNoIC0gc3VtYSAgIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBhbC4gU3RhbsOzdyBaamVkbm9jem9ueWNoIE4gICAgICAgIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBhbC4gU3RhbsOzdyBaamVkbm9jem9ueWNoIFMgICAgICAgIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBBbGVqZSBKZXJvem9saW1za2llIC0gc3VtYSAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIEFsZWplIEplcm96b2xpbXNraWUvcGwuIFphd2lzenkgTiA6IG51bSAgTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIC4uLlxuICQgQWxlamUgSmVyb3pvbGltc2tpZS9wbC4gWmF3aXN6eSBTIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBCYW5hY2hhL8W7d2lya2kgaSBXaWd1cnkgICAgICAgICAgIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBCYXp5bGlhxYRza2EvV3lzb2NraWVnbyAgICAgICAgICAgIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBCZWx3ZWRlcnNrYSAgICAgICAgICAgICAgICAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIEN6ZXJuaWFrb3dza2EgLSBzdW1hICAgICAgICAgICAgICA6IG51bSAgTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIC4uLlxuICQgQ3plcm5pYWtvd3NrYSBFICAgICAgICAgICAgICAgICAgIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBDemVybmlha293c2thIFcgICAgICAgICAgICAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIE1hcnNhICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6IG51bSAgTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIC4uLlxuICQgTWFyc3phxYJrb3dza2EvTWV0cm8gxZp3acSZdG9rcnp5c2thIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBOU1IgTW9zdCBHZGHFhHNraSAtIHN1bWEgICAgICAgICAgIDogbnVtICAxMDIgNTc2IDI1ODUgNDg0IDExMzggLi4uXG4gJCBOU1IgTW9zdCBHZGHFhHNraSBDUFIgICAgICAgICAgICAgIDogbnVtICAwIDAgMCAwIDAgMCAwIDAgMCAwIC4uLlxuICQgTlNSIE1vc3QgR2RhxYRza2kgRERSICAgICAgICAgICAgICA6IG51bSAgMTAyIDU3NiAyNTg1IDQ4NCAxMTM4IC4uLlxuICQgTlNSIFNvbGVjIC0gc3VtYSAgICAgICAgICAgICAgICAgIDogbnVtICA2NiAxOTUgMTQxNCAyMTQgMzkzIC4uLlxuICQgTlNSIFNvbGVjIENQUiAgICAgICAgICAgICAgICAgICAgIDogbnVtICA2IDExNCA4NjEgMTM0IDI3MyAxNzIgMjI0IDI2MiAxMDAgMjA3IC4uLlxuICQgTlNSIFNvbGVjIEREUiAgICAgICAgICAgICAgICAgICAgIDogbnVtICA2MCA4MSA1NTMgODAgMTIwIDEyNiAxMjkgMTczIDc4IDI0OSAuLi5cbiAkIFByYXNrYSDFm2NpZcW8a2EgcmVrcmVhY3lqbmEgICAgICAgIDogbnVtICBOYU4gMTA4IDExNDYgMjAxIDYxNyAuLi5cbiAkIMWad2nEmXRva3J6eXNrYS9FbWlsaWkgUGxhdGVyIC0gc3VtYTogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCDFmndpxJl0b2tyenlza2EvRW1pbGlpIFBsYXRlciBOICAgICA6IG51bSAgTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIC4uLlxuICQgxZp3acSZdG9rcnp5c2thL0VtaWxpaSBQbGF0ZXIgUyAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIFRhcmdvd2EvRHdvcnplYyBXaWxlxYRza2kgICAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIFd5YnJ6ZcW8ZSBIZWxza2llL1N0YXJ6ecWEc2tpZWdvICAgIDogbnVtICBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gLi4uXG4gJCBXeXNvY2tpZWdvICAgICAgICAgICAgICAgICAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIMW7d2lya2kgaSBXaWd1cnkvMSBTaWVycG5pYSAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIMW7d2lya2kgaSBXaWd1cnkvVHJvamRlbmEgLSBzdW1hICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIMW7d2lya2kgaSBXaWd1cnkvVHJvamRlbmEgRSAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIMW7d2lya2kgaSBXaWd1cnkvVHJvamRlbmEgVyAgICAgICAgOiBudW0gIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiBOYU4gTmFOIE5hTiAuLi5cbiAkIHRlbXBfbWluICAgICAgICAgICAgICAgICAgICAgICAgICA6IG51bSAgMTMgMTcuNiAxMy4zIDEzLjEgMTIuNCAxMy40IDExLjkgMTEuNiA5LjEgNi41IC4uLlxuICQgdGVtcF9hdmcgICAgICAgICAgICAgICAgICAgICAgICAgIDogbnVtICAxOC44IDE4LjcgMTguNiAxNS40IDE1LjEgMTguNiAxNi4yIDE1LjcgMTIuNiAxNC42IC4uLlxuICQgdGVtcF9tYXggICAgICAgICAgICAgICAgICAgICAgICAgIDogbnVtICAyMy4zIDIwLjcgMjMuNSAxOS43IDE4LjcgMjMuNCAyMC42IDIwLjggMTcuMSAyMS4zIC4uLlxuICQgZGVzemN6ICAgICAgICAgICAgICAgICAgICAgICAgICAgIDogbnVtICAxOS44IDAgMCAyIDAgMCAwIDAgMC40IDAgLi4uXG4gJCBzbmllZyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOiBudW0gIDAgMCAwIDAgMCAwIDAgMCAwIDAgLi4uXG4gJCBKYWtpX2R6aWVuICAgICAgICAgICAgICAgICAgICAgICAgOiBjaHIgIFwicm9ib2N6eVwiIFwicm9ib2N6eVwiIFwicm9ib2N6eVwiIFwid2Vla2VuZFwiIC4uLlxuICQgUm9kemFqX29wYWR1ICAgICAgICAgICAgICAgICAgICAgIDogY2hyICBcImRcIiBcInNcIiBcInNcIiBcImRcIiAuLi5cbiAtIGF0dHIoKiwgXCIuaW50ZXJuYWwuc2VsZnJlZlwiKT08ZXh0ZXJuYWxwdHI+IFxuIC0gYXR0cigqLCBcInNvcnRlZFwiKT0gY2hyIFwiRGF0YVwiXG5OVUxMXG4ifQ== -->
-<pre><code>Classes ‘data.table’ and 'data.frame':  1398 obs. of  42 variables:
- $ Data                              : Date, format: &quot;2014-08-13&quot; &quot;2014-08-14&quot; &quot;2014-08-15&quot; ...
- $ startTyg                          : Date, format: &quot;2014-08-11&quot; &quot;2014-08-11&quot; &quot;2014-08-11&quot; ...
- $ startM                            : Date, format: &quot;2014-08-01&quot; &quot;2014-08-01&quot; &quot;2014-08-01&quot; ...
- $ al. Solidarności/Dworzec Wileński : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ al. Stanów Zjednoczonych - suma   : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ al. Stanów Zjednoczonych N        : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ al. Stanów Zjednoczonych S        : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Aleje Jerozolimskie - suma        : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Aleje Jerozolimskie/pl. Zawiszy N : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Aleje Jerozolimskie/pl. Zawiszy S : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Banacha/Żwirki i Wigury           : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Bazyliańska/Wysockiego            : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Belwederska                       : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Czerniakowska - suma              : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Czerniakowska E                   : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Czerniakowska W                   : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Marsa                             : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Marszałkowska/Metro Świętokrzyska : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ NSR Most Gdański - suma           : num  102 576 2585 484 1138 ...
- $ NSR Most Gdański CPR              : num  0 0 0 0 0 0 0 0 0 0 ...
- $ NSR Most Gdański DDR              : num  102 576 2585 484 1138 ...
- $ NSR Solec - suma                  : num  66 195 1414 214 393 ...
- $ NSR Solec CPR                     : num  6 114 861 134 273 172 224 262 100 207 ...
- $ NSR Solec DDR                     : num  60 81 553 80 120 126 129 173 78 249 ...
- $ Praska ścieżka rekreacyjna        : num  NaN 108 1146 201 617 ...
- $ Świętokrzyska/Emilii Plater - suma: num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Świętokrzyska/Emilii Plater N     : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Świętokrzyska/Emilii Plater S     : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Targowa/Dworzec Wileński          : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Wybrzeże Helskie/Starzyńskiego    : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Wysockiego                        : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Żwirki i Wigury/1 Sierpnia        : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Żwirki i Wigury/Trojdena - suma   : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Żwirki i Wigury/Trojdena E        : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ Żwirki i Wigury/Trojdena W        : num  NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
- $ temp_min                          : num  13 17.6 13.3 13.1 12.4 13.4 11.9 11.6 9.1 6.5 ...
- $ temp_avg                          : num  18.8 18.7 18.6 15.4 15.1 18.6 16.2 15.7 12.6 14.6 ...
- $ temp_max                          : num  23.3 20.7 23.5 19.7 18.7 23.4 20.6 20.8 17.1 21.3 ...
- $ deszcz                            : num  19.8 0 0 2 0 0 0 0 0.4 0 ...
- $ snieg                             : num  0 0 0 0 0 0 0 0 0 0 ...
- $ Jaki_dzien                        : chr  &quot;roboczy&quot; &quot;roboczy&quot; &quot;roboczy&quot; &quot;weekend&quot; ...
- $ Rodzaj_opadu                      : chr  &quot;d&quot; &quot;s&quot; &quot;s&quot; &quot;d&quot; ...
- - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt; 
- - attr(*, &quot;sorted&quot;)= chr &quot;Data&quot;
-NULL</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gZnJlYWQocGxpa19wb2dvZGFfb2xkKSA6IFxuICBGaWxlICdwbGlraS9JTUdXX3BvZ29kYV8yMDE4MDkzMC5jc3YnIGRvZXMgbm90IGV4aXN0IG9yIGlzIG5vbi1yZWFkYWJsZS4gZ2V0d2QoKT09J0M6L1VzZXJzL01vbmlrYS9Eb2N1bWVudHMvUi9zaGlueS1zZXJ2ZXIvcm93ZXJ5J1xuIn0= -->
+<pre><code>Error in fread(plik_pogoda_old) : 
+  File 'pliki/IMGW_pogoda_20180930.csv' does not exist or is non-readable. getwd()=='C:/Users/Monika/Documents/R/shiny-server/rowery'</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud3JpdGUuY3N2KGRhbmVfenN1bW93YW5lLCBmaWxlID0gXCJkYW5lL2RhbmVfenN1bW93YW5lX3pfcG9nb2RhLmNzdlwiLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnKVxuZGFuZV9sb25nPC13aWRlX3RvX2xvbmcoZGFuZV96c3Vtb3dhbmUpXG5ybShkYW5lX3pzdW1vd2FuZSlcbndyaXRlLmNzdihkYW5lX2xvbmcsIGZpbGUgPSBcInBsaWtpL2RhbmVfbG9uZy5jc3ZcIiwgZmlsZUVuY29kaW5nID0gJ1VURi04JylcbmBgYCJ9 -->
-<pre class="r"><code>write.csv(dane_zsumowane, file = &quot;dane/dane_zsumowane_z_pogoda.csv&quot;, fileEncoding = 'UTF-8')
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWV0YWRhbmU8LXdjenl0YWpfbWV0YWRhbmVfel9hcGkoY3JlZGVudGlhbHMsIG1pYXN0bz1taWFzdG8pXG5wcmludChoZWFkKG1ldGFkYW5lKSlcbmBgYCJ9 -->
+<pre class="r"><code>metadane&lt;-wczytaj_metadane_z_api(credentials, miasto=miasto)
+print(head(metadane))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEudGFibGUiLCJkYXRhLmZyYW1lIl0sIm5jb2wiOjEwLCJucm93Ijo2fSwicmRmIjoiSDRzSUFBQUFBQUFBQm8yVnYyL1RRQlRISFNkT1NWQUtGQlorU2FZTS9GSlQvNGgvc1RTZ3FvV2dna1JVdFNvUzFXRmZtMnRkTzdLZHVzbENoMHI4QVlpRlNqQWpoRkJoZzRHaEt2OEFBMGhNVEFpSkJRbGw0RWZEdWJIVDJHNUZJbDNlK1hQZnUzZnYzVHY3OXVnMGw1M09FZ1JCRWtrcVFaQkozRTJSK0M5QnBJaU1aMWNJSW5rVWR6eFJEcmMwMVR3M1NqVnYzTWR0bFdxNlk3aU5VODNIbi9EWVlXK2NJRmE5aVdlQm5xZkxwbzQwWUJubTFycUtoa2RkMDJwQWxaNUNPdHhhc3hlUkx6MjVJM1dBc2ZuYXBXY1dvR2FZYXNNMDZtcUZ2dmwvU2RuZjZaa3JPbHlBZEFsYVpnTzdYY0xydytFcW5qWURYR1EzNm5pdEhvVmwzK25nVldBQXRRS0d0OTY2eUZwRU5NSmJuNjlaZGZxOGh1eXFEdW9Yc0tyZkM3cFlvbDg4ZnpxNVhpeWRYcHRJWEg2SWJXTkZINndVUzZkZTNzcXRUV0Q3NnRHM0x4dkYwb2tmejM1L1hlck1FeklYbVVrT0ZJVWpIei8vZlBDM0tBd2NoNWMrYkJZTGY2Ni91U3VNWVB2ays3dU5POWkrSHprMmdKT2J6TFdUakU5b3p4WTZ2YlFPbDZGdSswY1QwQU5Ud0xJYndBVVJOYVhxd0k2SzAzTkFkVXdMOTdhREN0amZlVy9qcTU2dm5lcnhxc2lySG5mTVk3MEZSN2I4SFpMK0RnbmY5bzJWWjBWRzV0dXlaQ0RiTTVDT294UnVHYis4RC9rejZJZ2pPdUxvNERRM3poWVlTV1FFWlJkZFl3c3NJd295RTBhc0tQRmlOeElZVVZJVU5vNjRPT0pEaUdWa2lZa2dWcFlMWWh4SjNVaGtPSVdUMkREaUZaN2o0aWkwdk1peWpNSUkzVWhpUkk3bjVSaVNtRGdLZVpSWWxwY1VPWTVDS1pRWnZoQUpxSTJrTUNvSWpGSUlJMEhnWlM2TVJFR01xandraEpFa3lGR1ZoNklxWEZwY0ZMRThHMGNSbFNMeUJTR094RjdLTkh3OURiQUVnK3VaOVNHSnRLRDhKeEJjc0ZVWVhISWRPTWlwYWNGelJqZU4rVzZRVXBGVER3YVJQWXZkb3VYT2JBenNpdWthd2VKVmdLelpqcStNaTdSNTZPeUN0QTB0QlBSOVlzcHF3QUg1T1F2dlB4SlR4akxkZkJDWGR5ZEo3MFhRYXJWKzdaR0FQclBxSU5QQVV0TDdJbEVSTHdrckFnN1ZERzlwYlVpdDFJekZJZG0vNWdtaS9jdjUvWFJYUDl0Mm1Rb2lvSUw0SUU2ZUVXU0gwc0U5cVBzUC9UaUVuUWp5VlFzWlRoQXlwbmJlTVIwUTZMS3FxUWVrL1RMZC9nZlNINTh0ZndjQUFBPT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["Miejsce"],"name":[2],"type":["chr"],"align":["left"]},{"label":["latitude"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["longitude"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["city"],"name":[5],"type":["fctr"],"align":["left"]},{"label":["is_active"],"name":[6],"type":["int"],"align":["right"]},{"label":["is_shown"],"name":[7],"type":["int"],"align":["right"]},{"label":["pair_id"],"name":[8],"type":["int"],"align":["right"]},{"label":["widget_id"],"name":[9],"type":["fctr"],"align":["left"]},{"label":["serial"],"name":[10],"type":["fctr"],"align":["left"]}],"data":[{"1":"100017988","2":"al. Solidarności/Dworzec Wileński","3":"52.2553","4":"21.0358","5":"Warszawa","6":"1","7":"1","8":"NA","9":"","10":"X2H14116736"},{"1":"100027263","2":"al. Stanów Zjednoczonych N","3":"52.2306","4":"21.0697","5":"Warszawa","6":"1","7":"1","8":"100027264","9":"","10":"X2H15118846"},{"1":"100027264","2":"al. Stanów Zjednoczonych S","3":"52.2303","4":"21.0707","5":"Warszawa","6":"1","7":"1","8":"100027263","9":"","10":"X2H15118847"},{"1":"100038470","2":"Aleje Jerozolimskie/pl. Zawiszy N","3":"52.2241","4":"20.9855","5":"Warszawa","6":"1","7":"1","8":"100038471","9":"","10":"X2H17062338"},{"1":"100038471","2":"Aleje Jerozolimskie/pl. Zawiszy S","3":"52.2242","4":"20.9868","5":"Warszawa","6":"1","7":"1","8":"100038470","9":"","10":"X2H17062370"},{"1":"100047576","2":"Banacha/Żwirki i Wigury (display)","3":"52.2105","4":"20.9874","5":"Warszawa","6":"1","7":"1","8":"NA","9":"","10":"X2H18096346"}],"options":{"columns":{"min":{},"max":[10],"total":[10]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9rYWNqZTwtenJvYl9zdW15KG1ldGFkYW5lKVxud3JpdGUuY3N2KGxva2FjamUsIHBsaWtfcG9sb3plbmllLCByb3cubmFtZXMgPSBGLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnKVxuYGBgIn0= -->
+<pre class="r"><code>lokacje&lt;-zrob_sumy(metadane)
+write.csv(lokacje, plik_polozenie, row.names = F, fileEncoding = 'UTF-8')</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9rYWNqZTwtZGF0YS50YWJsZShyZWFkLmNzdihwbGlrX3BvbG96ZW5pZSwgZW5jb2Rpbmc9J1VURi04JykpXG5rbHVjeiA8LSBsb2thY2plWyxjKFwiaWRcIiwgXCJNaWVqc2NlXCIpXVxuYGBgIn0= -->
+<pre class="r"><code>lokacje&lt;-data.table(read.csv(plik_polozenie, encoding='UTF-8'))
+klucz &lt;- lokacje[,c(&quot;id&quot;, &quot;Miejsce&quot;)]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlzdHlfc3R5bG93PC16cm9iX2xpc3R5X3N0eWxvdyhsb2thY2plLCBwYWxldGE9cGFsZXRhMzApICN3IG9ic2x1Z2Ffc3Vtb3dhbmlhXG53cml0ZS5jc3YobGlzdHlfc3R5bG93LCBmaWxlID0gcGxpa19zdHlsZSwgZmlsZUVuY29kaW5nID0gJ1VURi04Jywgcm93Lm5hbWVzID0gRilcbmBgYCJ9 -->
+<pre class="r"><code>listy_stylow&lt;-zrob_listy_stylow(lokacje, paleta=paleta30) #w obsluga_sumowania
+write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGFuZTwtd2N6eXRhal96X2FwaShjcmVkZW50aWFscywga2x1Y3o9a2x1Y3osIG9kPVwiMjAxNC0wOC0xM1wiLCBkbz1cIjIwMTgtMTEtMjZcIiwgbWlhc3RvKVxuZGFuZTwtbnVtZXJ5X2RhdChkYW5lKVxuYGBgIn0= -->
+<pre class="r"><code>dane&lt;-wczytaj_z_api(credentials, klucz=klucz, od=&quot;2014-08-13&quot;, do=&quot;2018-11-26&quot;, miasto)
+dane&lt;-numery_dat(dane)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog46S847ixbHVicmlkYXRl46S847iyXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g46S847ixcGFja2FnZTpkYXRhLnRhYmxl46S847iyOlxuXG4gICAgaG91ciwgaXNvd2VlaywgbWRheSwgbWludXRlLCBtb250aCwgcXVhcnRlciwgc2Vjb25kLCB3ZGF5LCB3ZWVrLCB5ZGF5LCB5ZWFyXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOOkvOO4sXBhY2thZ2U6YmFzZeOkvOO4sjpcblxuICAgIGRhdGVcbiJ9 -->
+<pre><code>
+Attaching package: 㤼㸱lubridate㤼㸲
+
+The following objects are masked from 㤼㸱package:data.table㤼㸲:
+
+    hour, isoweek, mday, minute, month, quarter, second, wday, week, yday, year
+
+The following object is masked from 㤼㸱package:base㤼㸲:
+
+    date</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud3JpdGUuY3N2KGRhbmUsIGZpbGUgPSBkYW5lX3BvbGFjem9uZSwgZmlsZUVuY29kaW5nID0gJ1VURi04JylcbmBgYCJ9 -->
+<pre class="r"><code>write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGFuZV96c3Vtb3dhbmU8LXN1bWFfbGljem5pa293KGRhbmUpXG5kYW5lX3pzdW1vd2FuZTwtZG9kYWpfcG9nb2RlKGRhbmVfenN1bW93YW5lLCBwbGlrX3BvZ29kYSlcbndyaXRlLmNzdihkYW5lX3pzdW1vd2FuZSwgZmlsZSA9IGRhbmVfel9wb2dvZGEsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpXG5kYW5lX2xvbmc8LXdpZGVfdG9fbG9uZyhkYW5lX3pzdW1vd2FuZSlcbndyaXRlLmNzdihkYW5lX2xvbmcsIGZpbGUgPSBwbGlrX2RhbmVfbG9uZywgZmlsZUVuY29kaW5nID0gJ1VURi04JylcbnJtKGRhbmUpXG5ybShkYW5lX3pzdW1vd2FuZSlcbmBgYCJ9 -->
+<pre class="r"><code>dane_zsumowane&lt;-suma_licznikow(dane)
+dane_zsumowane&lt;-dodaj_pogode(dane_zsumowane, plik_pogoda)
+write.csv(dane_zsumowane, file = dane_z_pogoda, fileEncoding = 'UTF-8')
 dane_long&lt;-wide_to_long(dane_zsumowane)
-rm(dane_zsumowane)
-write.csv(dane_long, file = &quot;pliki/dane_long.csv&quot;, fileEncoding = 'UTF-8')</code></pre>
+write.csv(dane_long, file = plik_dane_long, fileEncoding = 'UTF-8')
+rm(dane)
+rm(dane_zsumowane)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpMb2FkIHN0dWZmDQoNCmBgYHtyfQ0KbGlicmFyeShkYXRhLnRhYmxlKQ0Kc291cmNlKCdsYWRvd2FuaWVfZGFueWNoLlInLCBlbmNvZGluZyA9ICdVVEYtOCcpDQpzb3VyY2UoJ29ic2x1Z2Ffc3Vtb3dhbmlhLlInLCBlbmNvZGluZyA9ICdVVEYtOCcpDQpzb3VyY2UoJ3BvZ29kYS9pbWd3LlInLCBlbmNvZGluZyA9ICdVVEYtOCcpDQpgYGANCg0KYGBge3J9DQpwbGlrX3BvZ29kYT0icGxpa2kvSU1HV19wb2dvZGFfMjAxODA1MzEuY3N2Ig0KYGBgDQoNCmBgYHtyfQ0KcGxpa19wb2dvZGFfb2xkPSJwbGlraS9JTUdXX3BvZ29kYV8yMDE4MDQzMC5jc3YiDQpwb2dvZGFfb2xkPC1mcmVhZChwbGlrX3BvZ29kYV9vbGQpDQpwb2dvZGFfb2xkWyxEYXRhOj1hcy5EYXRlKERhdGEpXQ0KcG9nb2RhX25ldzwtY3p5dGFqX2RhbmVfemlweShvZD01LCBkbz01LCBuYXp3YV9vdXQ9InBvZ29kYS9JTUdXXzIwMThfMDQuY3N2IikNCnBvZ29kYV9uZXdbLG9wYWQ6PU5VTExdDQpwb2dvZGFfbmV3Wyxyb2R6YWo6PU5VTExdDQoNCnBvZ29kYTwtdW5pcXVlKHJiaW5kKHBvZ29kYV9vbGQsIHBvZ29kYV9uZXcpKQ0Kd3JpdGUuY3N2KHBvZ29kYSwgZmlsZSA9IHBsaWtfcG9nb2RhLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnLCByb3cubmFtZXMgPSBGKQ0KDQpgYGANCg0KDQoNCmBgYHtyfQ0KbG9rYWNqZSA8LSByZWFkLmNzdigicGxpa2kvcG9sb3plbmllX2xpY3puaWtvdy5jc3YiLGRlYz0iLCIsIGVuY29kaW5nPSdVVEYtOCcpDQpsb2thY2plPC1kYXRhLnRhYmxlKGxva2FjamUpDQprbHVjeiA8LSBsb2thY2plWyxjKCJpZCIsICJNaWVqc2NlIildDQoNCmRhbmU8LXdjenl0YWpfel9hcGkoa2x1Y3o9a2x1Y3osIG9kPSIyMDE0LTA4LTEzIiwgZG89IjIwMTgtMDYtMTAiKQ0KDQpgYGANCg0KYGBge3J9DQpkYW5lPC1udW1lcnlfZGF0KGRhbmUpDQp3cml0ZS5jc3YoZGFuZSwgZmlsZSA9ICJkYW5lL2RhbmVfcG9sYWN6b25lLmNzdiIsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpDQoNCmRhbmVfenN1bW93YW5lPC1zdW1hX2xpY3puaWtvdyhkYW5lKQ0Kcm0oZGFuZSkNCmBgYA0KDQpgYGB7cn0NCm5hend5PC1uYW1lcyhkYW5lX3pzdW1vd2FuZSlbNDpsZW5ndGgobmFtZXMoZGFuZV96c3Vtb3dhbmUpKV0NCmxpc3R5X3N0eWxvdzwtenJvYl9saXN0eV9zdHlsb3cobmF6d3ksIHBhbGV0YT1wYWxldGEyMF9zb3J0ZWQpICN3IG9ic2x1Z2Ffc3Vtb3dhbmlhDQp3cml0ZS5jc3YobGlzdHlfc3R5bG93LCBmaWxlID0gInBsaWtpL2xpc3R5X3N0eWxvdy5jc3YiLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnLCByb3cubmFtZXMgPSBGKQ0Kd3JpdGUuY3N2KGRhbmVfenN1bW93YW5lLCBmaWxlID0gImRhbmUvZGFuZV9wb2xhY3pvbmVfenN1bW93YW5lLmNzdiIsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpDQoNCmBgYA0KDQpgYGB7cn0NCmRhbmVfenN1bW93YW5lPC1kb2Rhal9wb2dvZGUoZGFuZV96c3Vtb3dhbmUsIHBsaWtfcG9nb2RhKQ0KcHJpbnQoc3RyKGRhbmVfenN1bW93YW5lKSkNCndyaXRlLmNzdihkYW5lX3pzdW1vd2FuZSwgZmlsZSA9ICJkYW5lL2RhbmVfenN1bW93YW5lX3pfcG9nb2RhLmNzdiIsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpDQpkYW5lX2xvbmc8LXdpZGVfdG9fbG9uZyhkYW5lX3pzdW1vd2FuZSkNCnJtKGRhbmVfenN1bW93YW5lKQ0Kd3JpdGUuY3N2KGRhbmVfbG9uZywgZmlsZSA9ICJwbGlraS9kYW5lX2xvbmcuY3N2IiwgZmlsZUVuY29kaW5nID0gJ1VURi04JykNCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpMb2FkIHN0dWZmDQoNCmBgYHtyfQ0KbGlicmFyeShkYXRhLnRhYmxlKQ0Kc291cmNlKCdsYWRvd2FuaWVfZGFueWNoLlInLCBlbmNvZGluZyA9ICdVVEYtOCcpDQpzb3VyY2UoJ29ic2x1Z2Ffc3Vtb3dhbmlhLlInLCBlbmNvZGluZyA9ICdVVEYtOCcpDQpzb3VyY2UoJ3BvZ29kYS9pbWd3LlInLCBlbmNvZGluZyA9ICdVVEYtOCcpDQpgYGANCg0KYGBge3J9DQptaWFzdG89IldhcnN6YXdhIiAjS3JhayVDMyVCM3cNCmthdGFsb2c9InBsaWtpIg0KcGxpa19wb2dvZGE9cGFzdGUoa2F0YWxvZywgIklNR1dfcG9nb2RhXzIwMTgxMDMxLmNzdiIsIHNlcD0iLyIpDQpwbGlrX3BvbG96ZW5pZT1wYXN0ZShrYXRhbG9nLCJwb2xvemVuaWVfbGljem5pa293LmNzdiIsIHNlcD0iLyIpDQpwbGlrX3N0eWxlPXBhc3RlKGthdGFsb2csICJsaXN0eV9zdHlsb3cuY3N2Iiwgc2VwPSIvIikNCnBsaWtfZGFuZV9sb25nPXBhc3RlKGthdGFsb2csICJkYW5lX2xvbmcuY3N2Iiwgc2VwPSIvIikNCmRhbmVfcG9sYWN6b25lPXBhc3RlKCJkYW5lIiwgbWlhc3RvLCAiZGFuZV9wb2xhY3pvbmUuY3N2Iiwgc2VwPSIvIikNCmRhbmVfel9wb2dvZGE9cGFzdGUoImRhbmUiLG1pYXN0bywiZGFuZV96c3Vtb3dhbmVfel9wb2dvZGEuY3N2Iiwgc2VwPSIvIikNCmBgYA0KDQpgYGB7ciBhZGQgbmV3IHdlYXRoZXJ9DQpwbGlrX3BvZ29kYV9vbGQ9cGFzdGUoa2F0YWxvZywgIklNR1dfcG9nb2RhXzIwMTgwOTMwLmNzdiIsIHNlcD0iLyIpDQpwb2dvZGFfb2xkPC1mcmVhZChwbGlrX3BvZ29kYV9vbGQpDQpwb2dvZGFfb2xkWyxEYXRhOj1hcy5EYXRlKERhdGEpXQ0KcG9nb2RhX25ldzwtY3p5dGFqX2RhbmVfemlweShvZD0xMCwgZG89MTAsIHN0YWNqYSA9IGtyYWtvd0JhbGljZSkNCnBvZ29kYV9uZXdbLG9wYWQ6PU5VTExdDQpwb2dvZGFfbmV3Wyxyb2R6YWo6PU5VTExdDQoNCnBvZ29kYTwtdW5pcXVlKHJiaW5kKHBvZ29kYV9vbGQsIHBvZ29kYV9uZXcpKQ0Kd3JpdGUuY3N2KHBvZ29kYSwgZmlsZSA9IHBsaWtfcG9nb2RhLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnLCByb3cubmFtZXMgPSBGKQ0KDQpgYGANCg0KYGBge3J9DQptZXRhZGFuZTwtd2N6eXRhal9tZXRhZGFuZV96X2FwaShjcmVkZW50aWFscywgbWlhc3RvPW1pYXN0bykNCnByaW50KGhlYWQobWV0YWRhbmUpKQ0KDQpsb2thY2plPC16cm9iX3N1bXkobWV0YWRhbmUpDQp3cml0ZS5jc3YobG9rYWNqZSwgcGxpa19wb2xvemVuaWUsIHJvdy5uYW1lcyA9IEYsIGZpbGVFbmNvZGluZyA9ICdVVEYtOCcpDQpgYGANCg0KYGBge3J9DQpsb2thY2plPC1kYXRhLnRhYmxlKHJlYWQuY3N2KHBsaWtfcG9sb3plbmllLCBlbmNvZGluZz0nVVRGLTgnKSkNCmtsdWN6IDwtIGxva2FjamVbLGMoImlkIiwgIk1pZWpzY2UiKV0NCmBgYA0KDQpgYGB7ciBsaXN0eSBzdHlsb3cgLSB0eWxrbyBwcnogbm93eWNoIGxpY3puaWthY2h9DQpsaXN0eV9zdHlsb3c8LXpyb2JfbGlzdHlfc3R5bG93KGxva2FjamUsIHBhbGV0YT1wYWxldGEzMCkgI3cgb2JzbHVnYV9zdW1vd2FuaWENCndyaXRlLmNzdihsaXN0eV9zdHlsb3csIGZpbGUgPSBwbGlrX3N0eWxlLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnLCByb3cubmFtZXMgPSBGKQ0KYGBgDQoNCmBgYHtyIHNjaWFnYWogZGFuZSB6IGFwaX0NCmRhbmU8LXdjenl0YWpfel9hcGkoY3JlZGVudGlhbHMsIGtsdWN6PWtsdWN6LCBvZD0iMjAxNC0wOC0xMyIsIGRvPSIyMDE4LTExLTI2IiwgbWlhc3RvKQ0KZGFuZTwtbnVtZXJ5X2RhdChkYW5lKQ0Kd3JpdGUuY3N2KGRhbmUsIGZpbGUgPSBkYW5lX3BvbGFjem9uZSwgZmlsZUVuY29kaW5nID0gJ1VURi04JykNCmBgYA0KDQoNCmBgYHtyIHN1bXVqIGRhbmUgaSBkb2RhaiBwb2dvZGV9DQpkYW5lX3pzdW1vd2FuZTwtc3VtYV9saWN6bmlrb3coZGFuZSkNCmRhbmVfenN1bW93YW5lPC1kb2Rhal9wb2dvZGUoZGFuZV96c3Vtb3dhbmUsIHBsaWtfcG9nb2RhKQ0Kd3JpdGUuY3N2KGRhbmVfenN1bW93YW5lLCBmaWxlID0gZGFuZV96X3BvZ29kYSwgZmlsZUVuY29kaW5nID0gJ1VURi04JykNCmRhbmVfbG9uZzwtd2lkZV90b19sb25nKGRhbmVfenN1bW93YW5lKQ0Kd3JpdGUuY3N2KGRhbmVfbG9uZywgZmlsZSA9IHBsaWtfZGFuZV9sb25nLCBmaWxlRW5jb2RpbmcgPSAnVVRGLTgnKQ0Kcm0oZGFuZSkNCnJtKGRhbmVfenN1bW93YW5lKQ0KYGBgDQo=</div>
 
 
 

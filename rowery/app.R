@@ -33,7 +33,7 @@ dane_long<-wczytaj_dane(paste(katalog, "dane_long.csv", sep="/"))
 nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data])
-plik_pogoda=paste(katalog, "IMGW_pogoda_20181031.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_pogoda_20181231.csv", sep="/")
 temp<-fread(plik_pogoda)
 zakresDoPogoda=as.character(max(temp[,Data]))
 
@@ -172,8 +172,8 @@ server <- function(input, output, session) {
              zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)), style)
   
   #aktualizacja danych
-  dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
-                             plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
+  #dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
+  #                           plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
 
   #aktualizacja daty 
   zakresDo<-as.character(Sys.Date()-1)

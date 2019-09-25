@@ -15,7 +15,7 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```{r}
 miasto="Warszawa" #Krak%C3%B3w
 katalog="pliki"
-plik_pogoda=paste(katalog, "IMGW_pogoda_20181031.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_pogoda_20181231.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
@@ -55,11 +55,18 @@ write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F
 ```
 
 ```{r sciagaj dane z api}
-dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-11-26", miasto)
+dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-12-31", miasto)
 dane<-numery_dat(dane)
 write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
 ```
-
+```{r dodaj dane z 2019}
+dane2019_long<-fread("dane/Warszawa/dane2019.csv", encoding = 'UTF-8')
+dane2019_long[,Data:=as.Date(Data)]
+dane2019<-long_to_wide(dane2019_long)
+dane2019[,Testowy:=NULL]
+dane2019<-numery_dat(dane2019)
+dane<-rbind(dane, dane2019)
+```
 
 ```{r sumuj dane i dodaj pogode}
 dane_zsumowane<-suma_licznikow(dane)
