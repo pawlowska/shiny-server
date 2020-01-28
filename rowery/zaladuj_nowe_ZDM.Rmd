@@ -1,0 +1,85 @@
+---
+title: "ZDM nowe dane"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+
+```
+
+Wczytaj plik
+
+```{r reading}
+plik="pliki/dane2019PZ.csv"
+t<-fread(plik, encoding = "UTF-8")
+```
+
+Konwertuj do long i napraw nazwy
+
+```{r}
+tnew <- data.table(1)[,`:=`(c("date", "name", "sum"),NA)][,V1:=NULL][.0]
+
+while(!is.null(t$name)) {
+  tnew<-rbind(tnew, t[,c("date", "name", "sum")])
+  t<-t[,"name":=NULL]
+  t<-t[,"sum":=NULL]
+}
+
+tnew[,name:=gsub("ul. ", "", name)]
+tnew[,name:=gsub("\\(wschód\\)", "E", name)]
+tnew[,name:=gsub("\\(zachód\\)", "W", name)]
+tnew[,name:=gsub("\\(północ\\)", "N", name)]
+tnew[,name:=gsub("\\(południe\\)", "S", name)]
+
+tnew[,name:=gsub("Al. Jerozolimskie - południe", "Aleje Jerozolimskie/pl. Zawiszy S", name)]
+tnew[,name:=gsub("Al. Jerozolimskie - północ", "Aleje Jerozolimskie/pl. Zawiszy N", name)]
+
+tnew[,name:=gsub("Al. USA - południe", "al. Stanów Zjednoczonych S", name)]
+tnew[,name:=gsub("Al. USA - północ", "al. Stanów Zjednoczonych N", name)]
+
+tnew[,name:=gsub("\\(totem\\)", "(display)", name)]
+
+tnew[,name:=gsub("Bazyliańska", "Bazyliańska/Wysockiego", name)]
+
+tnew[,name:=gsub("Radzymińska - Bystra", "Bystra/Radzymińska", name)]
+
+
+tnew[,name:=gsub("Czerniakowska –", "Czerniakowska", name)]
+
+tnew[,name:=gsub("Dworzec Wileński \\(al. Solidarności\\)", "al. Solidarności/Dworzec Wileński", name)]
+tnew[,name:=gsub("Dworzec Wileński \\(Targowa\\)", "Targowa/Dworzec Wileński", name)]
+
+
+tnew[,name:=gsub("Marszałkowska", "Marszałkowska/Metro Świętokrzyska", name)]
+
+tnew[,name:=gsub("Nadwiślański Szlak Rowerowy -", "NSR", name)]
+tnew[,name:=gsub("– ciąg pieszo-rowerowy", "CPR", name)]
+tnew[,name:=gsub("– ścieżka rowerowa", "DDR", name)]
+
+tnew[,name:=gsub("Okopowa \\(Rondo Radosława\\)", "Okopowa/rondo Radosława", name)]
+
+tnew[,name:=gsub("Przyczółkowa", "Przyczółkowa/al. Wilanowska", name)]
+
+tnew[,name:=gsub(" - ", "/", name)]
+tnew[,name:=gsub(" / ", "/", name)]
+
+
+tnew[,name:=gsub("Świętokrzyska – ", "Świętokrzyska/", name)]
+
+tnew[,name:=gsub("Towarowa", "Towarowa/Łucka", name)]
+
+tnew[,name:=gsub("sierpnia", "Sierpnia", name)]
+
+
+tnew[,name:=gsub("Wybrzeże Helskie \\(Most Gdański\\)", "Wybrzeże Helskie/Starzyńskiego", name)]
+
+
+setnames(tnew, c("date", "name", "sum"), c("Data", "Miejsce", "Liczba_rowerow"))
+```
+
+```{r}
+write.csv(tnew, file = "dane/Warszawa/dane20192020.csv", fileEncoding = 'UTF-8')
+
+```

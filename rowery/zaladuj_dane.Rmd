@@ -59,8 +59,9 @@ dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-12-31", 
 dane<-numery_dat(dane)
 write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
 ```
-```{r dodaj dane z 2019}
-dane2019_long<-fread("dane/Warszawa/dane2019.csv", encoding = 'UTF-8')
+
+```{r dodaj dane z 2019 i 2020}
+dane2019_long<-fread("dane/Warszawa/dane20192020.csv", encoding = 'UTF-8')
 dane2019_long[,Data:=as.Date(Data)]
 dane2019<-long_to_wide(dane2019_long)
 dane2019[,Testowy:=NULL]
