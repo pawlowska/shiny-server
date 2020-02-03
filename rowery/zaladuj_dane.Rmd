@@ -15,25 +15,12 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```{r}
 miasto="Warszawa" #Krak%C3%B3w
 katalog="pliki"
-plik_pogoda=paste(katalog, "IMGW_pogoda_20181231.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_375_2014_2019.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
 dane_polaczone=paste("dane", miasto, "dane_polaczone.csv", sep="/")
 dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv", sep="/")
-```
-
-```{r add new weather}
-plik_pogoda_old=paste(katalog, "IMGW_pogoda_20180930.csv", sep="/")
-pogoda_old<-fread(plik_pogoda_old)
-pogoda_old[,Data:=as.Date(Data)]
-pogoda_new<-czytaj_dane_zipy(od=10, do=10, stacja = krakowBalice)
-pogoda_new[,opad:=NULL]
-pogoda_new[,rodzaj:=NULL]
-
-pogoda<-unique(rbind(pogoda_old, pogoda_new))
-write.csv(pogoda, file = plik_pogoda, fileEncoding = 'UTF-8', row.names = F)
-
 ```
 
 ```{r}
@@ -73,8 +60,15 @@ dane<-rbind(dane, dane2019)
 dane_zsumowane<-suma_licznikow(dane)
 dane_zsumowane<-dodaj_pogode(dane_zsumowane, plik_pogoda)
 write.csv(dane_zsumowane, file = dane_z_pogoda, fileEncoding = 'UTF-8')
+```
+
+```{r}
 dane_long<-wide_to_long(dane_zsumowane)
 write.csv(dane_long, file = plik_dane_long, fileEncoding = 'UTF-8')
+```
+
+```{r}
 rm(dane)
 rm(dane_zsumowane)
+rm(dane2019)
 ```
