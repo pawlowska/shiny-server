@@ -47,7 +47,7 @@ weatherPlot <- function(input, output, session, dane, zakresPogoda, zakresMax, l
   output$plotPogodaData<- renderPlot({
     wykres_pogoda_liczba(data_with_weather(),
                          start=zakresPogoda()[1], stop=zakresPogoda()[2], 
-                         paleta=style$kolory, linie = style$linie)
+                         style=style)
   })
       
   output$bike_weather_tooltip <- renderUI({
