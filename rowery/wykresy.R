@@ -14,14 +14,15 @@ labelsy<-function(krok) {
   }
 }
 
-wykres_lokalny<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Date("2017-08-31"), paleta=kolory) {
-  require(lubridate)
-  
-  #zakres_dat=seq(from=start, to=stop, by=1)
-  zakres_dat=interval(start, stop)
-  dane_zakres<-dane[Data %within% zakres_dat & Miejsce %in% kolumny]
-  wykres_kilka(dane_zakres, start, stop)
-}
+
+# wykres_lokalny<-function(dane, kolumny, start=as.Date("2016-01-01"), stop=as.Date("2017-08-31"), paleta=kolory) {
+#   require(lubridate)
+#   
+#   #zakres_dat=seq(from=start, to=stop, by=1)
+#   zakres_dat=interval(start, stop)
+#   dane_zakres<-dane[Data %within% zakres_dat & Miejsce %in% kolumny]
+#   wykres_kilka(dane_zakres, start, stop)
+# }
   
 
 better_ticks<-function(zakres_dat, krok=1) {
@@ -57,6 +58,9 @@ dodaj_wolne<-function(g, wolne) {
 
 #wykres kilku kolumn
 wykres_kilka<-function(dane, start, stop, style, krok=1, wartosc='bezwzględne') {
+  print("wykres_kilka")
+  print(str(dane))
+  
   start_osi_x=min(start,dane[,Data])
   
   #set theme    
@@ -149,7 +153,7 @@ wykres_pogody_w_czasie<-function(dane) {
   #set theme    
   theme_set(theme_light(base_size = rozmiar_czcionki))
   
-  dane[,Data:=as.POSIXct(paste(Data,"00:00:00"))]
+  #dane[,Data:=as.POSIXct(paste(Data,"00:00:00"))]
   
   wolne<-lista_wolnych(dane)
   
@@ -176,10 +180,18 @@ wykres_pogody_w_czasie<-function(dane) {
 }
 
 #combine plots of weather and bikes number
-wykres_pogoda_liczba<-function(dane, start, stop, paleta, linie) {
-  lista<- wykres_pogody_w_czasie(dane)
-  g2<- wykres_kilka(dane, start, stop, paleta, linie)
+wykres_pogoda_liczba<-function(dane, start, stop, style) {
+  print("wykres_pogoda_liczba")
+  print(str(dane))
+  g2<- wykres_kilka(dane, start, stop, style)
+  
+  lista<- wykres_pogody_w_czasie(dane) #this is only weather, always the same color scheme
+  #print(str(dane))
+  #print("trying...")
+  #temp<-ggplot_build(g2)
   grid.newpage()
-  grid.draw(rbind(ggplotGrob(lista[[1]]), ggplotGrob(lista[[2]]), 
-                  ggplotGrob(g2), size = "last"))
+  grid.draw(rbind(ggplotGrob(lista[[1]]), 
+                  ggplotGrob(lista[[2]]), 
+                  ggplotGrob(g2), 
+                  size = "last"))
 }
