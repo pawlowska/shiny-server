@@ -57,7 +57,7 @@ dodaj_wolne<-function(g, wolne) {
 
 
 #wykres kilku kolumn
-wykres_kilka<-function(dane, start, stop, style, krok=1, wartosc='bezwzględne') {
+wykres_kilka_licznikow<-function(dane, start, stop, style, krok=1, wartosc='bezwzględne') {
   start_osi_x=min(start,dane[,Data])
   
   #set theme    
@@ -150,26 +150,25 @@ wykres_pogody_w_czasie<-function(dane) {
   #set theme    
   theme_set(theme_light(base_size = rozmiar_czcionki))
   
-  #dane[,Data:=as.POSIXct(paste(Data,"00:00:00"))]
-  
   wolne<-lista_wolnych(dane)
   
   #temperatura
   g_t<-ggplot(dane)+
     geom_line( aes(Data, temp_avg), colour='red3', size=0.5 )+
     geom_ribbon(aes(x=Data, ymin=temp_min, ymax=temp_max), fill='red', alpha=0.1)+
-    scale_x_datetime(expand=c(0,0), labels=NULL)+ #numer X ticks
+    scale_x_date(expand=c(0,0), labels=NULL)+ #numer X ticks
     ylab("Temperatura (°C)")+xlab("")
   
   #opady
   g_d<-ggplot(dane)+
     geom_segment(aes(x=Data, xend=Data, y=0, yend=deszcz+snieg, color=Rodzaj_opadu), 
                  lineend = "butt", size=1)+
-    scale_x_datetime(expand=c(0,0), labels=NULL)+ #numer X ticks
+    scale_x_date(expand=c(0,0), labels=NULL)+ #numer X ticks
     scale_color_manual(values = c("midnightblue","deepskyblue"))+
     ylab("Opady (mm)")+xlab("")+theme(legend.position="none")
-    
+
   plot_list=list(g_t, g_d)
+  
   for (i in 1:2) {
       plot_list[[i]]<-dodaj_wolne(plot_list[[i]], wolne) + theme(plot.margin = unit(c(0,0,-5,0), "pt"))
   }
@@ -178,17 +177,13 @@ wykres_pogody_w_czasie<-function(dane) {
 
 #combine plots of weather and bikes number
 wykres_pogoda_liczba<-function(dane, start, stop, style) {
-  print("wykres_pogoda_liczba")
-  print(str(dane))
-  g2<- wykres_kilka(dane, start, stop, style)
-  
+  g2<- wykres_kilka_licznikow(dane, start, stop, style)
   lista<- wykres_pogody_w_czasie(dane) #this is only weather, always the same color scheme
-  #print(str(dane))
-  #print("trying...")
-  #temp<-ggplot_build(g2)
+
   grid.newpage()
   grid.draw(rbind(ggplotGrob(lista[[1]]), 
                   ggplotGrob(lista[[2]]), 
                   ggplotGrob(g2), 
                   size = "last"))
+  
 }

@@ -28,7 +28,7 @@ lokacje<-data.table(lokacje)
 #reading colors etc
 style<-wczytaj_style(katalog)
 
-#dane dostępne do: 10.05.2020
+#dane dostępne do: 10.05.2020, pogoda do kwietnia
 #reading data
 dane_long<-wczytaj_dane(paste(katalog, "dane_long.csv", sep="/"))
 nazwy<-unique(dane_long[,Miejsce])
