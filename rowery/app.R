@@ -34,7 +34,7 @@ dane_long<-wczytaj_dane(paste(katalog, "dane_long.csv", sep="/"))
 nazwy<-unique(dane_long[,Miejsce])
 zakresOd=  min(dane_long[,Data])
 zakresDo = max(dane_long[,Data])
-plik_pogoda=paste(katalog, "IMGW_375_2014_2019.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_2014_do2020_04.csv", sep="/")
 temp<-fread(plik_pogoda)
 zakresDoPogoda=as.character(max(temp[,Data]))
 

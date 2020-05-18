@@ -3,14 +3,16 @@ library(data.table)
 warszawaOkecie="352200375"
 krakowBalice="350190566"
 
-czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2020_01.csv", 
+nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
+
+
+czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2020_0104.csv", 
                            format='pogoda/raw/s_d_%02d_2020.csv', stacja=warszawaOkecie) {
-  nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
   pogoda<-data.table(matrix(nrow = 0, ncol = 8))
   setnames(pogoda, names(pogoda), nazwy_kolumn)
   for (i in od:do) {
     nazwa<-sprintf(format,i)
-    dane<-fread(nazwa,colClasses="numeric")[V1==stacja]
+    dane<-fread(nazwa)[V1==stacja]
     dane<-dane[,c('V3', 'V4', 'V5', 'V6', 'V8', 'V10', 'V14', 'V16') ]
     setnames(dane, names(dane), nazwy_kolumn)
     pogoda<-rbind(pogoda, dane)
@@ -20,13 +22,11 @@ czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2020_01.csv",
   pogoda[,deszcz:=ifelse(rodzaj=='W', opad, 0)]
   pogoda[,snieg:= ifelse(rodzaj=='S', opad, 0)]
   setcolorder(pogoda, c('Data', nazwy_kolumn[4:8], 'deszcz', 'snieg'))
-  #write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
+  write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
   pogoda
 }
 
 czytaj_dane_po_stacji<-function(nazwa_out="pogoda/IMGW_2019.csv", nazwa='pogoda/raw/s_d_t_375_2019.csv') {
-  nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
-
   dane<-fread(nazwa,colClasses="numeric")
   pogoda<-dane[,c('V3', 'V4', 'V5', 'V6', 'V8', 'V10', 'V14', 'V16') ]
   

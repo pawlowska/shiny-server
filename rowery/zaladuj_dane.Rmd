@@ -15,7 +15,7 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```{r}
 miasto="Warszawa" #Krak%C3%B3w
 katalog="pliki"
-plik_pogoda=paste(katalog, "IMGW_375_2014_2019.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_2014_do2020_04.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
