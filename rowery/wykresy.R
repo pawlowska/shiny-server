@@ -58,9 +58,6 @@ dodaj_wolne<-function(g, wolne) {
 
 #wykres kilku kolumn
 wykres_kilka<-function(dane, start, stop, style, krok=1, wartosc='bezwzględne') {
-  print("wykres_kilka")
-  print(str(dane))
-  
   start_osi_x=min(start,dane[,Data])
   
   #set theme    
