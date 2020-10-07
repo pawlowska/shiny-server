@@ -1,0 +1,54 @@
+---
+title: "Pogoda dane roczne"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+
+```
+
+
+```{r cars}
+rok_start=2014
+rok_koniec=2019
+stacja='375'
+katalog='roczne/'
+nazwa_out=paste(paste('IMGW', stacja, rok_start, rok_koniec, sep='_'), '.csv', sep='')
+```
+```{r}
+nazwy<-fread('roczne/s_d_format_poprawiony.csv', sep='\t', header=FALSE)
+print(str(nazwy))
+```
+
+
+
+```{r}
+nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
+  pogoda<-data.table(matrix(nrow = 0, ncol = 8))
+  setnames(pogoda, names(pogoda), nazwy_kolumn)
+
+for(rok in seq(rok_start, rok_koniec)) {
+  temp<-fread(paste(katalog, 's_d_', stacja, '_', rok, '.csv', sep=''), col.names=nazwy$V1)
+  temp<-temp[,c('Rok', 'Miesiąc', 'Dzień', 'Maksymalna temperatura dobowa', 'Minimalna temperatura dobowa', 
+                'Średnia temperatura dobowa', 'Suma dobowa opadu', 'Rodzaj opadu')]
+  setnames(temp, names(temp), nazwy_kolumn)
+  pogoda<-rbind(pogoda, temp)
+}
+  
+pogoda[,Data:=as.Date(paste(r,m,d, sep='-'))]
+pogoda[,c('r','m','d'):=NULL]
+pogoda[,deszcz:=ifelse(rodzaj=='W', opad, 0)]
+pogoda[,snieg:= ifelse(rodzaj=='S', opad, 0)]
+pogoda[,opad:=NULL]
+pogoda[,rodzaj:=NULL]
+
+```
+
+```{r}
+write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

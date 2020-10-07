@@ -126,7 +126,6 @@ pogoda_basic<-function(dane, paleta) {
   method_fit<-ifelse(length(unique(dane[,Data]))<100, "lm", "loess")
   
   gg<-ggplot(dane, 
-             #aes(temp_avg, Liczba_rowerow, colour = Miejsce, shape = Jaki_dzien, size=(deszcz+snieg))) +
              aes(temp_avg, Liczba_rowerow, colour = Miejsce, shape = Wolne, size=(deszcz+snieg))) +
     geom_point(alpha=0.8) +
     scale_size(range = c(1.5, 8)) +

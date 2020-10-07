@@ -12,21 +12,82 @@ library(data.table)
 Wczytaj plik
 
 ```{r reading}
-plik="pliki/dane2019PZ.csv"
+#plik="pliki/dane2019PZ.csv"
+plik="pliki/dane2020PZ_2czesc.csv"
 t<-fread(plik, encoding = "UTF-8")
+setnames(t, "date", "Data")
 ```
 
-Konwertuj do long i napraw nazwy
+Konwertuj do long i 
 
 ```{r}
-tnew <- data.table(1)[,`:=`(c("date", "name", "sum"),NA)][,V1:=NULL][.0]
+t_long<-melt(t, 
+              id.vars = "Data", variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
+print(head(t_long))
+rm(t)
+#tnew <- data.table(1)[,`:=`(c("date", "name", "sum"),NA)][,V1:=NULL][.0]
 
-while(!is.null(t$name)) {
-  tnew<-rbind(tnew, t[,c("date", "name", "sum")])
-  t<-t[,"name":=NULL]
-  t<-t[,"sum":=NULL]
+#while(!is.null(t$name)) {
+#  tnew<-rbind(tnew, t[,c("date", "name", "sum")])
+#  t<-t[,"name":=NULL]
+#  t<-t[,"sum":=NULL]
+#}
+```
+
+napraw nazwy
+```{r}
+
+naprawiaj_nazwe<-function(nazwa) {
+  slownik=rbind(
+    c("ul. ", ""),
+    c("\\(wschód\\)", "E"),
+    c("\\(zachód\\)", "W"),
+    c("\\(północ\\)", "N"),
+    c("\\(południe\\)", "S"),
+    c(" - południe", " S"),
+    c(" - północ"  , " N"),
+    c("Al. Jerozolimskie ", "Aleje Jerozolimskie/pl. Zawiszy "),
+#    c("Al. Jerozolimskie - południe", "Aleje Jerozolimskie/pl. Zawiszy S"),
+#    c("Al. Jerozolimskie - północ", "Aleje Jerozolimskie/pl. Zawiszy N"),
+    c("Al. USA ", "al. Stanów Zjednoczonych "),
+#    c("Al. USA - południe", "al. Stanów Zjednoczonych S"),
+#    c("Al. USA - północ", "al. Stanów Zjednoczonych N"),
+    c("\\(totem\\)", "(display)"),
+    c("Bazyliańska", "Bazyliańska/Wysockiego"),
+    c("Radzymińska - Bystra", "Bystra/Radzymińska"),
+    c("Czerniakowska –", "Czerniakowska"),
+    c("Dworzec Wileński \\(al. Solidarności\\)", "al. Solidarności/Dworzec Wileński"),
+    c("Dworzec Wileński \\(Targowa\\)", "Targowa/Dworzec Wileński"),
+    c("Marszałkowska", "Marszałkowska/Metro Świętokrzyska"),
+    c("Nadwiślański Szlak Rowerowy -", "NSR"),
+    c("– ciąg pieszo-rowerowy", "CPR"),
+    c("– ścieżka rowerowa", "DDR"),
+    c("Okopowa \\(Rondo Radosława\\)", "Okopowa/rondo Radosława"),
+    c("Przyczółkowa", "Przyczółkowa/al. Wilanowska"),
+    c(" - ", "/"),
+    c(" / ", "/"),
+    c("Świętokrzyska – ", "Świętokrzyska/"),
+    c("Towarowa", "Towarowa/Łucka"),
+    c("sierpnia", "Sierpnia"),
+    c("Wybrzeże Helskie \\(Most Gdański\\)", "Wybrzeże Helskie/Starzyńskiego")
+  )
+  
+  for(i in 1:nrow(slownik)) {
+    nazwa=gsub(pattern=slownik[i,1],replacement=slownik[i,2], nazwa)
+  }
+  nazwa
 }
 
+```
+
+
+```{r}
+t_long[,Miejsce:=naprawiaj_nazwe(Miejsce)]
+write.csv(t_long, file = "dane/Warszawa/dane2020_od05.csv", fileEncoding = 'UTF-8', row.names = F)
+```
+
+
+```{r}
 tnew[,name:=gsub("ul. ", "", name)]
 tnew[,name:=gsub("\\(wschód\\)", "E", name)]
 tnew[,name:=gsub("\\(zachód\\)", "W", name)]
@@ -80,6 +141,6 @@ setnames(tnew, c("date", "name", "sum"), c("Data", "Miejsce", "Liczba_rowerow"))
 ```
 
 ```{r}
-write.csv(tnew, file = "dane/Warszawa/dane20192020.csv", fileEncoding = 'UTF-8')
+write.csv(tnew, file = "dane/Warszawa/dane2020_od05.csv", fileEncoding = 'UTF-8')
 
 ```

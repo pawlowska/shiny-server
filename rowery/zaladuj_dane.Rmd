@@ -15,7 +15,7 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```{r}
 miasto="Warszawa" #Krak%C3%B3w
 katalog="pliki"
-plik_pogoda=paste(katalog, "IMGW_2014_do2020_04.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_2014_do2020_08.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
@@ -48,12 +48,20 @@ write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
 ```
 
 ```{r dodaj dane z 2019 i 2020}
-dane2019_long<-fread("dane/Warszawa/dane20192020.csv", encoding = 'UTF-8')
-dane2019_long[,Data:=as.Date(Data)]
-dane2019<-long_to_wide(dane2019_long)
-dane2019[,Testowy:=NULL]
-dane2019<-numery_dat(dane2019)
-dane<-rbind(dane, dane2019)
+dane_od2019_long<-rbind(fread("dane/Warszawa/dane20192020.csv", encoding = 'UTF-8')[Data<as.Date("2020-05-01")],
+                        fread("dane/Warszawa/dane2020_od05.csv", encoding = 'UTF-8'), fill=T)
+dane_od2019_long[,V1:=NULL]
+dane_od2019_long[,Data:=as.Date(Data)]
+dane_od2019_long<-na.omit(dane_od2019_long)
+
+dane_od2019<-dcast(dane_od2019_long, Data ~Miejsce, fill=NA, value.var="Liczba_rowerow")
+dane_od2019[,Testowy:=NULL]
+dane_od2019<-numery_dat(dane_od2019)
+```
+
+```{r polacz}
+
+dane<-rbind(dane, dane_od2019, fill=T)
 ```
 
 ```{r sumuj dane i dodaj pogode}
