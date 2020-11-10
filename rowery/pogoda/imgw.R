@@ -17,11 +17,12 @@ czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2020_0104.csv",
     setnames(dane, names(dane), nazwy_kolumn)
     pogoda<-rbind(pogoda, dane)
   }
-  pogoda[,Data:=as.Date(paste(r,m,d, sep='-'))]
+  pogoda[,Data:=paste(r,m,d, sep='-')]
   pogoda[,c('r','m','d'):=NULL]
   pogoda[,deszcz:=ifelse(rodzaj=='W', opad, 0)]
   pogoda[,snieg:= ifelse(rodzaj=='S', opad, 0)]
   setcolorder(pogoda, c('Data', nazwy_kolumn[4:8], 'deszcz', 'snieg'))
+  pogoda[,c('opad','rodzaj'):=NULL]
   write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
   pogoda
 }
