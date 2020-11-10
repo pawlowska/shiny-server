@@ -1,6 +1,7 @@
 library(data.table)
 library(RCurl)
 library(timeDate)
+library(lubridate)
 
 source('hasloA.R', encoding = 'UTF-8')
 
@@ -45,9 +46,8 @@ zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje, m
   nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
 }
 
-#credentials as parameter!!!
 
-wczytaj_z_api<-function(credentials, klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="Warszawa") {
+wczytaj_z_api_v2<-function(credentials, klucz=klucz, od="2019-01-01", do=Sys.Date(), miasto="Warszawa") {
   #link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
   link <- URLencode(paste('http://greenelephant.pl/rowery/api/v1/index_city.php?start=',od,
                 '&end=',do,'&city=',enc2utf8(miasto),sep=""))
@@ -60,15 +60,28 @@ wczytaj_z_api<-function(credentials, klucz=klucz, od="2018-01-01", do=Sys.Date()
   tabela_wide
 }
 
-wczytaj_metadane_z_api<-function(credentials, miasto="Warszawa") {
-  link<-URLencode(paste('http://greenelephant.pl/rowery/api/v1/metadata.php?city=',enc2utf8(miasto),sep=""))
+wczytaj_z_api<-function(credentials, klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="Warszawa") {
+  #link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
+  link <- URLencode(paste('http://greenelephant.pl/rowery/api/v1/index_city.php?start=',od,
+                          '&end=',do,'&city=',enc2utf8(miasto),sep=""))
   txt<- getURL(link, userpwd = credentials)
-  tabela<-data.table(read.csv(text=txt, sep=','))
-  setnames(tabela, 'counterid', 'id')
-  setnames(tabela, 'name', 'Miejsce')
-  tabela[,Miejsce:=as.character(Miejsce)]
-  tabela
+  tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
+  setnames(tabela, c("id", "Data", "Liczba_rowerow"))
+  tabela[,Data:=as.Date(Data)]
+  tabela<-merge(tabela, klucz, by="id")
+  tabela_wide<-long_to_wide(tabela)
+  tabela_wide
 }
+
+# wczytaj_metadane_z_api<-function(credentials, miasto="Warszawa") {
+#   link<-URLencode(paste('http://greenelephant.pl/rowery/api/v1/metadata.php?city=',enc2utf8(miasto),sep=""))
+#   txt<- getURL(link, userpwd = credentials)
+#   tabela<-data.table(read.csv(text=txt, sep=','))
+#   setnames(tabela, 'counterid', 'id')
+#   setnames(tabela, 'name', 'Miejsce')
+#   tabela[,Miejsce:=as.character(Miejsce)]
+#   tabela
+# }
 
 # wczytaj_dane_godzinowe<-function(plik) {
 #   library(data.table)
@@ -96,10 +109,10 @@ numery_dat<-function(tabela) {
   tabela
 }
 
-long_to_wide<-function(dane, nazwa_zmiennej="Liczba_rowerow") {
-  tabela_wide<-dcast(dane, Data ~Miejsce, value.var=nazwa_zmiennej)
-  tabela_wide
-}
+#long_to_wide<-function(dane, nazwa_zmiennej="Liczba_rowerow") {
+#  tabela_wide<-dcast(dane, Data ~Miejsce, value.var=nazwa_zmiennej)
+#  tabela_wide
+#}
 
 
 wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Wolne","Rodzaj_opadu")) {

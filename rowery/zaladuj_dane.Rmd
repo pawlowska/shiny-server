@@ -18,25 +18,21 @@ katalog="pliki"
 plik_pogoda=paste(katalog, "IMGW_2014_do2020_08.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
-plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
-dane_polaczone=paste("dane", miasto, "dane_polaczone.csv", sep="/")
-dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv", sep="/")
+
+dane_do2018=paste("dane", miasto, "dane_do2018_zsumowane_z_pogoda.csv", sep="/")
+#plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
+#dane_polaczone=paste("dane", miasto, "dane_archiwalne_do2018.csv", sep="/")
+#dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv", sep="/")
 ```
 
-```{r}
-metadane<-wczytaj_metadane_z_api(credentials, miasto=miasto)
-print(head(metadane))
-
-lokacje<-zrob_sumy(metadane)
-write.csv(lokacje, plik_polozenie, row.names = F, fileEncoding = 'UTF-8')
-```
 
 ```{r}
 lokacje<-data.table(read.csv(plik_polozenie, encoding='UTF-8'))
-klucz <- lokacje[,c("id", "Miejsce")]
+#klucz <- lokacje[,c("id", "Miejsce")]
 ```
 
-```{r listy stylow - tylko prz nowych licznikach}
+Jeżeli są nowe liczniki:
+```{r NOWE LICZNIKI listy stylow}
 listy_stylow<-zrob_listy_stylow(lokacje, paleta=paleta30) #w obsluga_sumowania
 write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F)
 ```
