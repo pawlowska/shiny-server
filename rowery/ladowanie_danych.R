@@ -2,6 +2,8 @@ library(data.table)
 library(RCurl)
 library(timeDate)
 library(lubridate)
+library(dplyr)
+library(tidyr)
 
 source('hasloA.R', encoding = 'UTF-8')
 
@@ -48,40 +50,14 @@ zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje, m
 
 
 wczytaj_z_api_v2<-function(credentials, klucz=klucz, od="2019-01-01", do=Sys.Date(), miasto="Warszawa") {
-  #link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
-  link <- URLencode(paste('http://greenelephant.pl/rowery/api/v1/index_city.php?start=',od,
-                '&end=',do,'&city=',enc2utf8(miasto),sep=""))
-  txt<- getURL(link, userpwd = credentials)
-  tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
-  setnames(tabela, c("id", "Data", "Liczba_rowerow"))
-  tabela[,Data:=as.Date(Data)]
-  tabela<-merge(tabela, klucz, by="id")
-  tabela_wide<-long_to_wide(tabela)
-  tabela_wide
+  link <- URLencode(paste('http://greenelephant.pl/rowery/api/v2/index.php?od=',od,'&do=',do,sep=""))
+  json<- jsonlite::fromJSON(getURL(link, userpwd = credentials))
+  json
 }
 
-wczytaj_z_api<-function(credentials, klucz=klucz, od="2018-01-01", do=Sys.Date(), miasto="Warszawa") {
-  #link <- paste('http://greenelephant.pl/rowery/api/v1/?start=',od,'&end=',do,'&city=',miasto)
-  link <- URLencode(paste('http://greenelephant.pl/rowery/api/v1/index_city.php?start=',od,
-                          '&end=',do,'&city=',enc2utf8(miasto),sep=""))
-  txt<- getURL(link, userpwd = credentials)
-  tabela<-data.table(read.csv(text=txt, sep=',', header=FALSE))
-  setnames(tabela, c("id", "Data", "Liczba_rowerow"))
-  tabela[,Data:=as.Date(Data)]
-  tabela<-merge(tabela, klucz, by="id")
-  tabela_wide<-long_to_wide(tabela)
-  tabela_wide
+json_do_tabeli<-function(big_json) {
+  big_json %>% unnest(counters) %>% select(-c(installationDate, mapLatitude, mapLongitude)) %>% unnest(dailyCounts)
 }
-
-# wczytaj_metadane_z_api<-function(credentials, miasto="Warszawa") {
-#   link<-URLencode(paste('http://greenelephant.pl/rowery/api/v1/metadata.php?city=',enc2utf8(miasto),sep=""))
-#   txt<- getURL(link, userpwd = credentials)
-#   tabela<-data.table(read.csv(text=txt, sep=','))
-#   setnames(tabela, 'counterid', 'id')
-#   setnames(tabela, 'name', 'Miejsce')
-#   tabela[,Miejsce:=as.character(Miejsce)]
-#   tabela
-# }
 
 # wczytaj_dane_godzinowe<-function(plik) {
 #   library(data.table)
