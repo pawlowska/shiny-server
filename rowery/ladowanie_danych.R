@@ -68,7 +68,7 @@ json_do_tabeli<-function(big_json) {
     rename(Data= date, Liczba_rowerow=today, zdm_id=deviceId)
 }
 
-uzupelnij_tabele<-function(tab_in, metadane) {
+uzupelnij_tabele<-function(tab_in, metadane, plik_pogoda) {
   tab_in %>%
     mutate(Data=as.Date(Data)) %>%
     mutate(startTyg=as.Date(lubridate::floor_date(Data-days(1), "week")+days(1))) %>%
@@ -77,7 +77,9 @@ uzupelnij_tabele<-function(tab_in, metadane) {
     spread(Miejsce, Liczba_rowerow) %>%
     data.table() %>%
     suma_licznikow() %>% 
-    gather(key="Miejsce", value="Liczba_rowerow", -Data, -startTyg)
+    gather(key="Miejsce", value="Liczba_rowerow", -Data, -startTyg) %>%
+    data.table() %>%
+    dodaj_pogode(plik_pogoda)
 
     #teraz można ić za ciosem i dodać pogode  
 }
@@ -90,10 +92,8 @@ uzupelnij_tabele<-function(tab_in, metadane) {
 # }
 
 wczytaj_dane<-function(plik = "dane_polaczone.csv") {
-  tabela<-fread(plik, header = TRUE, encoding = "UTF-8", drop=1) #1st column is just row numers, drop it
-  tabela[,Data := as.Date(Data, format="%Y-%m-%d")]
-  tabela[,startTyg := as.Date(startTyg, format="%Y-%m-%d")]
-  tabela
+  tabela<-fread(plik, header = TRUE, encoding = "UTF-8") %>%
+    mutate(Data=as.Date(Data), startTyg=as.Date(startTyg))
 }
 
 
@@ -181,6 +181,7 @@ dodaj_pogode<-function(tabela,
   dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
   dane[,Jaki_dzien:=weekend(Data)]
   dane[,Wolne:=wolne(Data)]
+  
   dane
 }
 
