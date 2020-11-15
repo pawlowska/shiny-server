@@ -57,6 +57,6 @@ write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
 
 ```{r polacz dane w formacie long}
 dane<-rbind(dane20142018, dane20192020)
-write.csv(dane_long, file = plik_dane_long, fileEncoding = 'UTF-8', row.names = F)
+write.csv(dane, file = plik_dane_long, fileEncoding = 'UTF-8', row.names = F)
 
 ```
