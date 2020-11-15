@@ -56,7 +56,30 @@ wczytaj_z_api_v2<-function(credentials, klucz=klucz, od="2019-01-01", do=Sys.Dat
 }
 
 json_do_tabeli<-function(big_json) {
-  big_json %>% unnest(counters) %>% select(-c(installationDate, mapLatitude, mapLongitude)) %>% unnest(dailyCounts)
+  big_json %>% 
+    unnest(counters) %>% 
+    select(-c(installationDate, mapLatitude, mapLongitude)) %>% 
+    unnest(dailyCounts)  %>% 
+    group_by(deviceId, description, date) %>% 
+    summarise(all=sum(cumulative, na.rm=T), today=sum(sincePrevious, na.rm=T)) %>%
+    ungroup() %>%
+    na_if(0) %>%
+    filter(description != 'Testowy') %>%
+    rename(Data= date, Liczba_rowerow=today, zdm_id=deviceId)
+}
+
+uzupelnij_tabele<-function(tab_in, metadane) {
+  tab_in %>%
+    mutate(Data=as.Date(Data)) %>%
+    mutate(startTyg=as.Date(lubridate::floor_date(Data-days(1), "week")+days(1))) %>%
+    left_join(select(metadane, c('Miejsce', 'zdm_id')), by='zdm_id') %>%
+    select(-c(description, all, zdm_id)) %>%
+    spread(Miejsce, Liczba_rowerow) %>%
+    data.table() %>%
+    suma_licznikow() %>% 
+    gather(key="Miejsce", value="Liczba_rowerow", -Data, -startTyg)
+
+    #teraz można ić za ciosem i dodać pogode  
 }
 
 # wczytaj_dane_godzinowe<-function(plik) {
@@ -73,17 +96,6 @@ wczytaj_dane<-function(plik = "dane_polaczone.csv") {
   tabela
 }
 
-#numery tygodni i miesiecy
-numery_dat<-function(tabela) { 
-  nazwy<-names(tabela)[2:ncol(tabela)]
-  library(lubridate)
-  #uses lubridate; correction to make the week start Monday
-  tabela[,startTyg:=floor_date(Data-days(1), "week")+days(1)]
-  #tabela[,startM:=floor_date(Data, "month")]
-  setcolorder(tabela, c("Data", "startTyg", nazwy[order(nazwy)]))
-  
-  tabela
-}
 
 #long_to_wide<-function(dane, nazwa_zmiennej="Liczba_rowerow") {
 #  tabela_wide<-dcast(dane, Data ~Miejsce, value.var=nazwa_zmiennej)
