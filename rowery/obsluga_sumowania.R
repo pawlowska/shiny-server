@@ -1,7 +1,13 @@
 library(data.table)
 source('palety_kolorow.R')
 
+sumuj_pary_licznikow<-function(metadane) {
+  wirtualne_liczniki<-metadane %>% filter(is.na(zdm_id))
+  print(wirtualne_liczniki)
+}
+
 zrob_sumy<-function(metadane) {
+  #tworzy nazwy sum na podstawie nazw licznikow ktore maja pare (has_pair)
   metadane[,has_pair:=!is.na(pair_id)]
   do_sumowania<-metadane[has_pair==T,]
   tabela<-metadane[,c('id', 'Miejsce', 'latitude', 'longitude', 'has_pair')]
@@ -26,7 +32,6 @@ suma_licznikow<-function(tabela) {
   nazwy<-names(tabela)[3:ncol(tabela)] #reszta
   
   find.string <- paste(c('N$', 'E$', 'CPR$'), collapse = "|")
-  podwojne_liczniki<-grep(find.string, nazwy, value = T)
   podw<-znajdz_prefix(grep(find.string, nazwy, value = T), find.string)
 
   if(length(podw)>0) {
