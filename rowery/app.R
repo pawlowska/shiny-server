@@ -6,6 +6,7 @@ options(shiny.usecairo=T)
 library(lubridate)
 library(shinyWidgets)
 library(shinyBS)
+library(tidyverse)
 
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
