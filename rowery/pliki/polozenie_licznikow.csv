@@ -1,44 +1,44 @@
-id,Miejsce,latitude,longitude,has_pair,zdm_id
-100017988,al. Solidarności/Dworzec Wileński,52.2553,21.0358,FALSE,9
-NA,al. Stanów Zjednoczonych - suma,NA,NA,FALSE,
-100027263,al. Stanów Zjednoczonych N,52.2306,21.0697,TRUE,15
-100027264,al. Stanów Zjednoczonych S,52.2303,21.0707,TRUE,34
-NA,Aleje Jerozolimskie/pl. Zawiszy - suma,NA,NA,FALSE,
-100038470,Aleje Jerozolimskie/pl. Zawiszy N,52.2241,20.9855,TRUE,20
-100038471,Aleje Jerozolimskie/pl. Zawiszy S,52.2242,20.9868,TRUE,18
-100047576,Banacha/Żwirki i Wigury (display),52.2105,20.9874,FALSE,1
-100018251,Bazyliańska/Wysockiego,52.2912,21.0191,FALSE,23
-100026727,Belwederska,52.2115,21.0268,FALSE,33
-100046182,Bystra/Radzymińska,52.2942,21.0819,FALSE,11
-NA,Czerniakowska - suma,NA,NA,FALSE,
-100042111,Czerniakowska E,52.196,21.0535,TRUE,31
-100042112,Czerniakowska W,52.1956,21.053,TRUE,24
-100045488,Jagiellońska,52.2869,21.0071,FALSE,8
-100038472,Marsa,52.2508,21.1474,FALSE,35
-100023491,Marszałkowska/Metro Świętokrzyska,52.2359,21.0078,FALSE,3
-NA,NSR Most Gdański - suma,NA,NA,FALSE,
-100015254,NSR Most Gdański CPR,52.2605,21.008,TRUE,13
-100015251,NSR Most Gdański DDR,52.2604,21.0079,TRUE,22
-NA,NSR Solec - suma,NA,NA,FALSE,
-100015253,NSR Solec CPR,52.2312,21.0422,TRUE,14
-100015250,NSR Solec DDR,52.231,21.0414,TRUE,26
-100046732,Okopowa/rondo Radosława,52.254,20.9819,FALSE,16
-100015252,Praska ścieżka rekreacyjna,52.2401,21.0395,FALSE,28
-100046911,Przyczółkowa/al. Wilanowska,52.1653,21.084,FALSE,32
-100046183,Radzymińska/Jórskiego,52.2771,21.0669,FALSE,25
-NA,Szaserów - suma,NA,NA,FALSE,
-100046627,Szaserów N,52.2503,21.0882,TRUE,30
-100046628,Szaserów S,52.2501,21.0875,TRUE,6
-NA,Świętokrzyska/Emilii Plater - suma,NA,NA,FALSE,
-100023490,Świętokrzyska/Emilii Plater N,52.2339,21.0019,TRUE,4
-100023489,Świętokrzyska/Emilii Plater S,52.2339,21.002,TRUE,10
-100047575,Świętokrzyska/Zielna (display),52.2348,21.0061,FALSE,29
-100017989,Targowa/Dworzec Wileński,52.2541,21.0355,FALSE,27
-100044510,Towarowa/Łucka,52.2323,20.9832,FALSE,17
-100046912,Wiertnicza,52.1782,21.0731,FALSE,21
-100034734,Wybrzeże Helskie/Starzyńskiego,52.262,21.0146,FALSE,19
-100018250,Wysockiego,52.2904,21.0192,FALSE,5
-100044505,Żwirki i Wigury/1 Sierpnia,52.1909,20.9819,FALSE,12
-NA,Żwirki i Wigury/Trojdena - suma,NA,NA,FALSE,
-100030132,Żwirki i Wigury/Trojdena E,52.20559,20.9868,TRUE,2
-100030131,Żwirki i Wigury/Trojdena W,52.2057,20.986,TRUE,36
+id,Miejsce,latitude,longitude,has_pair,zdm_id,id1,id2
+100017988,al. Solidarności/Dworzec Wileński,52.2553,21.0358,FALSE,9,,
+NA,al. Stanów Zjednoczonych - suma,NA,NA,FALSE,,15,34
+100027263,al. Stanów Zjednoczonych N,52.2306,21.0697,TRUE,15,,
+100027264,al. Stanów Zjednoczonych S,52.2303,21.0707,TRUE,34,,
+NA,Aleje Jerozolimskie/pl. Zawiszy - suma,NA,NA,FALSE,,18,20
+100038470,Aleje Jerozolimskie/pl. Zawiszy N,52.2241,20.9855,TRUE,20,,
+100038471,Aleje Jerozolimskie/pl. Zawiszy S,52.2242,20.9868,TRUE,18,,
+100047576,Banacha/Żwirki i Wigury (display),52.2105,20.9874,FALSE,1,,
+100018251,Bazyliańska/Wysockiego,52.2912,21.0191,FALSE,23,,
+100026727,Belwederska,52.2115,21.0268,FALSE,33,,
+100046182,Bystra/Radzymińska,52.2942,21.0819,FALSE,11,,
+NA,Czerniakowska - suma,NA,NA,FALSE,,24,31
+100042111,Czerniakowska E,52.196,21.0535,TRUE,31,,
+100042112,Czerniakowska W,52.1956,21.053,TRUE,24,,
+100045488,Jagiellońska,52.2869,21.0071,FALSE,8,,
+100038472,Marsa,52.2508,21.1474,FALSE,35,,
+100023491,Marszałkowska/Metro Świętokrzyska,52.2359,21.0078,FALSE,3,,
+NA,NSR Most Gdański - suma,NA,NA,FALSE,,13,22
+100015254,NSR Most Gdański CPR,52.2605,21.008,TRUE,13,,
+100015251,NSR Most Gdański DDR,52.2604,21.0079,TRUE,22,,
+NA,NSR Solec - suma,NA,NA,FALSE,,14,26
+100015253,NSR Solec CPR,52.2312,21.0422,TRUE,14,,
+100015250,NSR Solec DDR,52.231,21.0414,TRUE,26,,
+100046732,Okopowa/rondo Radosława,52.254,20.9819,FALSE,16,,
+100015252,Praska ścieżka rekreacyjna,52.2401,21.0395,FALSE,28,,
+100046911,Przyczółkowa/al. Wilanowska,52.1653,21.084,FALSE,32,,
+100046183,Radzymińska/Jórskiego,52.2771,21.0669,FALSE,25,,
+NA,Szaserów - suma,NA,NA,FALSE,,6,30
+100046627,Szaserów N,52.2503,21.0882,TRUE,30,,
+100046628,Szaserów S,52.2501,21.0875,TRUE,6,,
+NA,Świętokrzyska/Emilii Plater - suma,NA,NA,FALSE,,4,10
+100023490,Świętokrzyska/Emilii Plater N,52.2339,21.0019,TRUE,4,,
+100023489,Świętokrzyska/Emilii Plater S,52.2339,21.002,TRUE,10,,
+100047575,Świętokrzyska/Zielna (display),52.2348,21.0061,FALSE,29,,
+100017989,Targowa/Dworzec Wileński,52.2541,21.0355,FALSE,27,,
+100044510,Towarowa/Łucka,52.2323,20.9832,FALSE,17,,
+100046912,Wiertnicza,52.1782,21.0731,FALSE,21,,
+100034734,Wybrzeże Helskie/Starzyńskiego,52.262,21.0146,FALSE,19,,
+100018250,Wysockiego,52.2904,21.0192,FALSE,5,,
+100044505,Żwirki i Wigury/1 Sierpnia,52.1909,20.9819,FALSE,12,,
+NA,Żwirki i Wigury/Trojdena - suma,NA,NA,FALSE,,2,36
+100030132,Żwirki i Wigury/Trojdena E,52.20559,20.9868,TRUE,2,,
+100030131,Żwirki i Wigury/Trojdena W,52.2057,20.986,TRUE,36,,
