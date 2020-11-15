@@ -7,6 +7,7 @@ Load stuff
 
 ```{r}
 library(data.table)
+library(tidyverse)
 source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('pogoda/imgw.R', encoding = 'UTF-8')
@@ -15,11 +16,11 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```{r}
 miasto="Warszawa" #Krak%C3%B3w
 katalog="pliki"
-plik_pogoda=paste(katalog, "IMGW_2014_do2020_08.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_2014_do2020_10.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 
-dane_do2018=paste("dane", miasto, "dane_do2018_zsumowane_z_pogoda.csv", sep="/")
+dane_do2018=paste("dane", miasto, "dane_do2018_z_pogoda_long.csv", sep="/")
 #plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
 #dane_polaczone=paste("dane", miasto, "dane_archiwalne_do2018.csv", sep="/")
 #dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv", sep="/")
@@ -27,52 +28,35 @@ dane_do2018=paste("dane", miasto, "dane_do2018_zsumowane_z_pogoda.csv", sep="/")
 
 
 ```{r}
-lokacje<-data.table(read.csv(plik_polozenie, encoding='UTF-8'))
-#klucz <- lokacje[,c("id", "Miejsce")]
+metadane<-data.table(read.csv(plik_polozenie, encoding='UTF-8'))
 ```
 
 Jeżeli są nowe liczniki:
 ```{r NOWE LICZNIKI listy stylow}
-listy_stylow<-zrob_listy_stylow(lokacje, paleta=paleta30) #w obsluga_sumowania
+listy_stylow<-zrob_listy_stylow(metadane, paleta=paleta30) #w obsluga_sumowania
 write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F)
 ```
 
+```{r dane archiwalne}
+dane20142018<-fread(dane_do2018, encoding = 'UTF-8') %>%
+  mutate(Data=as.Date(Data), startTyg=as.Date(startTyg))
+```
+
+```{r dane z nowego api}
+dane20192020<-json_do_tabeli(wczytaj_z_api_v2(credentials, od="2019-03-28", do="2020-11-11")) %>%
+  uzupelnij_tabele(metadane, plik_pogoda)
+
+# to wide: %>% spread(Miejsce, Liczba_rowerow)
+```
 ```{r sciagaj dane z api}
 dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-12-31", miasto)
 dane<-numery_dat(dane)
 write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
 ```
 
-```{r dodaj dane z 2019 i 2020}
-dane_od2019_long<-rbind(fread("dane/Warszawa/dane20192020.csv", encoding = 'UTF-8')[Data<as.Date("2020-05-01")],
-                        fread("dane/Warszawa/dane2020_od05.csv", encoding = 'UTF-8'), fill=T)
-dane_od2019_long[,V1:=NULL]
-dane_od2019_long[,Data:=as.Date(Data)]
-dane_od2019_long<-na.omit(dane_od2019_long)
 
-dane_od2019<-dcast(dane_od2019_long, Data ~Miejsce, fill=NA, value.var="Liczba_rowerow")
-dane_od2019[,Testowy:=NULL]
-dane_od2019<-numery_dat(dane_od2019)
-```
+```{r polacz dane w formacie long}
+dane<-rbind(dane20142018, dane20192020)
+write.csv(dane_long, file = plik_dane_long, fileEncoding = 'UTF-8', row.names = F)
 
-```{r polacz}
-
-dane<-rbind(dane, dane_od2019, fill=T)
-```
-
-```{r sumuj dane i dodaj pogode}
-dane_zsumowane<-suma_licznikow(dane)
-dane_zsumowane<-dodaj_pogode(dane_zsumowane, plik_pogoda)
-write.csv(dane_zsumowane, file = dane_z_pogoda, fileEncoding = 'UTF-8')
-```
-
-```{r}
-dane_long<-wide_to_long(dane_zsumowane)
-write.csv(dane_long, file = plik_dane_long, fileEncoding = 'UTF-8')
-```
-
-```{r}
-rm(dane)
-rm(dane_zsumowane)
-rm(dane2019)
 ```
