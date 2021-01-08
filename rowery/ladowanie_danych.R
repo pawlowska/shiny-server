@@ -41,15 +41,16 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, 
 }
 
 zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje, miasto = "Warszawa") {
-  klucz <- lokacje[,c("id", "Miejsce")]
-  
-  nowe_dane<-wczytaj_z_api(credentials, klucz=klucz, od=ostatnia_data, miasto = miasto)
-  nowe_dane<-suma_licznikow(numery_dat(nowe_dane))
-  nowe_long<-wide_to_long(dodaj_pogode(nowe_dane, plik_pogoda))
+  nowe_dane<-wczytaj_z_api_v2(credentials,od=ostatnia_data, miasto = miasto) %>%    
+    json_do_tabeli() 
+
+  print(str(nowe_dane))
+  nowe_dane%>%
+    uzupelnij_tabele(lokacje, plik_pogoda)
 }
 
 
-wczytaj_z_api_v2<-function(credentials, klucz=klucz, od="2019-01-01", do=Sys.Date(), miasto="Warszawa") {
+wczytaj_z_api_v2<-function(credentials, od="2019-01-01", do=Sys.Date(), miasto="Warszawa") {
   link <- URLencode(paste('http://greenelephant.pl/rowery/api/v2/index.php?od=',od,'&do=',do,sep=""))
   json<- jsonlite::fromJSON(getURL(link, userpwd = credentials))
   json

@@ -21,9 +21,6 @@ plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 
 dane_do2018=paste("dane", miasto, "dane_do2018_z_pogoda_long.csv", sep="/")
-#plik_dane_long=paste(katalog, "dane_long.csv", sep="/")
-#dane_polaczone=paste("dane", miasto, "dane_archiwalne_do2018.csv", sep="/")
-#dane_z_pogoda=paste("dane",miasto,"dane_zsumowane_z_pogoda.csv", sep="/")
 ```
 
 
@@ -43,17 +40,11 @@ dane20142018<-fread(dane_do2018, encoding = 'UTF-8') %>%
 ```
 
 ```{r dane z nowego api}
-dane20192020<-json_do_tabeli(wczytaj_z_api_v2(credentials, od="2019-03-28", do="2020-11-11")) %>%
+dane20192020<-json_do_tabeli(wczytaj_z_api_v2(credentials, od="2019-03-28", do="2020-12-31")) %>%
   uzupelnij_tabele(metadane, plik_pogoda)
 
 # to wide: %>% spread(Miejsce, Liczba_rowerow)
 ```
-```{r sciagaj dane z api}
-dane<-wczytaj_z_api(credentials, klucz=klucz, od="2014-08-13", do="2018-12-31", miasto)
-dane<-numery_dat(dane)
-write.csv(dane, file = dane_polaczone, fileEncoding = 'UTF-8')
-```
-
 
 ```{r polacz dane w formacie long}
 dane<-rbind(dane20142018, dane20192020)

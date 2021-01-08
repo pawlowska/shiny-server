@@ -1,3 +1,5 @@
+#dane dodane do: 31.12.2020
+
 library(shiny)
 
 library(Cairo) #for nice looks of the graph
