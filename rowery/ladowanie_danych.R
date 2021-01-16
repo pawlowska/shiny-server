@@ -62,21 +62,21 @@ json_do_tabeli<-function(big_json) {
     select(-c(installationDate, mapLatitude, mapLongitude)) %>% 
     unnest(dailyCounts)  %>% 
     group_by(deviceId, description, date) %>% 
-    summarise(all=sum(cumulative, na.rm=T), today=sum(sincePrevious, na.rm=T)) %>%
-    ungroup() %>%
+    summarise(all=sum(cumulative, na.rm=T), today=sum(sincePrevious, na.rm=T), .groups="drop") %>%
     na_if(0) %>%
     filter(description != 'Testowy') %>%
     rename(Data= date, Liczba_rowerow=today, zdm_id=deviceId)
 }
 
+#dplyr-style reformatting of data output from json_do_tabeli()
 uzupelnij_tabele<-function(tab_in, metadane, plik_pogoda) {
    tab_in %>%
     mutate(Data=as.Date(Data)) %>%
     left_join(select(metadane, c('Miejsce', 'zdm_id')), by='zdm_id') %>%
     select(-c(description, all)) %>%
     sumuj_pary_licznikow(metadane) %>%
+    select(-zdm_id) %>%
     mutate(startTyg=as.Date(lubridate::floor_date(Data-days(1), "week")+days(1))) %>%
-    #gather(key="Miejsce", value="Liczba_rowerow", -Data, -startTyg) %>%
     data.table() %>%
     dodaj_pogode(plik_pogoda)
 }

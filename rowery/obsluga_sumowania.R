@@ -5,8 +5,7 @@ sumuj_jeden_dzien<-function(dane_dzienne, wirtualne_liczniki) {
   wirtualne_liczniki %>%
     left_join(dane_dzienne %>% select(-"Miejsce"), by=("zdm_id")) %>%
     group_by(Miejsce) %>%
-    summarise(Liczba_rowerow=sum(Liczba_rowerow, na.rm=TRUE)) %>%
-    ungroup()
+    summarise(Liczba_rowerow=sum(Liczba_rowerow, na.rm=TRUE), .groups="drop")
 }
 
 sumuj_pary_licznikow<-function(dane, metadane) {
