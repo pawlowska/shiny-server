@@ -1,9 +1,31 @@
 library(data.table)
 source('palety_kolorow.R')
 
-sumuj_pary_licznikow<-function(metadane) {
-  wirtualne_liczniki<-metadane %>% filter(is.na(zdm_id))
-  print(wirtualne_liczniki)
+sumuj_jeden_dzien<-function(dane_dzienne, wirtualne_liczniki) {
+  wirtualne_liczniki %>%
+    left_join(dane_dzienne %>% select(-"Miejsce"), by=("zdm_id")) %>%
+    group_by(Miejsce) %>%
+    summarise(Liczba_rowerow=sum(Liczba_rowerow, na.rm=TRUE)) %>%
+    ungroup()
+}
+
+sumuj_pary_licznikow<-function(dane, metadane) {
+  #find virtual counters' names: those with zdm_id==NA
+  wirtualne_liczniki<-metadane %>% 
+    filter(is.na(zdm_id)) %>% 
+    select(-c("latitude", "longitude", "has_pair", "zdm_id", "id"))
+  wirtualne_liczniki<-bind_rows(
+    wirtualne_liczniki %>%
+      mutate(zdm_id=id1),
+    wirtualne_liczniki %>%
+      mutate(zdm_id=id2)
+  ) %>% select(-c("id1", "id2"))
+  
+  #sum up values for virtual counters and bind with all real counters data
+  wszystkie_liczby<-dane %>% 
+    group_by(Data) %>%
+    group_modify(~sumuj_jeden_dzien(.x, wirtualne_liczniki)) %>%
+    rbind(dane) 
 }
 
 zrob_sumy<-function(metadane) {
@@ -33,13 +55,15 @@ suma_licznikow<-function(tabela) {
   
   find.string <- paste(c('N$', 'E$', 'CPR$'), collapse = "|")
   podw<-znajdz_prefix(grep(find.string, nazwy, value = T), find.string)
-
+  
   if(length(podw)>0) {
     
     i<-1
     for (p in podw) {
+      print(p)
       s<-paste(p, "- suma", sep="")
       sumuj<-grep(podw[i], nazwy, value = T)
+      print(sumuj[i])
       tabela[,(s):=get(sumuj[1])+get(sumuj[2])]
       i<-i+1
     }
@@ -68,54 +92,3 @@ suma_licznikow<-function(tabela) {
 # }
 
 
-a2=0.7
-a3=0.4
-
-zrob_listy_stylow<-function(lokacje, paleta=paleta30) {
-  unikaty<-lokacje[has_pair==F]$Miejsce
-  pary<-lokacje[has_pair==T]$Miejsce
-  ile_unikatow<-length(unikaty)
-  
-  kolory<-paleta[1:ile_unikatow]
-  alfy<-c(rep(1, ile_unikatow))
-  
-  lista<-data.table(Miejsce=unikaty, kolor=kolory, linia="solid", font="bold", alfa=alfy)
-  
-  if (length(pary)>0) {
-    lista<-rbind(lista, data.table(Miejsce=pary, font="normal"), fill=T)
-    lista<-lista[base::order(Miejsce)]
-    
-    ktory<-1
-    kolor<-lista[1]$kolor
-    linia<-"dashed"
-    alfa<-0.7
-    for (i in 1:nrow(lista)) {
-      if (lista[i, 'font']=='normal') {
-        lista[i, 'kolor']<-kolor
-        lista[i]$linia<-linia
-        lista[i]$alfa<-alfa
-        if(ktory==1) {
-          ktory=2
-          linia<-"dotdash"
-          alfa<-0.4
-        }
-      } else {
-        ktory<-1
-        kolor<-lista[i]$kolor
-        linia<-"dashed"
-        alfa<-0.7
-      }
-    }
-  }
-  
-  lista
-}
-
-css_list<-function(what="#liczniki div.checkbox:nth-child(", style, iterator) {
-  paste0(what,
-         iterator,
-         ") span{color: ", 
-         style$kolory[iterator],
-         "; font-weight : ",
-         style$fonty[iterator],"}")
-}
