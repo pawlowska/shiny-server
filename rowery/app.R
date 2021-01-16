@@ -1,4 +1,4 @@
-#dane dodane do: 10.01.2020
+#dane dodane do: 10.01.2020, no update :(
 
 library(shiny)
 
@@ -175,11 +175,11 @@ server <- function(input, output, session) {
              zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)), style)
   
   #aktualizacja danych
-  dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
-                             plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
+  #dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
+  #                           plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
 
   #aktualizacja daty 
-  zakresDo<-as.character(Sys.Date()-1)
+  #zakresDo<-as.character(Sys.Date()-1)
 
   #podsumuj
   dane_tyg<-podsumuj.okresy(dane_long, "startTyg")
