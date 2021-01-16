@@ -6,7 +6,7 @@ krakowBalice="350190566"
 nazwy_kolumn<-c('r', 'm', 'd', 'temp_max', 'temp_min', 'temp_avg', 'opad', 'rodzaj')
 
 
-czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2020_0104.csv", 
+czytaj_dane_zipy<-function(od=1, do=1, save= T, nazwa_out="pogoda/IMGW_2020_0104.csv", 
                            format='pogoda/raw/s_d_%02d_2020.csv', stacja=warszawaOkecie) {
   pogoda<-data.table(matrix(nrow = 0, ncol = 8))
   setnames(pogoda, names(pogoda), nazwy_kolumn)
@@ -23,7 +23,7 @@ czytaj_dane_zipy<-function(od=1, do=1, nazwa_out="pogoda/IMGW_2020_0104.csv",
   pogoda[,snieg:= ifelse(rodzaj=='S', opad, 0)]
   setcolorder(pogoda, c('Data', nazwy_kolumn[4:8], 'deszcz', 'snieg'))
   pogoda[,c('opad','rodzaj'):=NULL]
-  write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)
+  if (save) {write.csv(pogoda, file = nazwa_out, fileEncoding = 'UTF-8', row.names = F)}
   pogoda
 }
 
