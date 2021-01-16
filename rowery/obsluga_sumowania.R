@@ -48,35 +48,6 @@ znajdz_prefix<-function(s, koncowka=" - suma") {
   substring(s, 0, regexpr(koncowka, s)-1)
 }
 
-suma_licznikow<-function(tabela) {
-  nazwy_x<-names(tabela)[1:2] #Data, startTyg
-  nazwy<-names(tabela)[3:ncol(tabela)] #reszta
-  
-  find.string <- paste(c('N$', 'E$', 'CPR$'), collapse = "|")
-  podw<-znajdz_prefix(grep(find.string, nazwy, value = T), find.string)
-  
-  if(length(podw)>0) {
-    
-    i<-1
-    for (p in podw) {
-      print(p)
-      s<-paste(p, "- suma", sep="")
-      sumuj<-grep(podw[i], nazwy, value = T)
-      print(sumuj[i])
-      tabela[,(s):=get(sumuj[1])+get(sumuj[2])]
-      i<-i+1
-    }
-    
-    nazwy<-names(tabela)[3:ncol(tabela)] #reszta
-    nazwy<-sort(nazwy)
-    
-    kolejnosc <-c(nazwy_x, nazwy)
-    setcolorder(tabela, kolejnosc)
-  }
-  
-  tabela
-}
-
 # in_out_ratio<-function(tabela) {
 #   nazwy<-names(tabela)
 #   nazwy_in <-grep("IN", nazwy, value = TRUE)
@@ -89,5 +60,3 @@ suma_licznikow<-function(tabela) {
 #   }
 #   tabela
 # }
-
-
