@@ -1,4 +1,4 @@
-#dane dodane do: 31.12.2020
+#dane dodane do: 10.01.2020
 
 library(shiny)
 
