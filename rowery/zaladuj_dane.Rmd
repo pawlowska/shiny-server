@@ -16,7 +16,7 @@ source('pogoda/imgw.R', encoding = 'UTF-8')
 ```{r}
 miasto="Warszawa" #Krak%C3%B3w
 katalog="pliki"
-plik_pogoda=paste(katalog, "IMGW_2014_do2020_10.csv", sep="/")
+plik_pogoda=paste(katalog, "IMGW_2014_do2020_12.csv", sep="/")
 plik_polozenie=paste(katalog,"polozenie_licznikow.csv", sep="/")
 plik_style=paste(katalog, "listy_stylow.csv", sep="/")
 
@@ -34,20 +34,21 @@ listy_stylow<-zrob_listy_stylow(metadane, paleta=paleta30) #w obsluga_sumowania
 write.csv(listy_stylow, file = plik_style, fileEncoding = 'UTF-8', row.names = F)
 ```
 
+Data from prevoius database: file on harddrive
 ```{r dane archiwalne}
 dane20142018<-fread(dane_do2018, encoding = 'UTF-8') %>%
   mutate(Data=as.Date(Data), startTyg=as.Date(startTyg))
 ```
 
+Data from current database
 ```{r dane z nowego api}
-dane20192020<-json_do_tabeli(wczytaj_z_api_v2(credentials, od="2019-03-28", do="2020-12-31")) %>%
+dane20192021<-json_do_tabeli(wczytaj_z_api_v2(credentials, od="2019-03-28", do="2021-01-10")) %>%
   uzupelnij_tabele(metadane, plik_pogoda)
-
-# to wide: %>% spread(Miejsce, Liczba_rowerow)
 ```
 
+Bind and save
 ```{r polacz dane w formacie long}
-dane<-rbind(dane20142018, dane20192020)
+dane<-rbind(dane20142018, dane20192021)
 write.csv(dane, file = plik_dane_long, fileEncoding = 'UTF-8', row.names = F)
 
 ```
