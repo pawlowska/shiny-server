@@ -70,19 +70,15 @@ json_do_tabeli<-function(big_json) {
 }
 
 uzupelnij_tabele<-function(tab_in, metadane, plik_pogoda) {
-  tab_in %>%
+   tab_in %>%
     mutate(Data=as.Date(Data)) %>%
-    mutate(startTyg=as.Date(lubridate::floor_date(Data-days(1), "week")+days(1))) %>%
     left_join(select(metadane, c('Miejsce', 'zdm_id')), by='zdm_id') %>%
-    select(-c(description, all, zdm_id)) %>%
-    spread(Miejsce, Liczba_rowerow) %>%
-    data.table() %>%
-    suma_licznikow() %>% 
-    gather(key="Miejsce", value="Liczba_rowerow", -Data, -startTyg) %>%
+    select(-c(description, all)) %>%
+    sumuj_pary_licznikow(metadane) %>%
+    mutate(startTyg=as.Date(lubridate::floor_date(Data-days(1), "week")+days(1))) %>%
+    #gather(key="Miejsce", value="Liczba_rowerow", -Data, -startTyg) %>%
     data.table() %>%
     dodaj_pogode(plik_pogoda)
-
-    #teraz można ić za ciosem i dodać pogode  
 }
 
 # wczytaj_dane_godzinowe<-function(plik) {
@@ -144,6 +140,8 @@ podsumuj.procentowo <- function(tabela_long) {
 #PZ koniec
 
 weekend<-function(data) {
+  #takes: date
+  #returns: string
   dzien<-weekdays(data)
   ifelse (dzien %in% c("niedziela","sobota", "Sunday", "Sun", "Saturday", "Sat"), "weekend", "roboczy")
 }
@@ -186,6 +184,8 @@ dodaj_pogode<-function(tabela,
   dane
 }
 
+### STYLE (kolory, pogrubienia etc)
+
 wczytaj_style<-function(katalog) {
   #reading colors etc
   listy_stylow<-data.table(read.csv(file = paste(katalog, "listy_stylow.csv", sep="/"), 
@@ -200,4 +200,57 @@ wczytaj_style<-function(katalog) {
   names(fonty)<-listy_stylow$Miejsce
   style<-list(kolory=koloryLicznikow, linie=linieLicznikow, alfy=alfyLicznikow, fonty=fonty)
   style
+}
+
+
+a2=0.7
+a3=0.4
+
+zrob_listy_stylow<-function(lokacje, paleta=paleta30) {
+  unikaty<-lokacje[has_pair==F]$Miejsce
+  pary<-lokacje[has_pair==T]$Miejsce
+  ile_unikatow<-length(unikaty)
+  
+  kolory<-paleta[1:ile_unikatow]
+  alfy<-c(rep(1, ile_unikatow))
+  
+  lista<-data.table(Miejsce=unikaty, kolor=kolory, linia="solid", font="bold", alfa=alfy)
+  
+  if (length(pary)>0) {
+    lista<-rbind(lista, data.table(Miejsce=pary, font="normal"), fill=T)
+    lista<-lista[base::order(Miejsce)]
+    
+    ktory<-1
+    kolor<-lista[1]$kolor
+    linia<-"dashed"
+    alfa<-0.7
+    for (i in 1:nrow(lista)) {
+      if (lista[i, 'font']=='normal') {
+        lista[i, 'kolor']<-kolor
+        lista[i]$linia<-linia
+        lista[i]$alfa<-alfa
+        if(ktory==1) {
+          ktory=2
+          linia<-"dotdash"
+          alfa<-0.4
+        }
+      } else {
+        ktory<-1
+        kolor<-lista[i]$kolor
+        linia<-"dashed"
+        alfa<-0.7
+      }
+    }
+  }
+  
+  lista
+}
+
+css_list<-function(what="#liczniki div.checkbox:nth-child(", style, iterator) {
+  paste0(what,
+         iterator,
+         ") span{color: ", 
+         style$kolory[iterator],
+         "; font-weight : ",
+         style$fonty[iterator],"}")
 }
