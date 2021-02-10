@@ -12,11 +12,11 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, 
   #dane zaladowane od ostatniego git commit
   if (file.exists(p)) {
     ostatnie_nowe_long<-wczytaj_dane(p)
-    ostatnia_data<-max(ostatnie_nowe_long[,Data])
+    ostatnia_data<-max(ostatnie_nowe_long$Data)
     tekst="ostatnia data w nowe_long"
   } else {
     ostatnie_nowe_long<-stare[0,]
-    ostatnia_data<-max(stare[,Data])
+    ostatnia_data<-max(stare$Data)
     tekst="brak nowe_long, ostatnia data w dane_long"
   }
   cat(file=stderr(), tekst, as.character(ostatnia_data), "\n")
@@ -24,31 +24,23 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, 
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
     #zaladuj
-    nowe_long<-zaladuj_nowe_z_api(credentials, ostatnia_data, plik_pogoda, lokacje, miasto)
-    cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long[,Data])), "\n")
+    nowe_long<-wczytaj_z_api_v2(credentials, od=as.character(ostatnia_data)) %>%
+      json_do_tabeli() %>%
+      uzupelnij_tabele(metadane, plik_pogoda) 
+    cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long$Data)), "\n")
     
     #polacz
     ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
     setorder(ostatnie_nowe_long, "Data")
     #uaktualnij "nowe" dane
-    write.csv(ostatnie_nowe_long[Data>zakresDo], file = p, fileEncoding = 'UTF-8')
+    write.csv(ostatnie_nowe_long[Data>zakresDo], file = p, fileEncoding = 'UTF-8', row.names = F)
   }
   
   #polacz ze "starymi" danymi
   dane_long<-rbind(stare, ostatnie_nowe_long[Data>zakresDo])
-  cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long[,Data])), "\n")
+  cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long$Data)), "\n")
   dane_long
 }
-
-zaladuj_nowe_z_api<-function(credentials, ostatnia_data, plik_pogoda, lokacje, miasto = "Warszawa") {
-  nowe_dane<-wczytaj_z_api_v2(credentials,od=ostatnia_data, miasto = miasto) %>%    
-    json_do_tabeli() 
-
-  print(str(nowe_dane))
-  nowe_dane%>%
-    uzupelnij_tabele(lokacje, plik_pogoda)
-}
-
 
 wczytaj_z_api_v2<-function(credentials, od="2019-01-01", do=Sys.Date(), miasto="Warszawa") {
   link <- URLencode(paste('http://greenelephant.pl/rowery/api/v2/index.php?od=',od,'&do=',do,sep=""))
