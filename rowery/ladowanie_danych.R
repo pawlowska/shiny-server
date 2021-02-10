@@ -23,6 +23,8 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane,
   
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
+    cat(file=stderr(), "probuje pobrac nowe dane", as.character(ostatnia_data), "\n")
+    
     #zaladuj
     nowe_z_api<-wczytaj_z_api_v2(credentials, od=as.character(ostatnia_data)) %>%
       json_do_tabeli() %>%
@@ -46,6 +48,7 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane,
 wczytaj_z_api_v2<-function(credentials, od="2019-01-01", do=Sys.Date(), miasto="Warszawa") {
   link <- URLencode(paste('http://greenelephant.pl/rowery/api/v2/index.php?od=',od,'&do=',do,sep=""))
   json<- jsonlite::fromJSON(getURL(link, userpwd = credentials))
+  cat(file=stderr(), "pobrany plik json","\n")
   json
 }
 
