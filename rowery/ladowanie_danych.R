@@ -8,7 +8,7 @@ library(tidyr)
 source('hasloA.R', encoding = 'UTF-8')
 
 
-dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, lokacje, zakresDo, miasto = "Warszawa") {
+dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane, zakresDo, miasto = "Warszawa") {
   #dane zaladowane od ostatniego git commit
   if (file.exists(p)) {
     ostatnie_nowe_long<-wczytaj_dane(p)
