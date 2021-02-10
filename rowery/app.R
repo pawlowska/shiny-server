@@ -175,8 +175,8 @@ server <- function(input, output, session) {
              zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)), style)
   
   #aktualizacja danych
-  dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
-                             plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
+  #dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
+  #                           plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
 
   #aktualizacja daty 
   zakresDo<-as.character(Sys.Date()-1)
