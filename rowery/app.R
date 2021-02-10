@@ -179,7 +179,7 @@ server <- function(input, output, session) {
   #                           plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
 
   #aktualizacja daty 
-  #zakresDo<-as.character(Sys.Date()-1)
+  zakresDo<-as.character(Sys.Date()-1)
 
   #podsumuj
   dane_tyg<-podsumuj.okresy(dane_long, "startTyg")
