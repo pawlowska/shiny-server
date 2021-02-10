@@ -174,7 +174,7 @@ server <- function(input, output, session) {
   callModule(weatherPanel, 'pogoda_panel', dane=dane_long, liczniki=reactive(input$liczniki),
              zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)), style)
   
-  #aktualizacja danych?
+  #aktualizacja danych???
   dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
                              plik_pogoda=plik_pogoda, metadane=lokacje, zakresDo=zakresDo, miasto)
 
