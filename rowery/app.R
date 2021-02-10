@@ -25,7 +25,7 @@ miasto="Warszawa"
 tytul='Liczniki rowerów w Warszawie'
 
 #reading locations
-lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"),dec=".", encoding='UTF-8') %>%
+lokacje <- read.csv(paste(katalog, "polozenie_licznikow.csv", sep="/"), dec=".", encoding='UTF-8') %>%
   data.table()
 
 #reading colors etc

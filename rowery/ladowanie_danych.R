@@ -28,9 +28,8 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane,
     #zaladuj
     nowe_z_api<-wczytaj_z_api_v2(credentials, od=as.character(ostatnia_data)) %>%
       json_do_tabeli()
-    cat(file=stderr(), "pobieranie udane, probuje wywolac uzupelnij_tabele", "\n")
     
-    nowe_z_api %>% nowe_z_api
+    nowe_z_api <- nowe_z_api %>%
       uzupelnij_tabele(metadane, plik_pogoda) 
     cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_z_api$Data)), "\n")
 
@@ -68,6 +67,8 @@ json_do_tabeli<-function(big_json) {
 
 #dplyr-style reformatting of data output from json_do_tabeli()
 uzupelnij_tabele<-function(tab_in, metadane, plik_pogoda) {
+  cat(file=stderr(), str(metadane), "\n")
+  
    tab_in %>%
     mutate(Data=as.Date(Data)) %>%
     left_join(select(metadane, c('Miejsce', 'zdm_id')), by='zdm_id') %>%
