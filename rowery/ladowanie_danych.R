@@ -35,6 +35,7 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane,
     #uaktualnij "nowe" dane w pliku
     write.csv(nowe %>% filter(Data>zakresDo), file = p, fileEncoding = 'UTF-8', row.names = F)
   } else {
+    cat(file=stderr(), "nie pobieram danych, data: ", as.character(Sys.Date()), "\n")
     nowe<-nowe_z_pliku
   }
   
