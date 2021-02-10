@@ -176,7 +176,7 @@ server <- function(input, output, session) {
   
   #aktualizacja danych
   dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
-                             plik_pogoda=plik_pogoda, lokacje=lokacje, zakresDo=zakresDo, miasto)
+                             plik_pogoda=plik_pogoda, metadane=lokacje, zakresDo=zakresDo, miasto)
 
   #aktualizacja daty 
   zakresDo<-as.character(Sys.Date()-1)
