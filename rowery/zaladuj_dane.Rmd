@@ -42,7 +42,7 @@ dane20142018<-fread(dane_do2018, encoding = 'UTF-8') %>%
 
 Data from current database
 ```{r dane z nowego api}
-dane20192021<-json_do_tabeli(wczytaj_z_api_v2(credentials, od="2019-03-28", do="2021-01-10")) %>%
+dane20192021<-json_do_tabeli(wczytaj_z_api_v2(credentials, od="2019-03-28", do="2021-02-7")) %>%
   uzupelnij_tabele(metadane, plik_pogoda)
 ```
 
