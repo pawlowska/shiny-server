@@ -9,8 +9,6 @@ library(lubridate)
 library(shinyWidgets)
 library(shinyBS)
 library(tidyverse)
-
-source('ladowanie_danych.R', encoding = 'UTF-8')
 source('obsluga_sumowania.R', encoding = 'UTF-8')
 source('text.R', encoding = 'UTF-8')
 source('mapaModule.R', encoding = 'UTF-8')
@@ -175,8 +173,8 @@ server <- function(input, output, session) {
              zakresMax=c(od=as.Date(zakresOd), do=as.Date(zakresDoPogoda)), style)
   
   #aktualizacja danych???
-  dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
-                             plik_pogoda=plik_pogoda, metadane=lokacje, zakresDo=zakresDo, miasto)
+  try(dane_long<-dodaj_nowe_dane(stare=dane_long, p=(paste(katalog, "nowe_long.csv", sep="/")),
+                             plik_pogoda=plik_pogoda, metadane=lokacje, zakresDo=zakresDo, miasto))
 
   #aktualizacja daty 
   zakresDo<-as.character(Sys.Date()-1)

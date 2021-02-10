@@ -23,11 +23,13 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane,
   
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
-    cat(file=stderr(), "probuje pobrac nowe dane", as.character(ostatnia_data), "\n")
+    cat(file=stderr(), "probuje pobrac nowe dane od:", as.character(ostatnia_data), "\n")
     
     #zaladuj
     nowe_z_api<-wczytaj_z_api_v2(credentials, od=as.character(ostatnia_data)) %>%
       json_do_tabeli()
+    
+    cat(file=stderr(), str(metadane), "\n")
     
     nowe_z_api <- nowe_z_api %>%
       uzupelnij_tabele(metadane, plik_pogoda) 
@@ -67,8 +69,6 @@ json_do_tabeli<-function(big_json) {
 
 #dplyr-style reformatting of data output from json_do_tabeli()
 uzupelnij_tabele<-function(tab_in, metadane, plik_pogoda) {
-  cat(file=stderr(), str(metadane), "\n")
-  
    tab_in %>%
     mutate(Data=as.Date(Data)) %>%
     left_join(select(metadane, c('Miejsce', 'zdm_id')), by='zdm_id') %>%
@@ -77,7 +77,9 @@ uzupelnij_tabele<-function(tab_in, metadane, plik_pogoda) {
     select(-zdm_id) %>%
     mutate(startTyg=as.Date(lubridate::floor_date(Data-days(1), "week")+days(1))) %>%
     data.table() %>%
-    dodaj_pogode(plik_pogoda)
+    dodaj_pogode(plik_pogoda) %>%
+    mutate(Jaki_dzien=weekend(Data)) %>%
+    mutate(Wolne=wolne(Data))
 }
 
 # wczytaj_dane_godzinowe<-function(plik) {
@@ -93,17 +95,11 @@ wczytaj_dane<-function(plik = "dane_polaczone.csv") {
 }
 
 
-#long_to_wide<-function(dane, nazwa_zmiennej="Liczba_rowerow") {
-#  tabela_wide<-dcast(dane, Data ~Miejsce, value.var=nazwa_zmiennej)
-#  tabela_wide
+#wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Wolne","Rodzaj_opadu")) {
+#  tabela<-melt(dane, 
+#               id.vars = nazwy_zmiennych, 
+#               variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
 #}
-
-
-wide_to_long<-function(dane, nazwy_zmiennych=c("Data","startTyg", "temp_min", "temp_avg", "temp_max", "deszcz", "snieg", "Jaki_dzien","Wolne","Rodzaj_opadu")) {
-  tabela<-melt(dane, 
-               id.vars = nazwy_zmiennych, 
-               variable.name = "Miejsce", value.name = "Liczba_rowerow", na.rm = TRUE)
-}
 
 podsumuj.okresy<-function(tabela, kolumna) {
   podsumowanie <- tabela[,sum(Liczba_rowerow), by=c("Miejsce", kolumna)]
@@ -171,15 +167,17 @@ rodzaj_opadu<-function(d,s) {
   ifelse (d>0,'d','s')
 }
 
-dodaj_pogode<-function(tabela, 
-                       plik_pogoda="pliki/IMGW_pogoda_20171231.csv") {
+czytaj_pogode<-function(plik_pogoda) {
   pogoda<-fread(plik_pogoda, header = TRUE, encoding = "UTF-8")
   pogoda[,Data := as.Date(Data, format="%Y-%m-%d")]
   pogoda[,Rodzaj_opadu:=rodzaj_opadu(deszcz, snieg)]
+  pogoda
+}
+
+dodaj_pogode<-function(tabela, 
+                       plik_pogoda="pliki/IMGW_2014_do2020_12.csv") {
+  pogoda<-czytaj_pogode(plik_pogoda)
   dane<-merge(tabela, pogoda, by="Data", all.x=TRUE)
-  dane[,Jaki_dzien:=weekend(Data)]
-  dane[,Wolne:=wolne(Data)]
-  
   dane
 }
 
