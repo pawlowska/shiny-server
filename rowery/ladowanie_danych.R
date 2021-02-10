@@ -9,14 +9,14 @@ source('hasloA.R', encoding = 'UTF-8')
 
 
 dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane, zakresDo, miasto = "Warszawa") {
+  ostatnia_data<-max(stare$Data)
   #dane zaladowane od ostatniego git commit
   if (file.exists(p)) {
-    ostatnie_nowe_long<-wczytaj_dane(p)
-    ostatnia_data<-max(ostatnie_nowe_long$Data)
-    tekst="ostatnia data w nowe_long"
+    nowe_z_pliku<-wczytaj_dane(p)
+    ostatnia_data<-max(nowe_z_pliku$Data)
+    tekst="ostatnia data w pliku nowe_long"
   } else {
-    ostatnie_nowe_long<-stare[0,]
-    ostatnia_data<-max(stare$Data)
+    nowe_z_pliku<-stare[0,]
     tekst="brak nowe_long, ostatnia data w dane_long"
   }
   cat(file=stderr(), tekst, as.character(ostatnia_data), "\n")
@@ -24,20 +24,21 @@ dodaj_nowe_dane<-function(stare, p="pliki/nowe_long.csv", plik_pogoda, metadane,
   #czy są nowsze dane?  
   if (ostatnia_data<Sys.Date()-1) {
     #zaladuj
-    nowe_long<-wczytaj_z_api_v2(credentials, od=as.character(ostatnia_data)) %>%
+    nowe_z_api<-wczytaj_z_api_v2(credentials, od=as.character(ostatnia_data)) %>%
       json_do_tabeli() %>%
       uzupelnij_tabele(metadane, plik_pogoda) 
-    cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_long$Data)), "\n")
-    
-    #polacz
-    ostatnie_nowe_long<-rbind(ostatnie_nowe_long[Data<ostatnia_data], nowe_long)
-    setorder(ostatnie_nowe_long, "Data")
-    #uaktualnij "nowe" dane
-    write.csv(ostatnie_nowe_long[Data>zakresDo], file = p, fileEncoding = 'UTF-8', row.names = F)
+    cat(file=stderr(), "zaladowane dane z api do:", as.character(max(nowe_z_api$Data)), "\n")
+
+    nowe<-bind_rows(nowe_z_pliku, nowe_z_api)
+    #uaktualnij "nowe" dane w pliku
+    write.csv(nowe %>% filter(Data>zakresDo), file = p, fileEncoding = 'UTF-8', row.names = F)
+  } else {
+    nowe<-nowe_z_pliku
   }
   
+  
   #polacz ze "starymi" danymi
-  dane_long<-rbind(stare, ostatnie_nowe_long[Data>zakresDo])
+  dane_long<-bind_rows(stare, nowe %>% filter(Data>zakresDo))
   cat(file=stderr(), "ostatnia uaktualniona data", as.character(max(dane_long$Data)), "\n")
   dane_long
 }
