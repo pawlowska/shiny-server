@@ -1,4 +1,5 @@
 library(data.table)
+library(tidyverse)
 source('palety_kolorow.R')
 
 sumuj_jeden_dzien<-function(dane_dzienne, wirtualne_liczniki) {
@@ -24,7 +25,7 @@ sumuj_pary_licznikow<-function(dane, metadane) {
   wszystkie_liczby<-dane %>% 
     group_by(Data) %>%
     group_modify(~sumuj_jeden_dzien(.x, wirtualne_liczniki)) %>%
-    rbind(dane) 
+    bind_rows(dane) 
 }
 
 zrob_sumy<-function(metadane) {
